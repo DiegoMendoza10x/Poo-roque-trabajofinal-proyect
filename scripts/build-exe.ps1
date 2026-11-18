@@ -34,6 +34,7 @@ try {
         --dest "dist" `
         --vendor "UPeU" `
         --description "Sistema de gestion de alquileres de departamentos" `
+        --icon "icono\icono.ico" `
         --java-options "-Dfile.encoding=UTF-8" `
         --add-modules $modulos
     if ($LASTEXITCODE -ne 0) { throw "Falló jpackage" }

@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import pe.edu.upeu.alquileres.config.AppContext;
 import pe.edu.upeu.alquileres.config.DatabaseConfig;
@@ -49,6 +50,11 @@ public class App {
 
             Scene scene = new Scene(root, ancho, alto);
             scene.getStylesheets().add(App.class.getResource("/css/app.css").toExternalForm());
+
+            var icono = App.class.getResource("/images/app-icon.png");
+            if (icono != null) {
+                ventana.getIcons().setAll(new Image(icono.toExternalForm()));
+            }
 
             ventana.setTitle(titulo);
             ventana.setScene(scene);

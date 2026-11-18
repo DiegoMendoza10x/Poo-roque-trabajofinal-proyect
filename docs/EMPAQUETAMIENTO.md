@@ -28,7 +28,12 @@ El script:
    - `--main-jar SysAlquileres-1.0.0.jar`
    - `--main-class pe.edu.upeu.alquileres.App`
    - módulos: `java.base`, `java.desktop`, `java.sql`, `java.naming`, `java.logging`, `java.management`, `java.xml`, `java.prefs`, `java.scripting`, `jdk.unsupported`, `jdk.crypto.ec`, `jdk.crypto.cryptoki`.
+   - `--icon icono\icono.ico` (icono del ejecutable, multi-tamaño 16–256 px).
 4. Elimina la carpeta `data` de prueba y comprime en `dist\SysAlquileres-v2.0.0-portable.zip`.
+
+El archivo maestro se genera con `python scripts\prepare_icon.py` a partir de la imagen en `icono/`;
+ese script recorta el fondo blanco, genera el `.ico`, los mipmaps de Android y
+`src/main/resources/images/app-icon.png` (icono de la ventana JavaFX y del login).
 
 ### ¿Por qué esos módulos extra?
 

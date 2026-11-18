@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
@@ -20,9 +22,11 @@
         </padding>
 
         <HBox alignment="CENTER_LEFT" spacing="14.0">
-            <StackPane styleClass="login-logo">
-                <Label text="SA" styleClass="login-logo-texto"/>
-            </StackPane>
+            <ImageView fitWidth="48.0" fitHeight="48.0" preserveRatio="true" smooth="true">
+                <image>
+                    <Image url="@../images/app-icon.png"/>
+                </image>
+            </ImageView>
             <VBox spacing="2.0">
                 <Label text="SysAlquileres" styleClass="login-titulo"/>
                 <Label text="Gestión de alquileres de departamentos" styleClass="login-subtitulo"/>
