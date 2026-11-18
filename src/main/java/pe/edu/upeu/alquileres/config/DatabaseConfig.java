@@ -55,7 +55,13 @@ public final class DatabaseConfig {
             throw e;
         }
         dataSource = ds;
-        LOG.info("Base de datos lista: {}", url);
+        LOG.info("Base de datos lista: {} [{}]", url, motor(url));
+    }
+
+    private static String motor(String url) {
+        if (url.contains("supabase")) return "Supabase / PostgreSQL";
+        if (url.startsWith("jdbc:postgresql")) return "PostgreSQL";
+        return "H2 local";
     }
 
     public static DataSource getDataSource() {
@@ -94,16 +100,64 @@ public final class DatabaseConfig {
     }
 
     private static Properties loadProperties() {
+        Properties props = new Properties();
         try (InputStream in = DatabaseConfig.class.getResourceAsStream("/" + PROPERTIES_FILE)) {
             if (in == null) {
                 throw new IllegalStateException("No se encontró " + PROPERTIES_FILE);
             }
-            Properties props = new Properties();
             props.load(in);
-            return props;
         } catch (IOException e) {
             throw new IllegalStateException("Error leyendo " + PROPERTIES_FILE, e);
         }
+
+        // 1) Propiedades del sistema: -Ddb.url=... (tienen prioridad sobre el archivo)
+        aplicar(props, "db.url", System.getProperty("db.url"));
+        aplicar(props, "db.username", System.getProperty("db.username"));
+        aplicar(props, "db.password", System.getProperty("db.password"));
+        aplicar(props, "db.ddl.auto", System.getProperty("db.ddl.auto"));
+        aplicar(props, "db.seed.demo", System.getProperty("db.seed.demo"));
+
+        // 2) Variables de entorno genéricas
+        aplicar(props, "db.url", System.getenv("DB_URL"));
+        aplicar(props, "db.username", System.getenv("DB_USERNAME"));
+        aplicar(props, "db.password", System.getenv("DB_PASSWORD"));
+        aplicar(props, "db.ddl.auto", System.getenv("DB_DDL_AUTO"));
+        aplicar(props, "db.seed.demo", System.getenv("DB_SEED_DEMO"));
+
+        // 3) Variables de entorno de Supabase (máxima prioridad)
+        aplicar(props, "db.url", System.getenv("SUPABASE_DB_URL"));
+        aplicar(props, "db.username", System.getenv("SUPABASE_DB_USER"));
+        aplicar(props, "db.password", System.getenv("SUPABASE_DB_PASSWORD"));
+        aplicar(props, "db.ddl.auto", System.getenv("SUPABASE_DDL_AUTO"));
+        aplicar(props, "db.seed.demo", System.getenv("SUPABASE_SEED_DEMO"));
+
+        props.setProperty("db.url", normalizarUrl(props.getProperty("db.url", DEFAULT_URL)));
+        return props;
+    }
+
+    private static void aplicar(Properties props, String clave, String valor) {
+        if (valor != null && !valor.isBlank()) {
+            props.setProperty(clave, valor.trim());
+        }
+    }
+
+    /**
+     * Supabase exige conexiones cifradas: si la URL apunta a Supabase y no trae
+     * sslmode, se agrega automáticamente. Las conexiones locales no se tocan.
+     */
+    private static String normalizarUrl(String url) {
+        if (url == null || url.isBlank()) return DEFAULT_URL;
+        boolean esSupabase = url.contains("supabase.co") || url.contains("pooler.supabase.com");
+        if (esSupabase && !url.contains("sslmode")) {
+            url += url.contains("?") ? "&sslmode=require" : "?sslmode=require";
+        }
+        // El pooler de Supabase trabaja en modo transacción: no admite
+        // sentencias preparadas con nombre.
+        boolean esPooler = url.contains("pooler.supabase.com");
+        if (esPooler && !url.contains("prepareThreshold")) {
+            url += url.contains("?") ? "&prepareThreshold=0" : "?prepareThreshold=0";
+        }
+        return url;
     }
 
     /** Ejecuta un script SQL sentencia por sentencia. */

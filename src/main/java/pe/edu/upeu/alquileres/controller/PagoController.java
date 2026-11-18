@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import pe.edu.upeu.alquileres.components.Celdas;
 import pe.edu.upeu.alquileres.components.Dialogos;
 import pe.edu.upeu.alquileres.components.NotaVentaDialog;
 import pe.edu.upeu.alquileres.enums.MetodoPago;
@@ -74,6 +75,7 @@ public class PagoController {
         colMonto.setCellValueFactory(new PropertyValueFactory<>("monto"));
         colMonto.setCellFactory(c -> celdaDinero());
         colMetodo.setCellValueFactory(new PropertyValueFactory<>("metodo"));
+        colMetodo.setCellFactory(Celdas.chipMetodoPago());
 
         filtrados = new FilteredList<>(datos, p -> true);
         tblPagos.setItems(filtrados);

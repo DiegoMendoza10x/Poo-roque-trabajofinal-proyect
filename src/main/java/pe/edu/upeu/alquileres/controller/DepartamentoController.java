@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import pe.edu.upeu.alquileres.components.Celdas;
 import pe.edu.upeu.alquileres.components.Dialogos;
 import pe.edu.upeu.alquileres.enums.EstadoDepartamento;
 import pe.edu.upeu.alquileres.exception.BusinessException;
@@ -57,6 +58,7 @@ public class DepartamentoController {
         colPrecio.setCellValueFactory(new PropertyValueFactory<>("precioMensual"));
         colPrecio.setCellFactory(c -> celdaDinero());
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        colEstado.setCellFactory(Celdas.chipEstadoDepartamento());
 
         filtrados = new FilteredList<>(datos, d -> true);
         tblDepartamentos.setItems(filtrados);

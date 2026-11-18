@@ -34,11 +34,11 @@ public class App {
     }
 
     public static void mostrarLogin() {
-        cargar("/view/login.fxml", "SysAlquileres · Iniciar sesión", 430, 430, false);
+        cargar("/view/login.fxml", "SysAlquileres · Iniciar sesión", 520, 620, false);
     }
 
     public static void mostrarPrincipal() {
-        cargar("/view/main.fxml", "SysAlquileres · Gestión de Departamentos", 1100, 700, true);
+        cargar("/view/main.fxml", "SysAlquileres · Gestión de Departamentos", 1180, 730, true);
     }
 
     private static void cargar(String vista, String titulo, double ancho, double alto, boolean redimensionable) {
@@ -53,8 +53,8 @@ public class App {
             ventana.setTitle(titulo);
             ventana.setScene(scene);
             ventana.setResizable(redimensionable);
-            ventana.setMinWidth(redimensionable ? 900 : 0);
-            ventana.setMinHeight(redimensionable ? 600 : 0);
+            ventana.setMinWidth(redimensionable ? 1040 : 0);
+            ventana.setMinHeight(redimensionable ? 660 : 0);
             ventana.centerOnScreen();
             ventana.show();
         } catch (Exception e) {

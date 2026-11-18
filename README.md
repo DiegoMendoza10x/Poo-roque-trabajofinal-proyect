@@ -17,8 +17,9 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 - Credenciales de prueba: **admin / admin123**.
 
 ### Ventana principal
-- Barra de menú: **Archivo** (cerrar sesión, salir), **Módulos** y **Ayuda**.
-- Pestañas para cada módulo; se abren una sola vez y se reutilizan.
+- Barra lateral de navegación con los cuatro módulos y acceso rápido a la sesión.
+- Cabecera con el nombre del usuario autenticado y el rol.
+- Cada módulo se carga una sola vez y se reutiliza al cambiar de sección.
 - Encabezado con el nombre del usuario autenticado y barra de estado con el módulo y la fecha.
 - Cada módulo muestra el **formulario a la izquierda** y la **tabla a la derecha**.
 
@@ -47,6 +48,17 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 - Edición y eliminación con confirmación.
 - Métodos: Efectivo, Transferencia, Yape, Plin, Tarjeta.
 
+### Nota de venta (impresión 58 mm)
+- Botón **Nota de venta** en el módulo de pagos: muestra la vista previa del ticket.
+- Impresión por **impresora de Windows** (USB o Bluetooth emparejado) o por **puerto COM**.
+- Incluye datos de la empresa, cliente, departamento, contrato, periodo, importes y total.
+- Opción **Copiar texto** para usar la nota en cualquier otro medio.
+
+### Base de datos en la nube (Supabase)
+- La aplicación puede trabajar con **Supabase (PostgreSQL)** además de H2 local.
+- Script listo para ejecutar: `database/supabase_schema.sql`.
+- Guía completa: [`docs/SUPABASE.md`](docs/SUPABASE.md).
+
 ---
 
 ## 2. Arquitectura
@@ -54,13 +66,14 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 ```
 src/main/java/pe/edu/upeu/alquileres
 ├── App.java                     # Punto de entrada: login → ventana principal
-├── components/                  # Diálogos de confirmación y aviso
+├── components/                  # Diálogos,NotaVentaDialog y Celdas (chips de tabla)
 ├── config/
 │   ├── AppContext.java          # Contenedor de dependencias (repos + servicios + controladores)
-│   └── DatabaseConfig.java      # HikariCP, creación del esquema y seed
+│   └── DatabaseConfig.java      # HikariCP, esquema, seed y conexión a Supabase
 ├── controller/                  # Login, ventana principal y controladores de cada módulo
 ├── enums/                       # EstadoDepartamento, EstadoContrato, MetodoPago
 ├── exception/                   # BusinessException
+├── impresion/                   # NotaVenta, ImpresoraWindows e ImpresoraSerial (58 mm)
 ├── model/                       # Usuario, Departamento, Inquilino, TipoPersoneria, Contrato, Pago...
 ├── repository/                  # Interfaces + AbstractJpaRepository (JDBC)
 ├── service/                     # Interfaces + implementaciones con reglas de negocio
@@ -115,6 +128,30 @@ mvn -B -DskipTests package
 La primera ejecución crea la base en `data/alquileres.mv.db`, ejecuta `schema.sql` y carga `seed.sql`.
 
 Al iniciar aparece el **login**; ingresa con el usuario `admin` y la clave `admin123`.
+
+### Ejecutable .exe (Windows)
+
+El proyecto genera una imagen de aplicación con `jpackage`: un `.exe` que **ya incluye Java y JavaFX**,
+por lo que la computadora donde se ejecute no necesita tener JDK instalado.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build-exe.ps1
+```
+
+Resultados:
+
+| Archivo | Uso |
+|---|---|
+| `dist\SysAlquileres\SysAlquileres.exe` | Ejecutable portable: abre la carpeta y haz doble clic |
+| `dist\SysAlquileres-v2.0.0-portable.zip` (~60 MB) | Archivo para entregar; descomprimir y ejecutar el `.exe` |
+
+Notas:
+
+- El ZIP contiene las carpetas `app\`, `runtime\` y el ejecutable; no las separes.
+- No es un instalador: es una aplicación portable. Para generar un instalador `.exe`/`.msi`
+  con `jpackage --type exe` se necesita instalar **WiX Toolset 3.x**.
+- Si se usa Supabase, las variables de entorno deben configurarse en la misma terminal
+  desde la que se inicia el `.exe` (o de forma permanente con `setx`).
 
 ### Credenciales H2 por defecto
 
@@ -213,8 +250,15 @@ Restricciones destacadas:
 ```
 SysAlquileres/
 ├── database/
-│   └── postgresql_sistema_alquileres.sql
-├── docs/screenshots/
+│   ├── postgresql_sistema_alquileres.sql
+│   └── supabase_schema.sql          # Script para Supabase
+├── docs/
+│   ├── SUPABASE.md                  # Guía de conexión a Supabase
+│   ├── IMPRESION_58MM.md            # Guía de impresión térmica
+│   └── screenshots/
+├── scripts/
+│   └── build-exe.ps1                # Genera el .exe portable
+├── dist/                            # .exe y ZIP (se generan con build-exe.ps1)
 ├── src/main/java/pe/edu/upeu/alquileres/
 ├── src/main/resources/
 │   ├── application.properties

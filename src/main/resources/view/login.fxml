@@ -5,51 +5,58 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="pe.edu.upeu.alquileres.controller.LoginController"
-      styleClass="login-fondo" alignment="CENTER" spacing="16.0">
+<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="pe.edu.upeu.alquileres.controller.LoginController"
+           styleClass="login-fondo" alignment="CENTER">
 
-    <padding>
-        <Insets top="20.0" right="24.0" bottom="20.0" left="24.0"/>
-    </padding>
+    <VBox styleClass="login-card" maxWidth="380.0" spacing="14.0" alignment="CENTER_LEFT">
+        <padding>
+            <Insets top="34.0" right="34.0" bottom="30.0" left="34.0"/>
+        </padding>
 
-    <HBox alignment="CENTER_LEFT" spacing="12.0" maxWidth="Infinity">
-        <Circle fill="#ff5e1f" radius="15.0" stroke="BLACK" strokeType="INSIDE"/>
-        <Circle fill="#35ff1f" radius="15.0" stroke="BLACK" strokeType="INSIDE"/>
-        <Circle fill="DODGERBLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Label text="SysAlquileres Login" styleClass="login-titulo"/>
-    </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="14.0">
+            <StackPane styleClass="login-logo">
+                <Label text="SA" styleClass="login-logo-texto"/>
+            </StackPane>
+            <VBox spacing="2.0">
+                <Label text="SysAlquileres" styleClass="login-titulo"/>
+                <Label text="Gestión de alquileres de departamentos" styleClass="login-subtitulo"/>
+            </VBox>
+        </HBox>
 
-    <GridPane hgap="10.0" vgap="12.0" alignment="CENTER">
-        <columnConstraints>
-            <ColumnConstraints halignment="RIGHT" minWidth="80.0" prefWidth="90.0"/>
-            <ColumnConstraints minWidth="200.0" prefWidth="210.0"/>
-        </columnConstraints>
+        <Region styleClass="separador-suave">
+            <VBox.margin>
+                <Insets top="4.0" bottom="4.0"/>
+            </VBox.margin>
+        </Region>
 
-        <Label text="Usuario" GridPane.rowIndex="0"/>
-        <TextField fx:id="txtUsuario" promptText="admin" onAction="#onIngresar"
-                   GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <Label text="USUARIO" styleClass="login-etiqueta"/>
+        <TextField fx:id="txtUsuario" promptText="Ingresa tu usuario" onAction="#onIngresar"
+                   maxWidth="Infinity"/>
 
-        <Label text="Clave" GridPane.rowIndex="1"/>
-        <PasswordField fx:id="txtClave" promptText="admin123" onAction="#onIngresar"
-                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
-    </GridPane>
+        <Label text="CLAVE" styleClass="login-etiqueta"/>
+        <PasswordField fx:id="txtClave" promptText="Ingresa tu clave" onAction="#onIngresar"
+                       maxWidth="Infinity"/>
 
-    <Label fx:id="lblError" wrapText="true"/>
+        <Label fx:id="lblError" wrapText="true"/>
 
-    <HBox spacing="14.0" alignment="CENTER">
-        <Button text="Ingresar" onAction="#onIngresar" defaultButton="true"
-                styleClass="boton-primario" prefWidth="120.0"/>
-        <Button text="Cerrar" onAction="#onSalir" prefWidth="120.0"/>
-    </HBox>
+        <Button text="Ingresar al sistema" onAction="#onIngresar" defaultButton="true"
+                styleClass="boton-primario" maxWidth="Infinity"
+                HBox.hgrow="ALWAYS">
+            <VBox.margin>
+                <Insets top="6.0"/>
+            </VBox.margin>
+        </Button>
 
-    <Label text="Usuario de prueba: admin · Clave: admin123" styleClass="login-pista"/>
-</VBox>
+        <Button text="Cerrar" onAction="#onSalir" styleClass="boton-secundario"
+                maxWidth="Infinity"/>
+
+        <Label text="Usuario de prueba: admin  ·  Clave: admin123" styleClass="login-pista"
+               maxWidth="Infinity" alignment="CENTER"/>
+    </VBox>
+</StackPane>

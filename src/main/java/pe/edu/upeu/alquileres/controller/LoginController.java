@@ -35,10 +35,11 @@ public class LoginController {
     @FXML
     private void onIngresar() {
         lblError.setText("");
+        lblError.getStyleClass().removeAll("error", "exito");
         try {
             Optional<Usuario> usuario = service.login(txtUsuario.getText(), txtClave.getText());
             if (usuario.isEmpty()) {
-                lblError.setText("Usuario o clave incorrectos.");
+                mostrarError("Usuario o clave incorrectos.");
                 txtClave.clear();
                 txtClave.requestFocus();
                 return;
@@ -46,10 +47,17 @@ public class LoginController {
             Sesion.iniciar(usuario.get());
             App.mostrarPrincipal();
         } catch (BusinessException e) {
-            lblError.setText(e.getMessage());
+            mostrarError(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            lblError.setText("No se pudo conectar con la base de datos.");
+            mostrarError("No se pudo conectar con la base de datos.");
+        }
+    }
+
+    private void mostrarError(String mensaje) {
+        lblError.setText(mensaje);
+        if (!lblError.getStyleClass().contains("error")) {
+            lblError.getStyleClass().add("error");
         }
     }
 

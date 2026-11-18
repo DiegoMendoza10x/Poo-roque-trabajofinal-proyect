@@ -7,11 +7,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -47,7 +50,7 @@ public final class NotaVentaDialog {
         vistaPrevia.setWrapText(false);
         vistaPrevia.setPrefColumnCount(34);
         vistaPrevia.setPrefRowCount(24);
-        vistaPrevia.setStyle("-fx-font-family: 'Consolas', monospace; -fx-font-size: 11px;");
+        vistaPrevia.getStyleClass().add("ticket-previa");
         VBox.setVgrow(vistaPrevia, Priority.ALWAYS);
 
         // ----- Forma de conexión -----
@@ -110,6 +113,7 @@ public final class NotaVentaDialog {
         // ----- Botones y mensajes -----
         Label estado = new Label("Selecciona la conexión y presiona Imprimir.");
         estado.setWrapText(true);
+        estado.getStyleClass().add("texto-ayuda");
 
         Stage ventana = new Stage();
         ventana.initModality(Modality.APPLICATION_MODAL);
@@ -118,13 +122,24 @@ public final class NotaVentaDialog {
         }
         ventana.setTitle("Nota de venta · 58 mm");
 
-        Button btnImprimir = new Button("Imprimir");
+        Button btnImprimir = new Button("Imprimir nota");
         btnImprimir.getStyleClass().add("boton-primario");
         btnImprimir.setDefaultButton(true);
 
+        Button btnCopiar = new Button("Copiar texto");
+        btnCopiar.getStyleClass().add("boton-secundario");
+
         Button btnCerrar = new Button("Cerrar");
         btnCerrar.getStyleClass().add("boton-secundario");
+
         btnCerrar.setOnAction(e -> ventana.close());
+
+        btnCopiar.setOnAction(e -> {
+            ClipboardContent contenido = new ClipboardContent();
+            contenido.putString(String.join("\n", lineas));
+            Clipboard.getSystemClipboard().setContent(contenido);
+            mostrarEstado(estado, "Nota copiada al portapapeles.", false);
+        });
 
         btnImprimir.setOnAction(e -> {
             try {
@@ -149,50 +164,62 @@ public final class NotaVentaDialog {
         });
 
         // ----- Distribución de la ventana -----
-        Label tituloPrevia = new Label("Vista previa · 58 mm (32 caracteres por línea)");
-        tituloPrevia.getStyleClass().add("campo-etiqueta");
+        Label tituloPrevia = new Label("Vista previa · 58 mm");
+        tituloPrevia.getStyleClass().add("card-titulo");
+
+        Label ayudaPrevia = new Label("32 caracteres por línea · documento no fiscal");
+        ayudaPrevia.getStyleClass().add("texto-ayuda");
 
         Label tituloConexion = new Label("Forma de conexión");
-        tituloConexion.getStyleClass().add("titulo-form");
+        tituloConexion.getStyleClass().add("card-titulo");
 
-        VBox campoImpresora = new VBox(3, new Label("Impresora de Windows:"), cbxImpresoras);
-        VBox campoPuerto = new VBox(3, new Label("Puerto COM:"), cbxPuertos);
-        VBox campoBaudios = new VBox(3, new Label("Velocidad:"), cbxBaudios);
+        VBox campoImpresora = new VBox(4, etiqueta("Impresora de Windows"), cbxImpresoras);
+        VBox campoPuerto = new VBox(4, etiqueta("Puerto COM"), cbxPuertos);
+        VBox campoBaudios = new VBox(4, etiqueta("Velocidad"), cbxBaudios);
 
         HBox filaConexion = new HBox(12, campoPuerto, campoBaudios);
         HBox.setHgrow(campoPuerto, Priority.ALWAYS);
+        campoBaudios.setPrefWidth(130);
 
-        HBox botones = new HBox(10, btnImprimir, btnCerrar);
+        HBox botones = new HBox(10, btnCopiar, btnCerrar, btnImprimir);
         botones.setAlignment(Pos.CENTER_RIGHT);
 
-        VBox raiz = new VBox(10,
-                tituloPrevia,
-                vistaPrevia,
-                new Separator(),
+        VBox tarjetaPrevia = new VBox(8, tituloPrevia, ayudaPrevia, vistaPrevia);
+        tarjetaPrevia.getStyleClass().add("ticket-marco");
+        VBox.setVgrow(vistaPrevia, Priority.ALWAYS);
+
+        VBox tarjetaConexion = new VBox(10,
                 tituloConexion,
-                new HBox(16, rbWindows, rbSerial),
+                new HBox(18, rbWindows, rbSerial),
                 campoImpresora,
-                filaConexion,
-                estado,
-                botones);
-        raiz.setPadding(new Insets(14));
+                filaConexion);
+        tarjetaConexion.getStyleClass().add("ticket-marco");
+
+        VBox raiz = new VBox(12, tarjetaPrevia, tarjetaConexion, estado, botones);
+        raiz.setPadding(new Insets(16));
         raiz.getStyleClass().add("modulo");
 
-        Scene escena = new Scene(raiz, 500, 680);
+        Scene escena = new Scene(raiz, 520, 720);
         var css = NotaVentaDialog.class.getResource("/css/app.css");
         if (css != null) {
             escena.getStylesheets().add(css.toExternalForm());
         }
 
         ventana.setScene(escena);
-        ventana.setMinWidth(500);
-        ventana.setMinHeight(620);
+        ventana.setMinWidth(520);
+        ventana.setMinHeight(660);
         ventana.showAndWait();
+    }
+
+    private static Label etiqueta(String texto) {
+        Label etiqueta = new Label(texto);
+        etiqueta.getStyleClass().add("campo-etiqueta");
+        return etiqueta;
     }
 
     private static void mostrarEstado(Label etiqueta, String texto, boolean error) {
         etiqueta.setText(texto);
-        etiqueta.getStyleClass().removeAll("error", "exito");
+        etiqueta.getStyleClass().removeAll("error", "exito", "texto-ayuda");
         etiqueta.getStyleClass().add(error ? "error" : "exito");
     }
 }

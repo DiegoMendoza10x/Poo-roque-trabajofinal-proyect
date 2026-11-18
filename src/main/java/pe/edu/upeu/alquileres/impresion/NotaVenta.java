@@ -4,6 +4,7 @@ import pe.edu.upeu.alquileres.model.Contrato;
 import pe.edu.upeu.alquileres.model.Inquilino;
 import pe.edu.upeu.alquileres.model.Pago;
 import pe.edu.upeu.alquileres.util.Formato;
+import pe.edu.upeu.alquileres.util.Sesion;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -44,6 +45,7 @@ public final class NotaVenta {
         lineas.add("Contrato: #" + numeroContrato(pago));
         lineas.add("Periodo: " + pago.getPeriodoTexto());
         lineas.add("Fecha pago: " + pago.getFechaTexto());
+        lineas.add("Atendido: " + atendidoPor());
         lineas.add(separador());
 
         lineas.add(fila("Alquiler", Formato.dinero(monto)));
@@ -128,5 +130,10 @@ public final class NotaVenta {
     private static String numeroContrato(Pago pago) {
         return pago.getContrato() == null || pago.getContrato().getIdContrato() == null
                 ? "-" : String.valueOf(pago.getContrato().getIdContrato());
+    }
+
+    private static String atendidoPor() {
+        String nombre = Sesion.nombre();
+        return nombre == null || nombre.isBlank() ? "Caja" : recortar(nombre, ANCHO - 10);
     }
 }

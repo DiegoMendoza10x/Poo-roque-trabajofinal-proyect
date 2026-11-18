@@ -15,23 +15,28 @@
 
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="pe.edu.upeu.alquileres.controller.DepartamentoController"
-      styleClass="modulo" spacing="10.0">
+      styleClass="modulo" spacing="14.0">
 
-    <HBox alignment="CENTER_LEFT" spacing="8.0">
-        <Label text="Gestión de Departamentos" styleClass="titulo-modulo"/>
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox spacing="1.0">
+            <Label text="Departamentos" styleClass="page-titulo"/>
+            <Label text="Registra los departamentos y define su precio mensual"
+                   styleClass="page-sub"/>
+        </VBox>
         <Region HBox.hgrow="ALWAYS"/>
-        <Label text="Buscar:" styleClass="campo-etiqueta"/>
+        <Label text="Buscar" styleClass="campo-etiqueta"/>
         <TextField fx:id="txtBuscar" promptText="Número o dirección" prefWidth="200.0"/>
         <ComboBox fx:id="cbxFiltroEstado" prefWidth="150.0"/>
     </HBox>
 
-    <HBox spacing="12.0" VBox.vgrow="ALWAYS">
-        <VBox prefWidth="330.0" spacing="8.0">
-            <Label fx:id="lblFormTitulo" text="Nuevo departamento" styleClass="titulo-form"/>
+    <HBox spacing="16.0" VBox.vgrow="ALWAYS">
+        <VBox styleClass="card" prefWidth="345.0" spacing="12.0">
+            <Label fx:id="lblFormTitulo" text="Nuevo departamento" styleClass="card-titulo"/>
+            <Region styleClass="card-separador"/>
 
-            <GridPane hgap="8.0" vgap="8.0">
+            <GridPane hgap="10.0" vgap="9.0">
                 <columnConstraints>
-                    <ColumnConstraints minWidth="70.0" prefWidth="95.0"/>
+                    <ColumnConstraints minWidth="80.0" prefWidth="105.0"/>
                     <ColumnConstraints hgrow="ALWAYS"/>
                 </columnConstraints>
 
@@ -53,7 +58,6 @@
             </GridPane>
 
             <Label fx:id="lblMensaje" wrapText="true"/>
-
             <Region VBox.vgrow="ALWAYS"/>
 
             <HBox spacing="8.0">
@@ -64,7 +68,7 @@
             </HBox>
         </VBox>
 
-        <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+        <VBox styleClass="card" spacing="10.0" HBox.hgrow="ALWAYS">
             <HBox alignment="CENTER_LEFT" spacing="8.0">
                 <Button text="Nuevo" onAction="#onNuevo" styleClass="boton-secundario"/>
                 <Button text="Eliminar" onAction="#onEliminar" styleClass="boton-peligro"/>
@@ -78,7 +82,7 @@
                     <TableColumn fx:id="colPiso" text="Piso" prefWidth="60.0"/>
                     <TableColumn fx:id="colDireccion" text="Dirección" prefWidth="260.0"/>
                     <TableColumn fx:id="colPrecio" text="Precio mensual" prefWidth="130.0"/>
-                    <TableColumn fx:id="colEstado" text="Estado" prefWidth="110.0"/>
+                    <TableColumn fx:id="colEstado" text="Estado" prefWidth="120.0"/>
                 </columns>
             </TableView>
         </VBox>

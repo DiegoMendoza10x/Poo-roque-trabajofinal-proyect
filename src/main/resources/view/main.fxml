@@ -1,42 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.SVGPath?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="pe.edu.upeu.alquileres.controller.MainController"
-            prefWidth="1100.0" prefHeight="700.0">
+<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pe.edu.upeu.alquileres.controller.MainController"
+      styleClass="app-root" prefWidth="1180.0" prefHeight="730.0">
 
-    <top>
-        <MenuBar>
-            <menus>
-                <Menu text="Archivo">
-                    <items>
-                        <MenuItem text="Cerrar sesión" onAction="#onCerrarSesion"/>
-                        <MenuItem text="Salir" onAction="#onSalir"/>
-                    </items>
-                </Menu>
-                <Menu text="Módulos">
-                    <items>
-                        <MenuItem text="Departamentos" onAction="#irDepartamentos"/>
-                        <MenuItem text="Inquilinos" onAction="#irInquilinos"/>
-                        <MenuItem text="Contratos" onAction="#irContratos"/>
-                        <MenuItem text="Pagos" onAction="#irPagos"/>
-                    </items>
-                </Menu>
-                <Menu text="Ayuda">
-                    <items>
-                        <MenuItem text="Acerca de" onAction="#onAcercaDe"/>
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-    </top>
+    <!-- ================= BARRA LATERAL ================= -->
+    <VBox styleClass="sidebar" prefWidth="236.0" spacing="4.0">
+        <padding>
+            <Insets top="22.0" right="14.0" bottom="18.0" left="14.0"/>
+        </padding>
 
-    <center>
-        <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE"/>
-    </center>
-</BorderPane>
+        <HBox alignment="CENTER_LEFT" spacing="12.0">
+            <StackPane styleClass="sidebar-logo">
+                <Label text="SA" styleClass="sidebar-logo-texto"/>
+            </StackPane>
+            <VBox spacing="0.0">
+                <Label text="SysAlquileres" styleClass="sidebar-marca"/>
+                <Label text="POO 2026 · UPeU" styleClass="sidebar-marca-sub"/>
+            </VBox>
+        </HBox>
+
+        <Label text="MENÚ PRINCIPAL" styleClass="sidebar-seccion"/>
+
+        <Button fx:id="btnDepartamentos" text="Departamentos" onAction="#irDepartamentos"
+                styleClass="nav-button" maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#C7D2FE" scaleX="0.75" scaleY="0.75"
+                         content="M17 11V3H7v4H3v14h8v-4h2v4h8V11h-4zM7 19H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm4 4H9v-2h2v2zm0-4H9V9h2v2zm0-4H9V5h2v2zm4 8h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm4 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnInquilinos" text="Inquilinos" onAction="#irInquilinos"
+                styleClass="nav-button" maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#C7D2FE" scaleX="0.75" scaleY="0.75"
+                         content="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnContratos" text="Contratos" onAction="#irContratos"
+                styleClass="nav-button" maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#C7D2FE" scaleX="0.75" scaleY="0.75"
+                         content="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnPagos" text="Pagos y notas de venta" onAction="#irPagos"
+                styleClass="nav-button" maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#C7D2FE" scaleX="0.75" scaleY="0.75"
+                         content="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+            </graphic>
+        </Button>
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <Label text="SESIÓN" styleClass="sidebar-seccion"/>
+
+        <Button text="Acerca de" onAction="#onAcercaDe" styleClass="nav-button"
+                maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#C7D2FE" scaleX="0.75" scaleY="0.75"
+                         content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+            </graphic>
+        </Button>
+
+        <Button text="Cerrar sesión" onAction="#onCerrarSesion"
+                styleClass="nav-button, nav-button-salir" maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#FCA5A5" scaleX="0.75" scaleY="0.75"
+                         content="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </graphic>
+        </Button>
+
+        <Label text="versión 2.0 · UPeU Juliaca" styleClass="sidebar-pie">
+            <VBox.margin>
+                <Insets top="10.0"/>
+            </VBox.margin>
+        </Label>
+    </VBox>
+
+    <!-- ================= CONTENIDO ================= -->
+    <VBox HBox.hgrow="ALWAYS" styleClass="app-root">
+
+        <HBox styleClass="app-header" alignment="CENTER_LEFT" spacing="16.0">
+            <VBox spacing="1.0">
+                <Label fx:id="lblTitulo" text="Departamentos" styleClass="header-titulo"/>
+                <Label fx:id="lblSub" text="Administra los departamentos disponibles"
+                       styleClass="header-sub"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <HBox styleClass="user-chip" alignment="CENTER_LEFT" spacing="9.0">
+                <StackPane styleClass="user-avatar">
+                    <Label fx:id="lblAvatar" text="A" styleClass="user-avatar-texto"/>
+                </StackPane>
+                <VBox spacing="0.0">
+                    <Label fx:id="lblUsuario" text="Administrador" styleClass="user-nombre"/>
+                    <Label fx:id="lblRol" text="Administrador" styleClass="user-rol"/>
+                </VBox>
+            </HBox>
+        </HBox>
+
+        <StackPane fx:id="contenido" styleClass="contenido" VBox.vgrow="ALWAYS"/>
+    </VBox>
+</HBox>

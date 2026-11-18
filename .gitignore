@@ -1,6 +1,14 @@
 # Maven
 target/
 
+# Archivo local con credenciales de Supabase (NO subir)
+database/Coenction.txt
+database/*Coection*.txt
+
+# Ejecutable generado
+dist/
+dist-debug/
+
 # Base de datos local H2
 data/
 
