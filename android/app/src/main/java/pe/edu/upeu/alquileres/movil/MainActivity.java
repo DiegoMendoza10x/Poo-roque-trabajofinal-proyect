@@ -11,7 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -22,9 +22,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -82,13 +84,13 @@ public class MainActivity extends Activity {
             });
         }
 
-        adaptador = new ItemAdapter(this, datos);
+        adaptador = new ItemAdapter(this);
         listView.setAdapter(adaptador);
 
         txtBusca.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) {
-                adaptador.getFilter().filter(s);
+                adaptador.filtrar(s == null ? "" : s.toString());
             }
             @Override public void afterTextChanged(Editable s) { }
         });
@@ -200,8 +202,7 @@ public class MainActivity extends Activity {
                         @Override public void run() {
                             datos.clear();
                             datos.addAll(lista);
-                            adaptador.notifyDataSetChanged();
-                            adaptador.getFilter().filter(txtBusca.getText());
+                            adaptador.setDatos(lista);
                             lblConteo.setText(datos.size() + " registros · " + MODULOS[indice]);
                         }
                     });
@@ -378,17 +379,56 @@ public class MainActivity extends Activity {
         return limpio.length() <= maximo ? limpio : limpio.substring(0, maximo);
     }
 
-    /** Adaptador con fila de dos líneas y chip de estado. */
-    private static class ItemAdapter extends ArrayAdapter<Item> {
-        ItemAdapter(Context contexto, ArrayList<Item> datos) {
-            super(contexto, R.layout.item_row, datos);
+    /** Adaptador propio: mantiene una lista maestra y una lista visible filtrada. */
+    private static class ItemAdapter extends BaseAdapter {
+        private final Context contexto;
+        private final ArrayList<Item> todos = new ArrayList<>();
+        private final ArrayList<Item> visibles = new ArrayList<>();
+
+        ItemAdapter(Context contexto) {
+            this.contexto = contexto;
+        }
+
+        void setDatos(List<Item> nuevos) {
+            todos.clear();
+            todos.addAll(nuevos);
+            filtrar(null);
+        }
+
+        void filtrar(String texto) {
+            visibles.clear();
+            String busqueda = normalizar(texto);
+            for (Item item : todos) {
+                if (busqueda.isEmpty() || normalizar(item.toString()).contains(busqueda)) {
+                    visibles.add(item);
+                }
+            }
+            notifyDataSetChanged();
+        }
+
+        private static String normalizar(String texto) {
+            if (texto == null || texto.isEmpty()) return "";
+            return Normalizer.normalize(texto, Normalizer.Form.NFD)
+                    .replaceAll("\\p{M}", "").toLowerCase(Locale.ROOT).trim();
+        }
+
+        @Override public int getCount() {
+            return visibles.size();
+        }
+
+        @Override public Item getItem(int posicion) {
+            return visibles.get(posicion);
+        }
+
+        @Override public long getItemId(int posicion) {
+            return posicion;
         }
 
         @Override
         public View getView(int posicion, View convertido, ViewGroup padre) {
             View vista = convertido;
             if (vista == null) {
-                vista = LayoutInflater.from(getContext()).inflate(R.layout.item_row, padre, false);
+                vista = LayoutInflater.from(contexto).inflate(R.layout.item_row, padre, false);
             }
             Item item = getItem(posicion);
             ((TextView) vista.findViewById(R.id.itemTitulo)).setText(item.titulo);

@@ -2,7 +2,7 @@
 
 | # | Requisito | Ubicación | Estado |
 |---|---|---|---|
-| 1 | **Manual de usuario** | [`docs/MANUAL_USUARIO.md`](docs/MANUAL_USUARIO.md) | ✅ |
+| 1 | **Manual de usuario** | [`docs/MANUAL_USUARIO.md`](docs/MANUAL_USUARIO.md) · [Versión HTML atractiva](docs/MANUAL_USUARIO.html) | ✅ |
 | 2 | **Código fuente** | [`docs/CODIGO_FUENTE.md`](docs/CODIGO_FUENTE.md) · [`src/`](src/) · [`android/`](android/) | ✅ |
 | 3 | **Empaquetamiento `.exe`** | [`docs/EMPAQUETAMIENTO.md`](docs/EMPAQUETAMIENTO.md) · [`dist/SysAlquileres-v2.0.0-portable.zip`](dist/SysAlquileres-v2.0.0-portable.zip) | ✅ |
 

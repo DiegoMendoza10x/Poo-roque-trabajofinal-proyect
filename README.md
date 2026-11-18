@@ -13,7 +13,7 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 | Documento | Contenido |
 |---|---|
 | [ENTREGABLES.md](ENTREGABLES.md) | Índice de los 3 requisitos del proyecto final |
-| [Manual de usuario](docs/MANUAL_USUARIO.md) | Uso paso a paso del escritorio y del APK |
+| [Manual de usuario](docs/MANUAL_USUARIO.md) · [Versión HTML](docs/MANUAL_USUARIO.html) | Uso paso a paso del escritorio y del APK |
 | [Código fuente](docs/CODIGO_FUENTE.md) | Estructura y compilación |
 | [Empaquetamiento .exe](docs/EMPAQUETAMIENTO.md) | Cómo se generó el ejecutable |
 | [Guía de exposición](docs/GUIA_EXPOSICION.md) | Explicación del código y guion de exposición |
