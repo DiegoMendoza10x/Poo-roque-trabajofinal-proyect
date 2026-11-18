@@ -10,20 +10,18 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.text.Normalizer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,25 +29,25 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/** Pantalla principal: listados de los cuatro módulos y registro de pagos. */
+/** Pantalla principal: pestañas, listados con CRUD y nota de venta. */
 public class MainActivity extends Activity {
 
     private static final String[] MODULOS = {"Departamentos", "Inquilinos", "Contratos", "Pagos"};
     private static final String[] RUTAS = {
-            "/rest/v1/departamento?select=numero,piso,direccion,precio_mensual,estado&order=numero",
-            "/rest/v1/inquilino?select=dni,nombre,apellido,telefono&order=apellido",
-            "/rest/v1/contrato?select=idcontrato,fecha_inicio,fecha_fin,monto_mensual,estado,"
-                    + "inquilino(dni,nombre,apellido),departamento(numero)&order=idcontrato",
-            "/rest/v1/pago?select=idpago,fecha_pago,periodo,monto,metodo,descuento,igv,"
-                    + "contrato(idcontrato,inquilino(nombre,apellido),departamento(numero))&order=idpago.desc"
+            "/rest/v1/departamento?select=iddepartamento,numero,piso,direccion,precio_mensual,estado&order=numero",
+            "/rest/v1/inquilino?select=idinquilino,dni,nombre,apellido,telefono,direccion&order=apellido",
+            "/rest/v1/contrato?select=idcontrato,fecha_inicio,fecha_fin,monto_mensual,estado,inquilino(dni,nombre,apellido),departamento(numero)&order=idcontrato",
+            "/rest/v1/pago?select=idpago,fecha_pago,periodo,monto,metodo,descuento,igv,contrato(idcontrato,inquilino(nombre,apellido),departamento(numero))&order=idpago.desc"
     };
+    private static final String[] IDS = {"iddepartamento", "idinquilino", "idcontrato", "idpago"};
 
     private final ExecutorService hilo = Executors.newSingleThreadExecutor();
-    private final ArrayList<String> datos = new ArrayList<>();
-    private ArrayAdapter<String> adaptador;
-    private Spinner spinnerModulo;
+    private final ArrayList<Item> datos = new ArrayList<>();
+    private ItemAdapter adaptador;
+    private final Button[] pestañas = new Button[4];
     private EditText txtBusca;
     private TextView lblConteo;
+    private Button btnNuevo;
     private int moduloActual = 0;
 
     @Override
@@ -57,31 +55,35 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinnerModulo = findViewById(R.id.spinnerModulo);
         txtBusca = findViewById(R.id.txtBusca);
         lblConteo = findViewById(R.id.lblConteo);
+        btnNuevo = findViewById(R.id.btnNuevo);
         ListView listView = findViewById(R.id.listView);
         Button btnActualizar = findViewById(R.id.btnActualizar);
-        Button btnNuevoPago = findViewById(R.id.btnNuevoPago);
         Button btnSalir = findViewById(R.id.btnSalir);
+        TextView lblUsuario = findViewById(R.id.lblUsuario);
 
-        ArrayAdapter<String> adaptadorModulos = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, MODULOS);
-        adaptadorModulos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerModulo.setAdapter(adaptadorModulos);
+        SharedPreferences sesion = getSharedPreferences("sesion", MODE_PRIVATE);
+        String nombre = sesion.getString("nombre", "Administrador");
+        lblUsuario.setText(nombre + " · " + sesion.getString("rol", "ADMIN"));
 
-        adaptador = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, datos);
+        pestañas[0] = findViewById(R.id.tab0);
+        pestañas[1] = findViewById(R.id.tab1);
+        pestañas[2] = findViewById(R.id.tab2);
+        pestañas[3] = findViewById(R.id.tab3);
+        for (int i = 0; i < 4; i++) {
+            final int indice = i;
+            pestañas[i].setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    moduloActual = indice;
+                    marcarPestaña();
+                    cargar();
+                }
+            });
+        }
+
+        adaptador = new ItemAdapter(this, datos);
         listView.setAdapter(adaptador);
-
-        spinnerModulo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> padre, View vista, int posicion, long id) {
-                moduloActual = posicion;
-                cargar();
-            }
-
-            @Override public void onNothingSelected(AdapterView<?> padre) { }
-        });
 
         txtBusca.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) { }
@@ -91,11 +93,20 @@ public class MainActivity extends Activity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
+        listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override public void onItemClick(android.widget.AdapterView<?> padre, View vista,
+                                              int posicion, long id) {
+                final Item elegido = adaptador.getItem(posicion);
+                if (elegido == null) return;
+                mostrarOpciones(elegido);
+            }
+        });
+
         btnActualizar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { cargar(); }
         });
-        btnNuevoPago.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { mostrarDialogoPago(); }
+        btnNuevo.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { abrirFormulario(-1, null, false); }
         });
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -104,29 +115,91 @@ public class MainActivity extends Activity {
                 finish();
             }
         });
+
+        marcarPestaña();
+        cargar();
+    }
+
+    private void marcarPestaña() {
+        for (int i = 0; i < 4; i++) {
+            boolean activo = i == moduloActual;
+            pestañas[i].setBackgroundResource(activo
+                    ? R.drawable.bg_chip_activo : R.drawable.bg_chip);
+            pestañas[i].setTextColor(getResources().getColor(
+                    activo ? R.color.blanco : R.color.texto));
+        }
+        btnNuevo.setText("+ Nuevo " + MODULOS[moduloActual].replace("os", "o")
+                .replace("as", "a").toLowerCase());
+    }
+
+    private void abrirFormulario(long id, JSONObject item, boolean eliminar) {
+        Intent intent = new Intent(this, FormularioActivity.class);
+        intent.putExtra("modulo", moduloActual);
+        intent.putExtra("id", id);
+        if (item != null) intent.putExtra("item", item.toString());
+        intent.putExtra("eliminar", eliminar);
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) cargar();
+    }
+
+    private void mostrarOpciones(final Item elegido) {
+        final JSONArray opciones = new JSONArray();
+        opciones.put("Editar");
+        opciones.put("Eliminar");
+        if (moduloActual == 3) opciones.put("Ver nota de venta");
+
+        String[] items = new String[opciones.length()];
+        for (int i = 0; i < opciones.length(); i++) items[i] = opciones.optString(i);
+
+        new AlertDialog.Builder(this)
+                .setTitle(elegido.titulo)
+                .setItems(items, new android.content.DialogInterface.OnClickListener() {
+                    @Override public void onClick(android.content.DialogInterface d, int which) {
+                        String accion = opciones.optString(which);
+                        try {
+                            long id = elegido.json.getLong(IDS[moduloActual]);
+                            if ("Editar".equals(accion)) {
+                                abrirFormulario(id, elegido.json, false);
+                            } else if ("Eliminar".equals(accion)) {
+                                abrirFormulario(id, elegido.json, true);
+                            } else {
+                                mostrarNota(notaVenta(elegido.json,
+                                        elegido.json.optJSONObject("contrato")));
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(MainActivity.this, "Error: " + e.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .show();
     }
 
     // ------------------------------------------------------------------
-    // Listados
+    // Carga de datos
     // ------------------------------------------------------------------
 
     private void cargar() {
         lblConteo.setText("Cargando…");
         final int indice = moduloActual;
         hilo.execute(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
                 try {
                     final JSONArray filas = new JSONArray(SupabaseClient.get(RUTAS[indice]));
-                    final ArrayList<String> lineas = new ArrayList<>();
+                    final ArrayList<Item> lista = new ArrayList<>();
                     for (int i = 0; i < filas.length(); i++) {
-                        JSONObject fila = filas.getJSONObject(i);
-                        lineas.add(formatear(indice, fila));
+                        JSONObject f = filas.getJSONObject(i);
+                        lista.add(convertir(indice, f));
                     }
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
                             datos.clear();
-                            datos.addAll(lineas);
+                            datos.addAll(lista);
                             adaptador.notifyDataSetChanged();
                             adaptador.getFilter().filter(txtBusca.getText());
                             lblConteo.setText(datos.size() + " registros · " + MODULOS[indice]);
@@ -143,162 +216,39 @@ public class MainActivity extends Activity {
         });
     }
 
-    private String formatear(int modulo, JSONObject f) {
+    private Item convertir(int modulo, JSONObject f) {
         switch (modulo) {
             case 0:
-                return "N° " + f.optString("numero") + " · Piso " + f.optString("piso")
-                        + " · " + f.optString("direccion")
-                        + " · " + dinero(f.optString("precio_mensual"))
-                        + " · " + f.optString("estado");
+                return new Item("N° " + f.optString("numero") + " · " + f.optString("direccion"),
+                        "Piso " + f.optString("piso") + " · " + dinero(f.optString("precio_mensual")),
+                        f.optString("estado"), f);
             case 1:
-                return f.optString("dni") + " · " + f.optString("nombre") + " "
-                        + f.optString("apellido") + " · " + f.optString("telefono");
+                return new Item(f.optString("nombre") + " " + f.optString("apellido"),
+                        "DNI " + f.optString("dni") + " · " + f.optString("telefono"),
+                        f.optString("direccion"), f);
             case 2:
                 JSONObject inq = f.optJSONObject("inquilino");
                 JSONObject dep = f.optJSONObject("departamento");
-                return "#" + f.optString("idcontrato") + " · "
-                        + (inq == null ? "-" : inq.optString("nombre") + " " + inq.optString("apellido"))
-                        + " · Dpto. " + (dep == null ? "-" : dep.optString("numero"))
-                        + " · " + fecha(f.optString("fecha_inicio")) + " al " + fecha(f.optString("fecha_fin"))
-                        + " · " + dinero(f.optString("monto_mensual"))
-                        + " · " + f.optString("estado");
+                return new Item("#" + f.optString("idcontrato") + " · "
+                                + (inq == null ? "-" : inq.optString("nombre") + " " + inq.optString("apellido")),
+                        "Dpto. " + (dep == null ? "-" : dep.optString("numero"))
+                                + " · " + fecha(f.optString("fecha_inicio")) + " al " + fecha(f.optString("fecha_fin")),
+                        f.optString("estado"), f);
             default:
                 JSONObject c = f.optJSONObject("contrato");
                 JSONObject i = c == null ? null : c.optJSONObject("inquilino");
                 JSONObject d = c == null ? null : c.optJSONObject("departamento");
-                return "NV-" + numeroNota(f.optString("idpago")) + " · " + fecha(f.optString("fecha_pago"))
-                        + " · " + (i == null ? "-" : i.optString("nombre") + " " + i.optString("apellido"))
-                        + " · Dpto. " + (d == null ? "-" : d.optString("numero"))
-                        + " · " + dinero(f.optString("monto"))
-                        + " · " + f.optString("metodo");
+                return new Item("NV-" + numeroNota(f.optString("idpago")) + " · " + dinero(f.optString("monto")),
+                        (i == null ? "-" : i.optString("nombre") + " " + i.optString("apellido"))
+                                + " · Dpto. " + (d == null ? "-" : d.optString("numero"))
+                                + " · " + fecha(f.optString("fecha_pago")),
+                        f.optString("metodo"), f);
         }
     }
 
     // ------------------------------------------------------------------
-    // Registro de pagos y nota de venta
+    // Nota de venta
     // ------------------------------------------------------------------
-
-    private void mostrarDialogoPago() {
-        final View vista = LayoutInflater.from(this).inflate(R.layout.dialog_pago, null);
-        final Spinner cbxContrato = vista.findViewById(R.id.dlgContrato);
-        final EditText txtFecha = vista.findViewById(R.id.dlgFecha);
-        final EditText txtPeriodo = vista.findViewById(R.id.dlgPeriodo);
-        final EditText txtMonto = vista.findViewById(R.id.dlgMonto);
-        final EditText txtMetodo = vista.findViewById(R.id.dlgMetodo);
-        final EditText txtDescuento = vista.findViewById(R.id.dlgDescuento);
-        final EditText txtIgv = vista.findViewById(R.id.dlgIgv);
-
-        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-        txtFecha.setText(fmt.format(new Date()));
-        txtPeriodo.setText(fmt.format(new Date()).substring(0, 8) + "01");
-
-        final ArrayList<JSONObject> contratos = new ArrayList<>();
-        final ArrayAdapter<String> adaptadorContratos = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, new ArrayList<String>());
-        adaptadorContratos.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cbxContrato.setAdapter(adaptadorContratos);
-
-        hilo.execute(new Runnable() {
-            @Override public void run() {
-                try {
-                    final JSONArray filas = new JSONArray(SupabaseClient.get(
-                            "/rest/v1/contrato?select=idcontrato,estado,"
-                                    + "inquilino(nombre,apellido),departamento(numero)"
-                                    + "&estado=eq.Vigente&order=idcontrato"));
-                    final ArrayList<String> opciones = new ArrayList<>();
-                    for (int i = 0; i < filas.length(); i++) {
-                        JSONObject f = filas.getJSONObject(i);
-                        contratos.add(f);
-                        JSONObject inq = f.optJSONObject("inquilino");
-                        JSONObject dep = f.optJSONObject("departamento");
-                        opciones.add("#" + f.optString("idcontrato") + " · "
-                                + (inq == null ? "-" : inq.optString("nombre") + " " + inq.optString("apellido"))
-                                + " · Dpto. " + (dep == null ? "-" : dep.optString("numero")));
-                    }
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            adaptadorContratos.clear();
-                            adaptadorContratos.addAll(opciones);
-                            adaptadorContratos.notifyDataSetChanged();
-                        }
-                    });
-                } catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            lblConteo.setText("No se pudieron cargar los contratos: " + e.getMessage());
-                        }
-                    });
-                }
-            }
-        });
-
-        final AlertDialog dialogo = new AlertDialog.Builder(this)
-                .setTitle("Registrar pago")
-                .setView(vista)
-                .setPositiveButton("Guardar y emitir nota", null)
-                .setNegativeButton("Cancelar", null)
-                .create();
-        dialogo.setOnShowListener(new android.content.DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(android.content.DialogInterface d) {
-                ((android.widget.Button) dialogo.getButton(AlertDialog.BUTTON_POSITIVE))
-                        .setOnClickListener(new View.OnClickListener() {
-                            @Override public void onClick(View v) {
-                                guardarPago(contratos, cbxContrato, txtFecha, txtPeriodo,
-                                        txtMonto, txtMetodo, txtDescuento, txtIgv);
-                            }
-                        });
-            }
-        });
-        dialogo.show();
-    }
-
-    /** Se llama desde el botón positive del diálogo (implementado en onStart para simplificar). */
-    private void guardarPago(final ArrayList<JSONObject> contratos, Spinner cbxContrato,
-                             EditText txtFecha, EditText txtPeriodo, EditText txtMonto,
-                             EditText txtMetodo, EditText txtDescuento, EditText txtIgv) {
-        if (contratos.isEmpty() || cbxContrato.getSelectedItemPosition() < 0) {
-            lblConteo.setText("No hay contratos vigentes disponibles.");
-            return;
-        }
-        final JSONObject contrato = contratos.get(cbxContrato.getSelectedItemPosition());
-        final JSONObject pago = new JSONObject();
-        try {
-            pago.put("fecha_pago", txtFecha.getText().toString().trim());
-            pago.put("periodo", txtPeriodo.getText().toString().trim());
-            pago.put("monto", new BigDecimal(txtMonto.getText().toString().trim()));
-            pago.put("metodo", txtMetodo.getText().toString().trim());
-            pago.put("descuento", new BigDecimal(vacioCero(txtDescuento.getText().toString())));
-            pago.put("igv", new BigDecimal(vacioCero(txtIgv.getText().toString())));
-            pago.put("idcontrato", contrato.getLong("idcontrato"));
-        } catch (Exception e) {
-            lblConteo.setText("Revisa los datos del pago: " + e.getMessage());
-            return;
-        }
-
-        hilo.execute(new Runnable() {
-            @Override public void run() {
-                try {
-                    final String respuesta = SupabaseClient.post("/rest/v1/pago", pago.toString());
-                    final JSONArray guardado = new JSONArray(respuesta);
-                    final JSONObject fila = guardado.length() > 0 ? guardado.getJSONObject(0) : pago;
-                    final String nota = notaVenta(fila, contrato);
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            mostrarNota(nota);
-                            cargar();
-                        }
-                    });
-                } catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            lblConteo.setText("No se pudo guardar: " + e.getMessage());
-                        }
-                    });
-                }
-            }
-        });
-    }
 
     private void mostrarNota(final String nota) {
         final TextView vistaNota = new TextView(this);
@@ -306,7 +256,6 @@ public class MainActivity extends Activity {
         vistaNota.setTextSize(11);
         vistaNota.setTypeface(android.graphics.Typeface.MONOSPACE);
         vistaNota.setPadding(20, 12, 20, 12);
-
         new AlertDialog.Builder(this)
                 .setTitle("Nota de venta")
                 .setView(vistaNota)
@@ -320,6 +269,50 @@ public class MainActivity extends Activity {
                 })
                 .setNegativeButton("Cerrar", null)
                 .show();
+    }
+
+    private String notaVenta(JSONObject pago, JSONObject contrato) {
+        JSONObject inq = contrato == null ? null : contrato.optJSONObject("inquilino");
+        JSONObject dep = contrato == null ? null : contrato.optJSONObject("departamento");
+        String cliente = inq == null ? "Cliente varios"
+                : inq.optString("nombre") + " " + inq.optString("apellido");
+        String dni = inq == null ? "-" : inq.optString("dni");
+        String depto = dep == null ? "-" : dep.optString("numero");
+        double total = new BigDecimal(vacioCero(pago.optString("monto"))).doubleValue()
+                - new BigDecimal(vacioCero(pago.optString("descuento"))).doubleValue()
+                + new BigDecimal(vacioCero(pago.optString("igv"))).doubleValue();
+        String atendido = getSharedPreferences("sesion", MODE_PRIVATE).getString("nombre", "Caja");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(centrar("INMOBILIARIA J && D && J")).append('\n');
+        sb.append(centrar("RUC 00000000")).append('\n');
+        sb.append(centrar("Salida Arequipa KM 6")).append('\n');
+        sb.append(centrar("Tel. 900 876 123")).append('\n');
+        sb.append(separador()).append('\n');
+        sb.append(centrar("NOTA DE VENTA")).append('\n');
+        sb.append(centrar("NV-" + numeroNota(pago.optString("idpago", "0")))).append('\n');
+        sb.append(centrar("Emitido: " + new SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                .format(new Date()))).append('\n');
+        sb.append(separador()).append('\n');
+        sb.append("Cliente: " + recortar(cliente, 23)).append('\n');
+        sb.append("DNI: " + dni).append('\n');
+        sb.append("Depto.: " + depto).append('\n');
+        sb.append("Contrato: #" + (contrato == null ? "-" : contrato.optString("idcontrato"))).append('\n');
+        sb.append("Periodo: " + fecha(pago.optString("periodo"))).append('\n');
+        sb.append("Fecha pago: " + fecha(pago.optString("fecha_pago"))).append('\n');
+        sb.append("Atendido: " + recortar(atendido, 22)).append('\n');
+        sb.append(separador()).append('\n');
+        sb.append(fila("Alquiler", dinero(pago.optString("monto")))).append('\n');
+        sb.append(fila("Descuento", "-" + dinero(pago.optString("descuento")))).append('\n');
+        sb.append(fila("IGV", dinero(pago.optString("igv")))).append('\n');
+        sb.append(separador('-')).append('\n');
+        sb.append(fila("TOTAL", String.format(Locale.US, "S/ %.2f", total))).append('\n');
+        sb.append(separador()).append('\n');
+        sb.append("Metodo: " + pago.optString("metodo")).append('\n');
+        sb.append(centrar("Gracias por su preferencia")).append('\n');
+        sb.append(centrar("Documento no fiscal")).append('\n');
+        sb.append(separador());
+        return sb.toString();
     }
 
     // ------------------------------------------------------------------
@@ -344,53 +337,11 @@ public class MainActivity extends Activity {
     }
 
     private static String numeroNota(String id) {
-        return String.format(Locale.US, "%06d", Integer.parseInt(id));
-    }
-
-    private String notaVenta(JSONObject pago, JSONObject contrato) {
-        JSONObject inq = contrato.optJSONObject("inquilino");
-        JSONObject dep = contrato.optJSONObject("departamento");
-        String cliente = inq == null ? "Cliente varios"
-                : inq.optString("nombre") + " " + inq.optString("apellido");
-        String dni = inq == null ? "-" : inq.optString("dni");
-        String depto = dep == null ? "-" : dep.optString("numero");
-        String monto = dinero(pago.optString("monto"));
-        String descuento = dinero(pago.optString("descuento"));
-        String igv = dinero(pago.optString("igv"));
-        double total = new BigDecimal(vacioCero(pago.optString("monto"))).doubleValue()
-                - new BigDecimal(vacioCero(pago.optString("descuento"))).doubleValue()
-                + new BigDecimal(vacioCero(pago.optString("igv"))).doubleValue();
-        SharedPreferences sesion = getSharedPreferences("sesion", MODE_PRIVATE);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(centrar("INMOBILIARIA J && D && J")).append('\n');
-        sb.append(centrar("RUC 00000000")).append('\n');
-        sb.append(centrar("Salida Arequipa KM 6")).append('\n');
-        sb.append(centrar("Tel. 900 876 123")).append('\n');
-        sb.append(separador()).append('\n');
-        sb.append(centrar("NOTA DE VENTA")).append('\n');
-        sb.append(centrar("NV-" + numeroNota(pago.optString("idpago", "0")))).append('\n');
-        sb.append(centrar("Emitido: " + new SimpleDateFormat("dd/MM/yyyy", Locale.US).format(new Date()))).append('\n');
-        sb.append(separador()).append('\n');
-        sb.append("Cliente: " + recortar(cliente, 23)).append('\n');
-        sb.append("DNI: " + dni).append('\n');
-        sb.append("Depto.: " + depto).append('\n');
-        sb.append("Contrato: #" + contrato.optString("idcontrato")).append('\n');
-        sb.append("Periodo: " + fecha(pago.optString("periodo"))).append('\n');
-        sb.append("Fecha pago: " + fecha(pago.optString("fecha_pago"))).append('\n');
-        sb.append("Atendido: " + recortar(sesion.getString("nombre", "Caja"), 22)).append('\n');
-        sb.append(separador()).append('\n');
-        sb.append(fila("Alquiler", monto)).append('\n');
-        sb.append(fila("Descuento", "-" + descuento)).append('\n');
-        sb.append(fila("IGV", igv)).append('\n');
-        sb.append(separador('-')).append('\n');
-        sb.append(fila("TOTAL", String.format(Locale.US, "S/ %.2f", total))).append('\n');
-        sb.append(separador()).append('\n');
-        sb.append("Metodo: " + pago.optString("metodo")).append('\n');
-        sb.append(centrar("Gracias por su preferencia")).append('\n');
-        sb.append(centrar("Documento no fiscal")).append('\n');
-        sb.append(separador());
-        return sb.toString();
+        try {
+            return String.format(Locale.US, "%06d", Integer.parseInt(id));
+        } catch (Exception e) {
+            return "000000";
+        }
     }
 
     private static final int ANCHO = 32;
@@ -398,34 +349,73 @@ public class MainActivity extends Activity {
     private static String centrar(String texto) {
         String limpio = recortar(texto, ANCHO);
         int espacios = ANCHO - limpio.length();
-        int izquierda = espacios / 2;
-        return relleno(' ', izquierda) + limpio + relleno(' ', espacios - izquierda);
+        int izq = espacios / 2;
+        return relleno(' ', izq) + limpio + relleno(' ', espacios - izq);
     }
 
     private static String fila(String izquierda, String derecha) {
         String der = recortar(derecha, ANCHO - 1);
         String izq = recortar(izquierda, ANCHO - der.length() - 1);
-        int espacios = ANCHO - izq.length() - der.length();
-        return izq + relleno(' ', Math.max(1, espacios)) + der;
+        return izq + relleno(' ', Math.max(1, ANCHO - izq.length() - der.length())) + der;
     }
 
     private static String separador() {
         return separador('-');
     }
 
-    private static String separador(char caracter) {
-        return relleno(caracter, ANCHO);
+    private static String separador(char c) {
+        return relleno(c, ANCHO);
     }
 
-    private static String relleno(char caracter, int cantidad) {
+    private static String relleno(char c, int cantidad) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < cantidad; i++) sb.append(caracter);
+        for (int i = 0; i < cantidad; i++) sb.append(c);
         return sb.toString();
     }
 
     private static String recortar(String texto, int maximo) {
         String limpio = texto == null ? "" : texto.trim();
         return limpio.length() <= maximo ? limpio : limpio.substring(0, maximo);
+    }
+
+    /** Adaptador con fila de dos líneas y chip de estado. */
+    private static class ItemAdapter extends ArrayAdapter<Item> {
+        ItemAdapter(Context contexto, ArrayList<Item> datos) {
+            super(contexto, R.layout.item_row, datos);
+        }
+
+        @Override
+        public View getView(int posicion, View convertido, ViewGroup padre) {
+            View vista = convertido;
+            if (vista == null) {
+                vista = LayoutInflater.from(getContext()).inflate(R.layout.item_row, padre, false);
+            }
+            Item item = getItem(posicion);
+            ((TextView) vista.findViewById(R.id.itemTitulo)).setText(item.titulo);
+            ((TextView) vista.findViewById(R.id.itemSub)).setText(item.sub);
+            TextView badge = vista.findViewById(R.id.itemBadge);
+            badge.setText(item.badge);
+            return vista;
+        }
+    }
+
+    private static class Item {
+        String titulo;
+        String sub;
+        String badge;
+        JSONObject json;
+
+        Item(String titulo, String sub, String badge, JSONObject json) {
+            this.titulo = titulo;
+            this.sub = sub;
+            this.badge = badge;
+            this.json = json;
+        }
+
+        @Override
+        public String toString() {
+            return titulo + " " + sub + " " + badge;
+        }
     }
 
     @Override

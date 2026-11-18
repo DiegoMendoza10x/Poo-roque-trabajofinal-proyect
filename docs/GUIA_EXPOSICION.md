@@ -407,7 +407,7 @@ Headers: apikey: sb_publishable_… · Authorization: Bearer sb_publishable_…
 ```
 
 - La **anon key** es pública por diseño (está en el APK); la seguridad real se logra con **RLS**.
-- Las tablas tenían RLS activo sin políticas → se crearon políticas `FOR SELECT TO anon USING (true)` para los listados y login, y `FOR INSERT TO anon WITH CHECK (true)` para `pago` (`database/supabase_movil_policies.sql`).
+- Las tablas tenían RLS activo sin políticas → se crearon políticas `FOR ALL TO anon USING (true) WITH CHECK (true)` para los cuatro módulos (SELECT, INSERT, UPDATE y DELETE) y `FOR SELECT` para login y catálogos (`database/supabase_movil_policies.sql`).
 - En producción se usaría Supabase Auth y políticas por usuario.
 
 ### 8.4 Errores típicos
@@ -463,19 +463,24 @@ android/
 └── gradlew.bat               compilación
 ```
 
-### 10.3 Funcionalidad del MVP
+### 10.3 Funcionalidad (CRUD completo)
 
 - Login con sesión persistida en `SharedPreferences`.
-- Selector de módulo: Departamentos, Inquilinos, Contratos, Pagos.
-- Listados desde Supabase con búsqueda local sin acentos.
-- **Registrar pago**: elige contrato vigente, fecha, periodo, monto, método, descuento e IGV → `POST /rest/v1/pago`.
+- Pestañas tipo *chip*: Departamentos, Inquilinos, Contratos y Pagos.
+- Listados desde Supabase con fila de dos líneas + chip de estado y búsqueda local.
+- **CRUD completo** de los cuatro módulos:
+  - botón **+ Nuevo …** → `FormularioActivity` genérico con campos dinámicos;
+  - tocar una fila → **Editar**, **Eliminar** (y **Ver nota de venta** en Pagos);
+  - los combos (inquilinos, departamentos, personerías, contratos vigentes) se cargan desde Supabase;
+  - `POST` para alta, `PATCH` para edición y `DELETE` para borrado con filtro `?id=eq.X`.
 - **Nota de venta** en 32 columnas con botón *Compartir / imprimir* (Android ACTION_SEND).
+- Diseño renovado: cabecera con degradado, avatar, tarjetas, campos redondeados y botones primarios.
 
 ### 10.4 Limitaciones
 
-- No edita ni elimina registros desde el celular (solo lectura + alta de pagos).
 - La impresión térmica por Bluetooth serial no está implementada en el APK; se usa compartir/imprimir del sistema.
-- En producción: Supabase Auth + RLS por usuario y ofuscar la anon key.
+- Las políticas RLS del MVP son permisivas (`USING (true)`): son para exposición académica. En producción se usaría Supabase Auth y políticas por usuario/rol.
+- La anon key es pública; la **secret key nunca se usa en el cliente** (saltea RLS).
 
 ---
 

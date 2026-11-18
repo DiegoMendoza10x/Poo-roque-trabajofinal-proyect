@@ -28,6 +28,14 @@ public final class SupabaseClient {
         return peticion("POST", ruta, json);
     }
 
+    public static String patch(String ruta, String json) throws IOException {
+        return peticion("PATCH", ruta, json);
+    }
+
+    public static void delete(String ruta) throws IOException {
+        peticion("DELETE", ruta, null);
+    }
+
     private static String peticion(String metodo, String ruta, String cuerpo) throws IOException {
         HttpURLConnection conexion = (HttpURLConnection) new URL(URL_BASE + ruta).openConnection();
         conexion.setRequestMethod(metodo);
@@ -37,7 +45,7 @@ public final class SupabaseClient {
         conexion.setRequestProperty("Authorization", "Bearer " + API_KEY);
         conexion.setRequestProperty("Accept", "application/json");
         conexion.setRequestProperty("Content-Type", "application/json; charset=utf-8");
-        if ("POST".equals(metodo)) {
+        if ("POST".equals(metodo) || "PATCH".equals(metodo)) {
             conexion.setDoOutput(true);
             conexion.setRequestProperty("Prefer", "return=representation");
         }

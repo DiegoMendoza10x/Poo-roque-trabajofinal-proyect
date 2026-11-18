@@ -20,6 +20,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".FormularioActivity"
+            android:exported="false"
+            android:label="Registro" />
     </application>
 
 </manifest>
