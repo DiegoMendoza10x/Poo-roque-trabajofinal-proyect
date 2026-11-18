@@ -26,7 +26,7 @@ public final class DatabaseConfig {
 
     private static final String PROPERTIES_FILE = "application.properties";
     private static final String DEFAULT_URL =
-            "jdbc:h2:file:./data/alquileres;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH";
+            "jdbc:h2:~/SysAlquileres/data/alquileres;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH";
     private static final String DEFAULT_USER = "sa";
     private static final String DEFAULT_SCRIPT = "schema.sql";
 

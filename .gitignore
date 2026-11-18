@@ -9,6 +9,14 @@ database/*Coection*.txt
 dist/
 dist-debug/
 
+# Android / APK
+android/.gradle/
+android/local.properties
+android/build/
+android/app/build/
+android/.idea/
+*.apk
+
 # Base de datos local H2
 data/
 

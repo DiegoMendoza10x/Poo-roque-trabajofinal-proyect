@@ -567,27 +567,6 @@
     -fx-background-color: transparent;
 }
 
-/* Fila de contrato con monto mensual alto (ver ContratoController). */
-.table-row-cell.contrato-monto-alto {
-    -fx-background-color: #FEF9C3;
-}
-
-.table-row-cell.contrato-monto-alto:hover {
-    -fx-background-color: #FEF08A;
-}
-
-.table-row-cell.contrato-monto-alto:selected {
-    -fx-background-color: #DBEAFE;
-}
-
-.table-row-cell.contrato-monto-alto .table-cell {
-    -fx-text-fill: #854D0E;
-}
-
-.table-row-cell.contrato-monto-alto:selected .table-cell {
-    -fx-text-fill: #0F172A;
-}
-
 /* ---------------- ETIQUETAS DE ESTADO (BADGES) ---------------- */
 
 .badge {

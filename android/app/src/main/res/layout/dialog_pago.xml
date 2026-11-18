@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contrato"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/dlgContrato"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blanco" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Fecha de pago (aaaa-mm-dd)"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/dlgFecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Periodo (aaaa-mm-01)"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/dlgPeriodo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Monto (S/)"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/dlgMonto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Método"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/dlgMetodo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Efectivo, Yape, Transferencia…"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Descuento"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/dlgDescuento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:text="0" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="IGV"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/dlgIgv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:text="0" />
+    </LinearLayout>
+
+</ScrollView>

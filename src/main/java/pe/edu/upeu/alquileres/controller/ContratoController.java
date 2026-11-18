@@ -10,7 +10,6 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -124,15 +123,6 @@ public class ContratoController {
             protected void updateItem(BigDecimal valor, boolean vacio) {
                 super.updateItem(valor, vacio);
                 setText(vacio || valor == null ? null : Formato.dinero(valor));
-
-                boolean montoMayor = !vacio && valor != null && valor.doubleValue() > 500;
-                TableRow<Contrato> fila = getTableRow();
-                if (fila != null) {
-                    fila.getStyleClass().remove("contrato-monto-alto");
-                    if (montoMayor) {
-                        fila.getStyleClass().add("contrato-monto-alto");
-                    }
-                }
             }
         };
     }

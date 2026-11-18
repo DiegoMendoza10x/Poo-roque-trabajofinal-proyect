@@ -153,6 +153,19 @@ Notas:
 - Si se usa Supabase, las variables de entorno deben configurarse en la misma terminal
   desde la que se inicia el `.exe` (o de forma permanente con `setx`).
 
+### APK Android (MVP)
+
+Versión móvil que reutiliza la misma base de datos de Supabase:
+
+```powershell
+cd android
+.\gradlew.bat assembleRelease
+```
+
+- APK: `android\app\build\outputs\apk\release\app-release.apk`
+- Incluye: login, listados de los 4 módulos, registro de pagos y nota de venta compartible.
+- Guía completa: [`docs/GUIA_EXPOSICION.md`](docs/GUIA_EXPOSICION.md) (sección 10).
+
 ### Credenciales H2 por defecto
 
 | Parámetro | Valor |
