@@ -20,7 +20,7 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "Falló la copia de dependencias" }
 
     Write-Host "[3/4] Generando imagen de aplicación con jpackage..." -ForegroundColor Cyan
-    if (Test-Path "dist") { Remove-Item "dist" -Recurse -Force }
+    if (Test-Path "dist\SysAlquileres") { Remove-Item "dist\SysAlquileres" -Recurse -Force }
     $modulos = "java.base,java.desktop,java.sql,java.naming,java.logging," +
                "java.management,java.xml,java.prefs,java.scripting,jdk.unsupported," +
                "jdk.crypto.ec,jdk.crypto.cryptoki"
