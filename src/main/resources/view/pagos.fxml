@@ -16,7 +16,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="pe.edu.upeu.alquileres.controller.PagoController"
-      styleClass="modulo" spacing="14.0">
+      styleClass="modulo" stylesheets="@../css/app.css" spacing="14.0">
 
     <HBox alignment="CENTER_LEFT" spacing="10.0">
         <VBox spacing="1.0">

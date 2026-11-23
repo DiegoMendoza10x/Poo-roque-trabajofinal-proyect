@@ -297,6 +297,20 @@ El botón está en **Pagos → Nota de venta**; hay que seleccionar primero un p
 - Los 4 FXML de módulos: cabecera con buscador, tarjeta de formulario y tarjeta de tabla.
 - `app.css`: paleta azul (`#2563EB`), tarjetas con sombra, botones redondeados, inputs con foco azul, tablas sin cuadrícula, *badges*, scrollbars y estilos de diálogo.
 
+### 5.13 ¿Por qué en Scene Builder se ve distinto?
+
+Si abres un FXML en Scene Builder verás controles grises, tablas vacías y textos recortados, pero al ejecutar la app se ve con colores y datos. No es un error:
+
+| Lo que ves en Scene Builder | Lo que pasa al ejecutar |
+|---|---|
+| Tema gris por defecto | `App.cargar()` aplica `/css/app.css` a la `Scene` (y los FXML también lo declaran con `stylesheets="@../css/app.css"` para que el preview lo cargue) |
+| "No content in table" | El controlador no se ejecuta en Scene Builder; en runtime `initialize()` llama a `service.findAll()` y llena la tabla |
+| Combos vacíos | Los combos se cargan desde Supabase/H2 dentro de `initialize()` |
+| Área recortada | El lienzo de Scene Builder es más chico que la ventana real (1180×730, mínimo 1040×660) |
+
+**Frase para la exposición:**
+> "El FXML es solo la estructura; Scene Builder la muestra con el tema por defecto y sin datos. Al ejecutar, `App.java` aplica el CSS y el controlador consulta la base: ahí aparecen el diseño y la información."
+
 ---
 
 ## 6. Flujo completo: crear un contrato y emitir una nota
