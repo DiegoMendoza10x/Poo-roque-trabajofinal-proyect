@@ -34,3 +34,5 @@ data/
 # Sistema operativo
 Thumbs.db
 .DS_Store
+
+.vercel
