@@ -56,7 +56,7 @@
       <li>Clona <code>https://github.com/Yorlxx/SysAlquileres.git</code> en la carpeta que indiques.</li>
       <li>Renombra el remoto original a <code>plantilla</code> (para no perder el origen).</li>
       <li>Agrega tu repositorio como <code>origin</code>.</li>
-      <li>Sube la rama <code>main</code> con todo el contenido.</li>
+      <li>Hace <code>push</code> con reintentos y verificación real del hash remoto.</li>
       <li>Muestra un resumen con los entregables y el estado final.</li>
     </ul>
   </section>
@@ -81,7 +81,7 @@
       <li>Pega la <b>URL de tu repositorio</b>: <code>https://github.com/TU_USUARIO/TU_REPO.git</code>.</li>
       <li>Presiona Enter en las dos preguntas opcionales para usar los valores por defecto.</li>
       <li>Si la carpeta ya existiera, responde <code>s</code> para eliminarla o <code>n</code> para elegir otra ruta.</li>
-      <li>Espera a que termine. Verás los pasos <code>[1/5]</code> hasta <code>[5/5]</code>.</li>
+      <li>Espera a que termine. Verás los pasos <code>[1/6]</code> hasta <code>[6/6]</code> y, si hay un 408, los reintentos automáticos.</li>
       <li>Presiona una tecla cuando aparezca <i>Press any key to continue</i>.</li>
     </ol>
     <div class="aviso verde"><strong>Resultado</strong> Tu repo de GitHub contendrá exactamente la misma estructura que el proyecto entregado.</div>
@@ -107,7 +107,13 @@ cd /d "C:\Entrega\SysAlquileres"
 git remote rename origin plantilla
 git remote add origin https://github.com/TU_USUARIO/TU_REPO.git
 
+git config http.postBuffer 524288000
+git config http.lowSpeedLimit 0
+git config http.lowSpeedTime 999999
+git config http.version HTTP/1.1
+
 git push -u origin main</pre>
+<p>El script aplica esos ajustes <b>antes</b> del push porque el ZIP portable hace que el envío pese más de 200 MB. Sin el buffer ampliado, GitHub responde <code>HTTP 408</code>.</p>
     <p>Después del push, tendrás dos remotos:</p>
     <table>
       <tr><th>Remoto</th><th>URL</th><th>Para qué sirve</th></tr>
@@ -132,7 +138,14 @@ git push -u origin main</pre>
 
   <section id="errores">
     <h2><span class="num">7</span> Si el push falla</h2>
-    <p>Si tu repositorio no está vacío, el script muestra tres opciones:</p>
+    <p class="intro">La versión mejorada del script hace <b>3 intentos normales</b>, espera entre ellos y verifica el hash remoto en lugar de fiarse del mensaje <i>Everything up-to-date</i>.</p>
+    <ul class="checks">
+      <li>Amplía <code>http.postBuffer</code> a 500 MB y desactiva los timeouts lentos.</li>
+      <li>Reintenta automáticamente hasta 3 veces si aparece <code>HTTP 408</code>.</li>
+      <li>Si el repo destino está vacío, usa <code>push -f</code> de forma segura como último recurso.</li>
+      <li>Compara el hash local con el remoto: solo muestra “LISTO” si coinciden.</li>
+    </ul>
+    <p>Si aun así falla, el script ofrece tres opciones:</p>
     <table>
       <tr><th>Opción</th><th>Qué hace</th><th>Cuándo usarla</th></tr>
       <tr><td><code>s</code> — unir historias</td><td><code>git pull --allow-unrelated-histories</code> y vuelve a subir.</td><td>Cuando quieras conservar ambos contenidos.</td></tr>
