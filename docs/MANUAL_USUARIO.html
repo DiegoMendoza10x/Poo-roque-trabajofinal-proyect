@@ -525,7 +525,7 @@ mvn javafx:run</pre>
     <details><summary>¿Dónde se guarda la configuración de la impresora?</summary><p>En <code>%USERPROFILE%\.SysAlquileres\impresion.properties</code>. La ruta exacta se muestra en el panel <b>Config. impresión</b>.</p></details>
     <details><summary>¿Se está usando Supabase o H2?</summary><p>En este entorno, <b>Supabase / PostgreSQL</b>, porque las variables <code>SUPABASE_DB_*</code> tienen prioridad. H2 es el valor por defecto cuando esas variables no existen. La base inicial incluida es H2 (gratuita); la nube es opcional y tiene costo adicional.</p></details>
     <details><summary>¿Cómo vuelvo a H2 local?</summary><p>Cierra la aplicación, elimina o desactiva las variables <code>SUPABASE_DB_*</code> y <code>DB_*</code>, y vuelve a ejecutar. La base se crea en la carpeta <code>data/</code>.</p></details>
-    <details><summary>¿Dónde está el modelo de Power Architect?</summary><p>En <code>database/modelo-power-architect.architect</code> (actualizado, 7 tablas). El original se conserva como <code>modelo-power-architect-original.architect</code>.</p></details>
+    <details><summary>¿Dónde está el modelo de Power Architect?</summary><p>En <code>modelo-power-architect/SysAlquileres-PowerArchitect.architect</code> (actualizado, 7 tablas). El original se conserva como <code>PowerArchitect-Original.architect</code> en la misma carpeta.</p></details>
     <details><summary>¿La clave del usuario está segura?</summary><p>En este proyecto académico se guarda en texto plano para simplificar. En un sistema real debe almacenarse con un hash (por ejemplo BCrypt).</p></details>
     <details><summary>¿Puedo copiar el ticket sin imprimirlo?</summary><p>Sí. En la ventana de nota de venta pulsa <b>Copiar texto</b>; el contenido queda en el portapapeles.</p></details>
   </section>
@@ -579,12 +579,13 @@ mvn javafx:run</pre>
     <table>
       <tr><th>Archivo</th><th>Contenido</th></tr>
       <tr><td><code>README.md</code></td><td>Descripción general, ejecución y estructura.</td></tr>
-      <tr><td><code>docs/CONFIGURACION.md</code></td><td>Panel de impresora, base activa y modelo Architect.</td></tr>
-      <tr><td><code>docs/IMPRESION_58MM.md</code></td><td>Guía técnica de impresión térmica.</td></tr>
-      <tr><td><code>docs/SUPABASE.md</code></td><td>Configuración de la base en la nube.</td></tr>
-      <tr><td><code>docs/GUIA_EXPOSICION.md</code></td><td>Explicación del código y guion.</td></tr>
-      <tr><td><code>docs/PRESENTACION.html</code></td><td>Presentación interactiva de 22 diapositivas.</td></tr>
-      <tr><td><code>database/modelo-power-architect.architect</code></td><td>Modelo de datos actualizado.</td></tr>
+      <tr><td><code>docs/GUIA_EXPOSICION.html</code></td><td>Guion de exposición y explicación del código.</td></tr>
+      <tr><td><code>docs/CONFIGURACION.html</code></td><td>Panel de impresora, base activa y modelo Architect.</td></tr>
+      <tr><td><code>docs/IMPRESION_58MM.html</code></td><td>Guía visual de impresión térmica.</td></tr>
+      <tr><td><code>docs/SUPABASE.html</code></td><td>Configuración de la base en la nube.</td></tr>
+      <tr><td><code>docs/APK_CLIENTES.html</code></td><td>Roles, claves y datos filtrados.</td></tr>
+      <tr><td><code>docs/PRESENTACION.html</code></td><td>Presentación interactiva de 23 diapositivas.</td></tr>
+      <tr><td><code>modelo-power-architect/SysAlquileres-PowerArchitect.architect</code></td><td>Modelo de datos actualizado (7 tablas).</td></tr>
     </table>
     <div class="aviso verde"><strong>Versión del manual</strong> Actualizado con: panel de configuración de impresión, impresión 58/80 mm por cable y Bluetooth, nota de venta al guardar pagos, Supabase activo y modelo Architect actualizado.</div>
   </section>
