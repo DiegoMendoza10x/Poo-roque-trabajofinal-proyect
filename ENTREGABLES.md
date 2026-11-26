@@ -16,6 +16,8 @@
 
 > Repositorio: `https://github.com/Yorlxx/SysAlquileres.git`. Si está privado, agregar al usuario **`dmanipar`** como colaborador desde *Settings → Collaborators*.
 
+> **Base de datos:** la versión entregada usa **H2 embebida** (gratuita, se crea sola, sin internet). La opción en la nube con **Supabase/PostgreSQL** permite compartir datos entre PCs y con la APK, pero implica un **costo adicional** de hosting y requiere variables de entorno. En un software comercial se usaría una única base centralizada con secretos gestionados y autenticación real.
+
 ## Entregables binarios
 
 | Archivo | Descripción |

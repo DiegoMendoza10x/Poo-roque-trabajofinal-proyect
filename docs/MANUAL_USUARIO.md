@@ -208,6 +208,8 @@ El rol `ADMIN` existe por defecto (`admin / admin123`). El rol `CLIENTE` se crea
 ## 10. Base de datos (información para el usuario)
 
 - **Base activa en este entorno: Supabase / PostgreSQL**, porque las variables `SUPABASE_DB_*` están configuradas y tienen prioridad. `application.properties` trae H2 como valor por defecto.
+- **Base inicial incluida:** H2 embebida, gratuita y que se crea sola; no requiere internet ni instalación.
+- **Base en la nube (opcional):** Supabase / PostgreSQL permite compartir datos entre PCs y con la APK, pero implica un **costo adicional** de hosting y requiere variables de entorno. En un sistema comercial se usaría una única base centralizada con secretos gestionados y autenticación real; aquí la arquitectura por capas permite cambiar de base sin tocar la interfaz.
 - Prioridad: `application.properties` → propiedades `-D` → variables `DB_*` → variables `SUPABASE_DB_*` (máxima).
 - La URL de Supabase se ajusta sola con `sslmode=require` y `prepareThreshold=0`.
 - Para volver a H2: cierra la app, quita las variables `SUPABASE_DB_*` y `DB_*`, y ejecuta de nuevo. La base local se crea en `~/SysAlquileres/data/alquileres.mv.db`.

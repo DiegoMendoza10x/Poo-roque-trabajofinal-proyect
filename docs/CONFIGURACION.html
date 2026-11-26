@@ -30,6 +30,7 @@ baudios=9600</pre>
 <p>Lo administra <code>config/ConfigImpresion.java</code> (Singleton). La ruta exacta se muestra en el panel.</p></section>
 <section id="base"><h2><span class="num">3</span> Base activa</h2>
 <div class="aviso verde"><strong>Este entorno</strong> Supabase / PostgreSQL, por las variables <code>SUPABASE_DB_*</code>.</div>
+<div class="aviso ambar"><strong>H2 inicial vs nube</strong> La versión entregada arranca con H2 embebida: gratuita, automática y sin internet. La base en la nube (Supabase) es opcional, permite compartir datos y tiene un <b>costo adicional</b> de hosting; requiere configurar variables de entorno.</div>
 <ol class="pasos"><li><code>application.properties</code> trae H2 por defecto.</li><li>Propiedades <code>-Ddb.url=...</code>.</li><li>Variables <code>DB_*</code>.</li><li><b>Variables <code>SUPABASE_DB_*</code></b> (prioridad máxima).</li></ol>
 <pre>SUPABASE_DB_URL=jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres
 SUPABASE_DDL_AUTO=false

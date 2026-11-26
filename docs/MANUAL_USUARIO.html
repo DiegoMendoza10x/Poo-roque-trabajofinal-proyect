@@ -463,6 +463,8 @@ baudios=9600</pre>
 
     <div class="aviso verde"><strong>Estado actual</strong> En este entorno se está usando <b>Supabase / PostgreSQL</b>, porque las variables <code>SUPABASE_DB_*</code> están configuradas y tienen prioridad. El archivo <code>application.properties</code> trae H2 como valor por defecto.</div>
 
+    <div class="aviso ambar"><strong>Base inicial incluida vs base en la nube</strong> La versión entregada usa <b>H2 embebida</b> por defecto: es gratuita, se crea automáticamente la primera vez y no requiere internet ni instalación. Si deseas compartir información entre varias PCs o con la APK, el sistema soporta <b>Supabase / PostgreSQL</b>, pero ese servicio externo implica un <b>costo adicional</b> de hosting y requiere configurar variables de entorno. En este proyecto académico la conexión ya está preparada; el plan cloud es responsabilidad del usuario.</div>
+
     <h3 class="sub">Prioridad de configuración</h3>
     <ol class="pasos">
       <li><code>application.properties</code> (H2 local por defecto).</li>
@@ -521,7 +523,7 @@ mvn javafx:run</pre>
     <details><summary>¿La nota de venta es una factura o boleta?</summary><p>No. Es una nota de venta interna para control del alquiler. No tiene validez fiscal ni reemplaza los comprobantes de SUNAT.</p></details>
     <details><summary>¿Puedo imprimir por Bluetooth si Windows la instaló como impresora?</summary><p>Sí. En ese caso elige <b>Cable / Windows</b>. El modo <b>Bluetooth / COM</b> es para impresoras que solo crean un puerto serial.</p></details>
     <details><summary>¿Dónde se guarda la configuración de la impresora?</summary><p>En <code>%USERPROFILE%\.SysAlquileres\impresion.properties</code>. La ruta exacta se muestra en el panel <b>Config. impresión</b>.</p></details>
-    <details><summary>¿Se está usando Supabase o H2?</summary><p>En este entorno, <b>Supabase / PostgreSQL</b>, porque las variables <code>SUPABASE_DB_*</code> tienen prioridad. H2 es el valor por defecto cuando esas variables no existen.</p></details>
+    <details><summary>¿Se está usando Supabase o H2?</summary><p>En este entorno, <b>Supabase / PostgreSQL</b>, porque las variables <code>SUPABASE_DB_*</code> tienen prioridad. H2 es el valor por defecto cuando esas variables no existen. La base inicial incluida es H2 (gratuita); la nube es opcional y tiene costo adicional.</p></details>
     <details><summary>¿Cómo vuelvo a H2 local?</summary><p>Cierra la aplicación, elimina o desactiva las variables <code>SUPABASE_DB_*</code> y <code>DB_*</code>, y vuelve a ejecutar. La base se crea en la carpeta <code>data/</code>.</p></details>
     <details><summary>¿Dónde está el modelo de Power Architect?</summary><p>En <code>database/modelo-power-architect.architect</code> (actualizado, 7 tablas). El original se conserva como <code>modelo-power-architect-original.architect</code>.</p></details>
     <details><summary>¿La clave del usuario está segura?</summary><p>En este proyecto académico se guarda en texto plano para simplificar. En un sistema real debe almacenarse con un hash (por ejemplo BCrypt).</p></details>

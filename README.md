@@ -209,6 +209,8 @@ Para reiniciar la base de datos: cierra la aplicación y elimina la carpeta `dat
 
 > **Base activa en este entorno:** hay variables `SUPABASE_DB_*` configuradas, por lo que el sistema está usando **Supabase / PostgreSQL** (pooler `aws-0-us-east-1.pooler.supabase.com`). `application.properties` sigue trayendo H2 como valor por defecto; las variables de entorno tienen prioridad. Para volver a H2 local, cierra la app y elimina/desactiva esas variables de entorno. La ruta del panel **Config. impresión** muestra el motor activo en tiempo real.
 
+> **Para la exposición / uso comercial:** la versión entregada usa **H2 embebida** por defecto: es gratuita, se crea sola y permite que cada estación funcione sin internet. Si se desea una **base en la nube** (Supabase/PostgreSQL) para compartir datos entre varias PCs o con la APK, ese servicio externo implica un **costo adicional** de hosting y requiere configurar variables de entorno. En un software comercial se usaría una única base centralizada con secretos gestionados, autenticación real y copias de seguridad; en este proyecto académico la arquitectura por capas permite cambiar de base sin tocar la interfaz.
+
 > El modelo **Power Architect** actualizado está en la carpeta **`modelo-power-architect/`**, archivo `SysAlquileres-PowerArchitect.architect` (7 tablas, incluida `usuario`). El original de REQUERIMIENTOS se conserva como `PowerArchitect-Original.architect`. Instrucciones en `modelo-power-architect/README.md`.
 
 > Si actualizas desde una versión anterior, elimina la carpeta `data/` una vez: las bases ya creadas no reciben automáticamente la tabla `usuario`.

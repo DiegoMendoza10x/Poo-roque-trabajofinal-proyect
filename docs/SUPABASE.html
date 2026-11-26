@@ -12,6 +12,7 @@
 <main>
 <section id="config"><h2><span class="num">1</span> Configuración</h2>
 <p class="intro"><code>application.properties</code> trae H2 por defecto, pero las variables de entorno lo sobrescriben.</p>
+<div class="aviso ambar"><strong>H2 inicial vs nube</strong> H2 embebida es gratuita y se crea sola; es la base incluida para la exposición. Supabase/PostgreSQL es la opción en la nube para compartir datos y tiene un <b>costo adicional</b> de hosting. La arquitectura por capas permite cambiar de una a otra sin modificar la interfaz.</div>
 <table><tr><th>Variable</th><th>Valor en este entorno</th></tr>
 <tr><td><code>SUPABASE_DB_URL</code></td><td><code>jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres</code></td></tr>
 <tr><td><code>SUPABASE_DB_USER</code></td><td><code>postgres.zarbbelqcsivzhjrpguu</code></td></tr>

@@ -118,6 +118,7 @@
   <section id="base">
     <h2><span class="num">6</span> Base de datos y Supabase</h2>
     <div class="aviso verde"><strong>Estado actual</strong> Se está usando <b>Supabase / PostgreSQL</b>, porque las variables <code>SUPABASE_DB_*</code> están configuradas y tienen prioridad sobre el H2 de <code>application.properties</code>.</div>
+    <div class="aviso ambar"><strong>Frase para el docente</strong> “Para la exposición entregamos H2 local: es gratuita, se crea sola y hace que cada estación funcione sin internet. Para un software comercial se migraría a una única base PostgreSQL en la nube con secretos gestionados, autenticación real y copias de seguridad; ese servicio tiene un costo adicional. La arquitectura por capas permite cambiar de base sin tocar la interfaz.”</div>
     <div class="diagrama">
       <div class="cadena">
         <div class="nodo"><span class="icono">🚀</span><b>AppContext</b><small>Singleton</small></div><div class="flecha">→</div>

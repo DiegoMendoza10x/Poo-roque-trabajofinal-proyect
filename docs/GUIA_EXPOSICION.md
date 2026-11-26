@@ -329,6 +329,8 @@ Si abres un FXML en Scene Builder verás controles grises, tablas vacías y text
 
 ## 7. Base de datos
 
+> **Para exponer:** la versión entregada usa **H2 embebida** por defecto (gratuita, se crea sola, sin internet). La opción cloud con **Supabase/PostgreSQL** permite compartir datos entre PCs y con la APK, pero implica un **costo adicional** de hosting y variables de entorno. En un software comercial se usaría una única base centralizada con secretos gestionados, autenticación real y backups; la arquitectura por capas permite cambiar de base sin tocar la interfaz.
+
 ### 7.1 Modelo entidad-relación
 
 ```mermaid

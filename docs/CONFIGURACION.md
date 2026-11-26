@@ -69,6 +69,8 @@ db.seed.demo=true
 
 Hay variables `SUPABASE_DB_*` configuradas, por lo que **la aplicación está usando Supabase / PostgreSQL**, no H2:
 
+> **H2 inicial vs nube:** la versión entregada arranca con H2 embebida (gratuita, automática, sin internet). La opción cloud con Supabase permite compartir datos entre PCs y con la APK, pero implica un **costo adicional** de hosting y requiere variables de entorno.
+
 ```text
 SUPABASE_DB_URL = jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres
 SUPABASE_DDL_AUTO = false
