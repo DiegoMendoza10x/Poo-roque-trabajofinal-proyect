@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="pe.edu.upeu.alquileres.controller.ConfiguracionImpresionController"
+      styleClass="modulo" stylesheets="@../css/app.css" spacing="14.0">
+
+    <padding>
+        <Insets top="18.0" right="22.0" bottom="18.0" left="22.0"/>
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <VBox spacing="1.0">
+            <Label text="Configuración de impresión" styleClass="page-titulo"/>
+            <Label text="Define papel, conexión y impresora para la nota de venta térmica" styleClass="page-sub"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <VBox styleClass="card" spacing="12.0">
+        <Label text="Impresora térmica" styleClass="card-titulo"/>
+
+        <GridPane hgap="12.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints minWidth="150.0" prefWidth="180.0"/>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="260.0"/>
+            </columnConstraints>
+
+            <Label text="Conexión" styleClass="campo-etiqueta" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="cbxModo" maxWidth="Infinity"
+                      GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <Label text="Papel" styleClass="campo-etiqueta" GridPane.rowIndex="1"/>
+            <ComboBox fx:id="cbxPapel" maxWidth="Infinity"
+                      GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <Label text="Impresora de Windows" styleClass="campo-etiqueta" GridPane.rowIndex="2"/>
+            <ComboBox fx:id="cbxImpresoras" maxWidth="Infinity" promptText="No hay impresoras instaladas"
+                      GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <Label text="Puerto COM / Bluetooth" styleClass="campo-etiqueta" GridPane.rowIndex="3"/>
+            <ComboBox fx:id="cbxPuertos" maxWidth="Infinity" promptText="No hay puertos COM"
+                      GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <Label text="Velocidad (baudios)" styleClass="campo-etiqueta" GridPane.rowIndex="4"/>
+            <ComboBox fx:id="cbxBaudios" maxWidth="Infinity"
+                      GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        </GridPane>
+
+        <Label fx:id="lblEstado" wrapText="true"/>
+
+        <HBox spacing="10.0">
+            <Button text="Guardar configuración" onAction="#onGuardar" styleClass="boton-primario"/>
+            <Button text="Imprimir prueba" onAction="#onProbar" styleClass="boton-exito"/>
+            <Button text="Actualizar listas" onAction="#onActualizar" styleClass="boton-secundario"/>
+        </HBox>
+    </VBox>
+
+    <VBox styleClass="card" spacing="8.0">
+        <Label text="Estado del sistema" styleClass="card-titulo"/>
+        <Label fx:id="lblBase" wrapText="true" styleClass="texto-ayuda"/>
+        <Label fx:id="lblRuta" wrapText="true" styleClass="texto-ayuda"/>
+    </VBox>
+
+    <VBox styleClass="card" spacing="8.0">
+        <Label text="Cómo funciona" styleClass="card-titulo"/>
+        <Label wrapText="true" styleClass="texto-ayuda"
+               text="Cable / Windows usa el controlador instalado en el sistema (por ejemplo POS-58-Series o POS-80-Series). Bluetooth / puerto COM envía comandos ESC/POS directamente al puerto serial creado al emparejar la impresora."/>
+        <Label wrapText="true" styleClass="texto-ayuda"
+               text="El papel de 58 mm imprime 32 caracteres por línea y el de 80 mm imprime 48. Guardar la configuración hace que la ventana de nota de venta abra con estos valores ya seleccionados."/>
+    </VBox>
+</VBox>

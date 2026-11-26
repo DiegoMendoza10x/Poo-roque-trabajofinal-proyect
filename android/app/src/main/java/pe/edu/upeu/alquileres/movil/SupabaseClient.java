@@ -17,6 +17,9 @@ public final class SupabaseClient {
     public static final String URL_BASE = "https://zarbbelqcsivzhjrpguu.supabase.co";
     public static final String API_KEY = "sb_publishable_wkoLJTTv6EeGN0d4QvLKHQ_7-OBCFPN";
 
+    /** DNI del usuario en sesión; se envía como cabecera para las políticas RLS. */
+    public static String cabeceraDni = "";
+
     private SupabaseClient() {
     }
 
@@ -45,6 +48,9 @@ public final class SupabaseClient {
         conexion.setRequestProperty("Authorization", "Bearer " + API_KEY);
         conexion.setRequestProperty("Accept", "application/json");
         conexion.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+        if (cabeceraDni != null && !cabeceraDni.trim().isEmpty()) {
+            conexion.setRequestProperty("x-dni", cabeceraDni.trim());
+        }
         if ("POST".equals(metodo) || "PATCH".equals(metodo)) {
             conexion.setDoOutput(true);
             conexion.setRequestProperty("Prefer", "return=representation");

@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='utf-8'?>
+<architect-project version="1.0" appversion="1.0.9">
+  <project-name>SysAlquileres · Modelo de datos actualizado (POO 2026)</project-name>
+  <print-settings numCopies="1" zoom="1.0" pageNumbersPrinted="true" orientation="1" paperWidth="612.0" paperHeight="792.0" leftBorder="50.0" rightBorder="50.0" topBorder="50.0" bottomBorder="50.0" />
+  <project-data-sources>
+    <data-source id="DS0">
+      <property key="Logical" value="PlayPen Database" />
+    </data-source>
+    <data-source id="DS2">
+      <property key="Connection Type" value="PostgreSQL" />
+      <property key="Logical" value="PostgreSQL (sin conexion configurada)" />
+    </data-source>
+  </project-data-sources>
+  <target-database id="ppdb" dbcs-ref="DS0">
+    <table id="TAB1001" populated="true" name="inquilino" objectType="TABLE" physicalName="inquilino">
+      <remarks />
+      <folder id="FOL10011" populated="true" name="Columns" physicalName="Columns" type="1">
+        <column id="COL1001_0" populated="true" autoIncrement="false" name="idinquilino" nullable="0" physicalName="idinquilino" precision="19" scale="0" sourceDataTypeName="int8" type="-5" primaryKeySeq="0" />
+        <column id="COL1001_1" populated="true" autoIncrement="false" name="dni" nullable="0" physicalName="dni" precision="8" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1001_2" populated="true" autoIncrement="false" name="nombre" nullable="0" physicalName="nombre" precision="80" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1001_3" populated="true" autoIncrement="false" name="apellido" nullable="0" physicalName="apellido" precision="80" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1001_4" populated="true" autoIncrement="false" name="telefono" nullable="1" physicalName="telefono" precision="15" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1001_5" populated="true" autoIncrement="false" name="direccion" nullable="1" physicalName="direccion" precision="150" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1001_6" populated="true" autoIncrement="false" name="idTipoPersoneria" nullable="1" physicalName="idTipoPersoneria" precision="10" scale="0" sourceDataTypeName="int4" type="4" />
+        <column id="COL1001_7" populated="true" autoIncrement="false" name="rep_legal" nullable="1" physicalName="rep_legal" precision="60" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1001_8" populated="true" autoIncrement="false" name="ruc" nullable="1" physicalName="ruc" precision="11" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1001_9" populated="true" autoIncrement="false" name="direccion_fiscal" nullable="1" physicalName="direccion_fiscal" precision="60" scale="0" sourceDataTypeName="varchar" type="12" />
+      </folder>
+      <folder id="FOL10013" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" />
+      <folder id="FOL10012" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" />
+      <folder id="FOL10014" populated="true" name="Indices" physicalName="Indices" type="4">
+        <index id="IDX1001_0" populated="true" clustered="false" name="inquilino_idinquilino_pkey" physicalName="inquilino_idinquilino_pkey" primaryKeyIndex="true" unique="true">
+          <index-column id="IDC1001_0" ascendingOrDescending="UNSPECIFIED" column-ref="COL1001_0" name="idinquilino" physicalName="idinquilino" />
+        </index>
+        <index id="IDX1001_1" populated="true" clustered="false" name="inquilino_dni_key" physicalName="inquilino_dni_key" primaryKeyIndex="false" unique="true">
+          <index-column id="IDC1001_1" ascendingOrDescending="UNSPECIFIED" column-ref="COL1001_1" name="dni" physicalName="dni" />
+        </index>
+      </folder>
+    </table>
+    <table id="TAB1002" populated="true" name="departamento" objectType="TABLE" physicalName="departamento">
+      <remarks />
+      <folder id="FOL10021" populated="true" name="Columns" physicalName="Columns" type="1">
+        <column id="COL1002_0" populated="true" autoIncrement="false" name="iddepartamento" nullable="0" physicalName="iddepartamento" precision="19" scale="0" sourceDataTypeName="int8" type="-5" primaryKeySeq="0" />
+        <column id="COL1002_1" populated="true" autoIncrement="false" name="numero" nullable="0" physicalName="numero" precision="10" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1002_2" populated="true" autoIncrement="false" name="piso" nullable="0" physicalName="piso" precision="10" scale="0" sourceDataTypeName="int4" type="4" />
+        <column id="COL1002_3" populated="true" autoIncrement="false" name="direccion" nullable="0" physicalName="direccion" precision="150" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1002_4" populated="true" autoIncrement="false" name="precio_mensual" nullable="0" physicalName="precio_mensual" precision="10" scale="2" sourceDataTypeName="numeric" type="2" />
+        <column id="COL1002_5" populated="true" autoIncrement="false" name="estado" nullable="0" physicalName="estado" precision="20" scale="0" sourceDataTypeName="varchar" type="12" />
+      </folder>
+      <folder id="FOL10023" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" />
+      <folder id="FOL10022" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" />
+      <folder id="FOL10024" populated="true" name="Indices" physicalName="Indices" type="4">
+        <index id="IDX1002_0" populated="true" clustered="false" name="departamento_iddepartamento_pkey" physicalName="departamento_iddepartamento_pkey" primaryKeyIndex="true" unique="true">
+          <index-column id="IDC1002_0" ascendingOrDescending="UNSPECIFIED" column-ref="COL1002_0" name="iddepartamento" physicalName="iddepartamento" />
+        </index>
+        <index id="IDX1002_1" populated="true" clustered="false" name="departamento_numero_key" physicalName="departamento_numero_key" primaryKeyIndex="false" unique="true">
+          <index-column id="IDC1002_1" ascendingOrDescending="UNSPECIFIED" column-ref="COL1002_1" name="numero" physicalName="numero" />
+        </index>
+      </folder>
+    </table>
+    <table id="TAB1003" populated="true" name="contrato" objectType="TABLE" physicalName="contrato">
+      <remarks />
+      <folder id="FOL10031" populated="true" name="Columns" physicalName="Columns" type="1">
+        <column id="COL1003_0" populated="true" autoIncrement="false" name="idcontrato" nullable="0" physicalName="idcontrato" precision="19" scale="0" sourceDataTypeName="int8" type="-5" primaryKeySeq="0" />
+        <column id="COL1003_1" populated="true" autoIncrement="false" name="fecha_inicio" nullable="0" physicalName="fecha_inicio" precision="10" scale="0" sourceDataTypeName="date" type="91" />
+        <column id="COL1003_2" populated="true" autoIncrement="false" name="fecha_fin" nullable="0" physicalName="fecha_fin" precision="10" scale="0" sourceDataTypeName="date" type="91" />
+        <column id="COL1003_3" populated="true" autoIncrement="false" name="monto_mensual" nullable="0" physicalName="monto_mensual" precision="10" scale="2" sourceDataTypeName="numeric" type="2" />
+        <column id="COL1003_4" populated="true" autoIncrement="false" name="estado" nullable="0" physicalName="estado" precision="20" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1003_5" populated="true" autoIncrement="false" name="idinquilino" nullable="0" physicalName="idinquilino" precision="19" scale="0" sourceDataTypeName="int8" type="-5" />
+        <column id="COL1003_6" populated="true" autoIncrement="false" name="iddepartamento" nullable="0" physicalName="iddepartamento" precision="19" scale="0" sourceDataTypeName="int8" type="-5" />
+        <column id="COL1003_7" populated="true" autoIncrement="false" name="fecha_contrato" nullable="0" physicalName="fecha_contrato" precision="29" scale="0" sourceDataTypeName="timestamp" type="93" />
+        <column id="COL1003_8" populated="true" autoIncrement="false" name="cantidad_persona" nullable="0" physicalName="cantidad_persona" precision="10" scale="0" sourceDataTypeName="int4" type="4" />
+      </folder>
+      <folder id="FOL10033" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" />
+      <folder id="FOL10032" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" />
+      <folder id="FOL10034" populated="true" name="Indices" physicalName="Indices" type="4">
+        <index id="IDX1003_0" populated="true" clustered="false" name="contrato_idcontrato_pkey" physicalName="contrato_idcontrato_pkey" primaryKeyIndex="true" unique="true">
+          <index-column id="IDC1003_0" ascendingOrDescending="UNSPECIFIED" column-ref="COL1003_0" name="idcontrato" physicalName="idcontrato" />
+        </index>
+        <index id="IDX1003_1" populated="true" clustered="false" name="idx_contrato_departamento" physicalName="idx_contrato_departamento" primaryKeyIndex="false" unique="false">
+          <index-column id="IDC1003_1" ascendingOrDescending="UNSPECIFIED" column-ref="COL1003_6" name="iddepartamento" physicalName="iddepartamento" />
+        </index>
+        <index id="IDX1003_2" populated="true" clustered="false" name="idx_contrato_inquilino" physicalName="idx_contrato_inquilino" primaryKeyIndex="false" unique="false">
+          <index-column id="IDC1003_2" ascendingOrDescending="UNSPECIFIED" column-ref="COL1003_5" name="idinquilino" physicalName="idinquilino" />
+        </index>
+      </folder>
+    </table>
+    <table id="TAB1004" populated="true" name="pago" objectType="TABLE" physicalName="pago">
+      <remarks />
+      <folder id="FOL10041" populated="true" name="Columns" physicalName="Columns" type="1">
+        <column id="COL1004_0" populated="true" autoIncrement="false" name="idpago" nullable="0" physicalName="idpago" precision="19" scale="0" sourceDataTypeName="int8" type="-5" primaryKeySeq="0" />
+        <column id="COL1004_1" populated="true" autoIncrement="false" name="fecha_pago" nullable="0" physicalName="fecha_pago" precision="10" scale="0" sourceDataTypeName="date" type="91" />
+        <column id="COL1004_2" populated="true" autoIncrement="false" name="periodo" nullable="0" physicalName="periodo" precision="10" scale="0" sourceDataTypeName="date" type="91" />
+        <column id="COL1004_3" populated="true" autoIncrement="false" name="monto" nullable="0" physicalName="monto" precision="10" scale="2" sourceDataTypeName="numeric" type="2" />
+        <column id="COL1004_4" populated="true" autoIncrement="false" name="metodo" nullable="0" physicalName="metodo" precision="30" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1004_5" populated="true" autoIncrement="false" name="idcontrato" nullable="0" physicalName="idcontrato" precision="19" scale="0" sourceDataTypeName="int8" type="-5" />
+        <column id="COL1004_6" populated="true" autoIncrement="false" name="descuento" nullable="0" physicalName="descuento" precision="10" scale="2" sourceDataTypeName="numeric" type="2" />
+        <column id="COL1004_7" populated="true" autoIncrement="false" name="igv" nullable="0" physicalName="igv" precision="10" scale="2" sourceDataTypeName="numeric" type="2" />
+      </folder>
+      <folder id="FOL10043" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" />
+      <folder id="FOL10042" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" />
+      <folder id="FOL10044" populated="true" name="Indices" physicalName="Indices" type="4">
+        <index id="IDX1004_0" populated="true" clustered="false" name="pago_idpago_pkey" physicalName="pago_idpago_pkey" primaryKeyIndex="true" unique="true">
+          <index-column id="IDC1004_0" ascendingOrDescending="UNSPECIFIED" column-ref="COL1004_0" name="idpago" physicalName="idpago" />
+        </index>
+        <index id="IDX1004_1" populated="true" clustered="false" name="idx_pago_contrato" physicalName="idx_pago_contrato" primaryKeyIndex="false" unique="false">
+          <index-column id="IDC1004_1" ascendingOrDescending="UNSPECIFIED" column-ref="COL1004_5" name="idcontrato" physicalName="idcontrato" />
+        </index>
+      </folder>
+    </table>
+    <table id="TAB1005" populated="true" name="tipo_personeria" objectType="TABLE" physicalName="tipo_personeria">
+      <remarks />
+      <folder id="FOL10051" populated="true" name="Columns" physicalName="Columns" type="1">
+        <column id="COL1005_0" populated="true" autoIncrement="false" name="idTipoPersoneria" nullable="0" physicalName="idTipoPersoneria" precision="10" scale="0" sourceDataTypeName="int4" type="4" primaryKeySeq="0" />
+        <column id="COL1005_1" populated="true" autoIncrement="false" name="nombre" nullable="0" physicalName="nombre" precision="20" scale="0" sourceDataTypeName="varchar" type="12" />
+      </folder>
+      <folder id="FOL10053" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" />
+      <folder id="FOL10052" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" />
+      <folder id="FOL10054" populated="true" name="Indices" physicalName="Indices" type="4">
+        <index id="IDX1005_0" populated="true" clustered="false" name="tipo_personeria_idTipoPersoneria_pkey" physicalName="tipo_personeria_idTipoPersoneria_pkey" primaryKeyIndex="true" unique="true">
+          <index-column id="IDC1005_0" ascendingOrDescending="UNSPECIFIED" column-ref="COL1005_0" name="idTipoPersoneria" physicalName="idTipoPersoneria" />
+        </index>
+      </folder>
+    </table>
+    <table id="TAB1006" populated="true" name="finalizacion_contrato" objectType="TABLE" physicalName="finalizacion_contrato">
+      <remarks />
+      <folder id="FOL10061" populated="true" name="Columns" physicalName="Columns" type="1">
+        <column id="COL1006_0" populated="true" autoIncrement="false" name="id_finalizacion" nullable="0" physicalName="id_finalizacion" precision="19" scale="0" sourceDataTypeName="int8" type="-5" primaryKeySeq="0" />
+        <column id="COL1006_1" populated="true" autoIncrement="false" name="idcontrato" nullable="0" physicalName="idcontrato" precision="19" scale="0" sourceDataTypeName="int8" type="-5" />
+        <column id="COL1006_2" populated="true" autoIncrement="false" name="fecha" nullable="0" physicalName="fecha" precision="29" scale="0" sourceDataTypeName="timestamp" type="93" />
+        <column id="COL1006_3" populated="true" autoIncrement="false" name="motivo" nullable="0" physicalName="motivo" precision="20" scale="0" sourceDataTypeName="varchar" type="12" />
+      </folder>
+      <folder id="FOL10063" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" />
+      <folder id="FOL10062" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" />
+      <folder id="FOL10064" populated="true" name="Indices" physicalName="Indices" type="4">
+        <index id="IDX1006_0" populated="true" clustered="false" name="finalizacion_contrato_id_finalizacion_pkey" physicalName="finalizacion_contrato_id_finalizacion_pkey" primaryKeyIndex="true" unique="true">
+          <index-column id="IDC1006_0" ascendingOrDescending="UNSPECIFIED" column-ref="COL1006_0" name="id_finalizacion" physicalName="id_finalizacion" />
+        </index>
+      </folder>
+    </table>
+    <table id="TAB1007" populated="true" name="usuario" objectType="TABLE" physicalName="usuario">
+      <remarks>Tabla agregada para el login del sistema (admin / admin123).</remarks>
+      <folder id="FOL10071" populated="true" name="Columns" physicalName="Columns" type="1">
+        <column id="COL1007_0" populated="true" autoIncrement="false" name="idusuario" nullable="0" physicalName="idusuario" precision="19" scale="0" sourceDataTypeName="int8" type="-5" primaryKeySeq="0" />
+        <column id="COL1007_1" populated="true" autoIncrement="false" name="usuario" nullable="0" physicalName="usuario" precision="30" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1007_2" populated="true" autoIncrement="false" name="clave" nullable="0" physicalName="clave" precision="100" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1007_3" populated="true" autoIncrement="false" name="nombre" nullable="0" physicalName="nombre" precision="80" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1007_4" populated="true" autoIncrement="false" name="rol" nullable="0" physicalName="rol" precision="20" scale="0" sourceDataTypeName="varchar" type="12" />
+        <column id="COL1007_5" populated="true" autoIncrement="false" name="estado" nullable="0" physicalName="estado" precision="15" scale="0" sourceDataTypeName="varchar" type="12" />
+      </folder>
+      <folder id="FOL10073" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" />
+      <folder id="FOL10072" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" />
+      <folder id="FOL10074" populated="true" name="Indices" physicalName="Indices" type="4">
+        <index id="IDX1007_0" populated="true" clustered="false" name="usuario_idusuario_pkey" physicalName="usuario_idusuario_pkey" primaryKeyIndex="true" unique="true">
+          <index-column id="IDC1007_0" ascendingOrDescending="UNSPECIFIED" column-ref="COL1007_0" name="idusuario" physicalName="idusuario" />
+        </index>
+        <index id="IDX1007_1" populated="true" clustered="false" name="usuario_usuario_key" physicalName="usuario_usuario_key" primaryKeyIndex="false" unique="true">
+          <index-column id="IDC1007_1" ascendingOrDescending="UNSPECIFIED" column-ref="COL1007_1" name="usuario" physicalName="usuario" />
+        </index>
+      </folder>
+    </table>
+    <relationships>
+      <relationship id="REL1" populated="true" deferrability="7" deleteRule="3" fk-table-ref="TAB1003" fkCardinality="7" identifying="false" name="contrato_idinquilino_fkey" physicalName="contrato_idinquilino_fkey" pk-table-ref="TAB1001" pkCardinality="2" updateRule="3">
+        <column-mapping id="CMP1" fk-column-ref="COL1003_5" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL1001_0" />
+      </relationship>
+      <relationship id="REL2" populated="true" deferrability="7" deleteRule="3" fk-table-ref="TAB1003" fkCardinality="7" identifying="false" name="contrato_iddepartamento_fkey" physicalName="contrato_iddepartamento_fkey" pk-table-ref="TAB1002" pkCardinality="2" updateRule="3">
+        <column-mapping id="CMP2" fk-column-ref="COL1003_6" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL1002_0" />
+      </relationship>
+      <relationship id="REL3" populated="true" deferrability="7" deleteRule="3" fk-table-ref="TAB1004" fkCardinality="7" identifying="false" name="pago_idcontrato_fkey" physicalName="pago_idcontrato_fkey" pk-table-ref="TAB1003" pkCardinality="2" updateRule="3">
+        <column-mapping id="CMP3" fk-column-ref="COL1004_5" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL1003_0" />
+      </relationship>
+      <relationship id="REL4" populated="true" deferrability="7" deleteRule="3" fk-table-ref="TAB1001" fkCardinality="7" identifying="false" name="inquilino_idTipoPersoneria_fkey" physicalName="inquilino_idTipoPersoneria_fkey" pk-table-ref="TAB1005" pkCardinality="2" updateRule="3">
+        <column-mapping id="CMP4" fk-column-ref="COL1001_6" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL1005_0" />
+      </relationship>
+      <relationship id="REL5" populated="true" deferrability="7" deleteRule="3" fk-table-ref="TAB1006" fkCardinality="7" identifying="false" name="finalizacion_contrato_idcontrato_fkey" physicalName="finalizacion_contrato_idcontrato_fkey" pk-table-ref="TAB1003" pkCardinality="2" updateRule="3">
+        <column-mapping id="CMP5" fk-column-ref="COL1006_1" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL1003_0" />
+      </relationship>
+    </relationships>
+  </target-database>
+  <ddl-generator type="ca.sqlpower.architect.ddl.GenericDDLGenerator" allow-connection="true"> </ddl-generator>
+  <liquibase-settings useSeparateChangeSets="false" generateId="false" idStart="1" />
+  <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
+  <play-pen zoom="1.0" viewportX="0" viewportY="0" relationship-style="rectilinear" names-displayLogicalNames="true" showPrimaryTag="true" showForeignTag="true" showAlternateTag="true" columnVisibility="ALL" relationshipLabelVisibility="true">
+    <table-pane table-ref="TAB1001" x="205" y="75" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false" />
+    <table-pane table-ref="TAB1002" x="575" y="260" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false" />
+    <table-pane table-ref="TAB1003" x="210" y="290" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false" />
+    <table-pane table-ref="TAB1004" x="210" y="570" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false" />
+    <table-pane table-ref="TAB1005" x="830" y="75" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false" />
+    <table-pane table-ref="TAB1006" x="600" y="570" bgColor="0xf0f0f0" fgColor="0x000000" rounded="false" dashed="false" />
+    <table-pane table-ref="TAB1007" x="850" y="300" bgColor="0xDBEAFE" fgColor="0x000000" rounded="false" dashed="false" />
+    <table-link relationship-ref="REL1" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132" />
+    <table-link relationship-ref="REL2" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132" />
+    <table-link relationship-ref="REL3" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132" />
+    <table-link relationship-ref="REL4" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132" />
+    <table-link relationship-ref="REL5" pkConnection="0.5" fkConnection="0.5" rLineColor="0x000000" pkLabelText="" fkLabelText="" orientation="132" />
+  </play-pen>
+  <critic-manager>
+    <critic-grouping platformType="Generic" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.PrimaryKeyCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.RelationshipMappingTypeCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.EmptyRelationshipCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.AlphaNumericNameCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.AlphaNumericSequenceNameCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SetDefaultOnColumnWithNoDefaultCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SetNullOnNonNullableColumnCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.DuplicateNameCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="DB2" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.DB2UnsupportedFeaturesCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="H2" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.H2UnsupportedFeaturesCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="HSQLDB" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.HSQLDBUnsupportedFeaturesCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="MySQL" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.MySQLCommentCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.MySQLReservedWordsCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.MySQLUnsupportedFeaturesCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="Oracle" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.OraclePhysicalNameCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.OracleReservedWordsCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.OracleUnsupportedFeaturesCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="PostgreSQL" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.PostgreSQLReservedWordsCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="SQL Server" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServerUnsupportedFeaturesCritic" severity="ERROR" />
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServerReservedWordsCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="SQL Server 2000" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServer2000UnsupportedFeaturesCritic" severity="ERROR" />
+    </critic-grouping>
+    <critic-grouping platformType="SQL Server 2005" enabled="true">
+      <critic-settings class="ca.sqlpower.architect.ddl.critic.impl.SQLServer2005UnsupportedFeaturesCritic" severity="ERROR" />
+    </critic-grouping>
+  </critic-manager>
+  <olap>
+  </olap>
+  <olap-gui>
+  </olap-gui>
+</architect-project>

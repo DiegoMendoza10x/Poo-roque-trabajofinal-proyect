@@ -1,11 +1,13 @@
 package pe.edu.upeu.alquileres.config;
 
 import pe.edu.upeu.alquileres.controller.ContratoController;
+import pe.edu.upeu.alquileres.controller.ConfiguracionImpresionController;
 import pe.edu.upeu.alquileres.controller.DepartamentoController;
 import pe.edu.upeu.alquileres.controller.InquilinoController;
 import pe.edu.upeu.alquileres.controller.LoginController;
 import pe.edu.upeu.alquileres.controller.MainController;
 import pe.edu.upeu.alquileres.controller.PagoController;
+import pe.edu.upeu.alquileres.controller.UsuarioController;
 import pe.edu.upeu.alquileres.repository.ContratoRepository;
 import pe.edu.upeu.alquileres.repository.DepartamentoRepository;
 import pe.edu.upeu.alquileres.repository.FinalizacionContratoRepository;
@@ -78,7 +80,8 @@ public final class AppContext {
                 getBean(ContratoRepository.class),
                 getBean(DepartamentoRepository.class),
                 getBean(PagoRepository.class),
-                getBean(FinalizacionContratoRepository.class)));
+                getBean(FinalizacionContratoRepository.class),
+                getBean(IUsuarioService.class)));
 
         registrar(IPagoService.class, new PagoServiceImp(
                 getBean(PagoRepository.class)));
@@ -95,10 +98,13 @@ public final class AppContext {
         registrar(ContratoController.class, new ContratoController(
                 getBean(IContratoService.class),
                 getBean(IInquilinoService.class),
-                getBean(IDepartamentoService.class)));
+                getBean(IDepartamentoService.class),
+                getBean(IUsuarioService.class)));
         registrar(PagoController.class, new PagoController(
                 getBean(IPagoService.class),
                 getBean(IContratoService.class)));
+        registrar(ConfiguracionImpresionController.class, new ConfiguracionImpresionController());
+        registrar(UsuarioController.class, new UsuarioController(getBean(IUsuarioService.class)));
     }
 
     private void registrar(Class<?> tipo, Object bean) {

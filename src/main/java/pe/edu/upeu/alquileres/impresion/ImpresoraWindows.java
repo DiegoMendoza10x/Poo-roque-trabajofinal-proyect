@@ -33,20 +33,28 @@ public final class ImpresoraWindows {
 
 
     public static void imprimir(PrintService impresora, List<String> lineas) throws PrinterException {
+        imprimir(impresora, lineas, 58);
+    }
+
+
+    /** Imprime el ticket en papel de 58 u 80 mm. */
+    public static void imprimir(PrintService impresora, List<String> lineas, int anchoMm)
+            throws PrinterException {
         if (impresora == null) {
             throw new PrinterException("No se seleccionó ninguna impresora de Windows.");
         }
 
         PrinterJob trabajo = PrinterJob.getPrinterJob();
         trabajo.setPrintService(impresora);
-        trabajo.setJobName("Nota de venta 58 mm");
-        trabajo.setPrintable(new TicketPrintable(lineas), crearPagina(lineas.size()));
+        trabajo.setJobName("Nota de venta " + anchoMm + " mm");
+        trabajo.setPrintable(new TicketPrintable(lineas, NotaVenta.columnas(anchoMm)),
+                crearPagina(lineas.size(), anchoMm));
         trabajo.print();
     }
 
-    private static PageFormat crearPagina(int cantidadLineas) {
+    private static PageFormat crearPagina(int cantidadLineas, int anchoMm) {
         double mm = 72.0 / 25.4;                 // 1 mm = 2.8346 puntos
-        double ancho = 58 * mm;                  // papel térmico de 58 mm
+        double ancho = anchoMm * mm;             // 58 mm u 80 mm
         double margen = 2.5 * mm;
         double altoLinea = 3.7 * mm;
         double alto = Math.max(40 * mm, cantidadLineas * altoLinea + 10 * mm);
@@ -65,9 +73,11 @@ public final class ImpresoraWindows {
     private static final class TicketPrintable implements Printable {
 
         private final List<String> lineas;
+        private final int columnas;
 
-        private TicketPrintable(List<String> lineas) {
+        private TicketPrintable(List<String> lineas, int columnas) {
             this.lineas = lineas;
+            this.columnas = columnas;
         }
 
         @Override
@@ -97,9 +107,9 @@ public final class ImpresoraWindows {
             return Printable.PAGE_EXISTS;
         }
 
-        /** Busca el tamaño de letra más grande con el que caben 32 caracteres. */
+        /** Busca el tamaño de letra más grande con el que caben todas las columnas. */
         private Font fuenteQueCabe(Graphics2D g2, float ancho) {
-            String prueba = "M".repeat(NotaVenta.ANCHO);
+            String prueba = "M".repeat(columnas);
             for (int tamano = 9; tamano >= 5; tamano--) {
                 Font fuente = new Font(Font.MONOSPACED, Font.PLAIN, tamano);
                 if (g2.getFontMetrics(fuente).stringWidth(prueba) <= ancho) {

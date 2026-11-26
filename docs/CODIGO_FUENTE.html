@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Código fuente · SysAlquileres</title><link rel="stylesheet" href="assets/estilo-docs.css"></head>
+<body>
+<div class="barra"><div><strong>Código fuente · SysAlquileres</strong><small>Estructura, capas y compilación</small></div>
+<div class="acciones"><button class="boton suave" onclick="document.getElementById('inicio').scrollIntoView()">↑ Inicio</button><button class="boton pdf" onclick="window.print()">⬇ Descargar en PDF</button></div></div>
+<header class="hero" id="inicio"><div class="hero-inner"><span class="etq">Arquitectura</span><h1>Código fuente</h1>
+<p>Recorrido visual por la estructura del proyecto, las responsabilidades de cada capa y los comandos para compilarlo.</p>
+<div class="chips"><span class="chip">Java 21</span><span class="chip">JavaFX 21</span><span class="chip">Maven</span></div></div></header>
+<div class="layout"><nav class="indice"><h3>Contenido</h3>
+<a href="#estructura">1. Estructura</a><a href="#paquetes">2. Paquetes</a><a href="#clases">3. Clases clave</a>
+<a href="#compilar">4. Compilar y ejecutar</a><a href="#dependencias">5. Dependencias</a><a href="#convenciones">6. Convenciones</a></nav>
+<main>
+<section id="estructura"><h2><span class="num">1</span> Estructura del proyecto</h2>
+<pre>SysAlquileres/
+├── src/main/java/pe/edu/upeu/alquileres/
+│   ├── App.java                 # main y cambio de ventanas
+│   ├── components/              # Dialogos, Celdas, NotaVentaDialog
+│   ├── config/                  # AppContext, DatabaseConfig, ConfigImpresion
+│   ├── controller/              #_login, principal, módulos y paneles
+│   ├── enums/ exception/ model/ # entidades y estados
+│   ├── impresion/               # NotaVenta, ImpresoraWindows, ImpresoraSerial
+│   ├── repository/              # JDBC + SqlHelper
+│   ├── service/                 # interfaces e implementaciones
+│   └── util/                    # Formato, Sesion, Validador
+├── src/main/resources/
+│   ├── application.properties   # H2 por defecto
+│   ├── schema.sql / seed.sql
+│   ├── css/app.css
+│   ├── images/                  # fondo y icono
+│   └── view/                    # 7 FXML
+├── database/                    # SQL y modelos Architect
+├── docs/                        # documentación HTML
+├── android/                     # APK de apoyo
+└── dist/                        # .exe, ZIP y APK</pre></section>
+<section id="paquetes"><h2><span class="num">2</span> Paquetes y responsabilidades</h2>
+<table><tr><th>Paquete</th><th>Responsabilidad</th></tr>
+<tr><td><code>controller</code></td><td>Eventos de FXML, formulas y tablas.</td></tr>
+<tr><td><code>service</code></td><td>Validaciones y reglas de negocio.</td></tr>
+<tr><td><code>repository</code></td><td>SQL parametrizado y mapeo a objetos.</td></tr>
+<tr><td><code>model</code></td><td>Datos con Lombok (<code>@Data</code>, <code>@Builder</code>).</td></tr>
+<tr><td><code>config</code></td><td>DI, conexión y configuración persistente.</td></tr>
+<tr><td><code>impresion</code></td><td>Ticket 58/80 mm y drivers.</td></tr>
+<tr><td><code>components</code></td><td>Diálogos, chips y vista de impresión.</td></tr>
+</table>
+<div class="aviso verde"><strong>Regla de oro</strong> El controller no tiene SQL y el repository no decide reglas.</div></section>
+<section id="clases"><h2><span class="num">3</span> Clases clave</h2>
+<div class="rejilla">
+<div class="tarjeta azul"><h4>App.java</h4><p>Contiene el <code>main</code>; la ventana está en <code>App.Ventana</code> para evitar el error de JavaFX en el IDE.</p></div>
+<div class="tarjeta"><h4>AppContext</h4><p>Singleton que arma repositorios → servicios → controladores.</p></div>
+<div class="tarjeta"><h4>DatabaseConfig</h4><p>Lee properties y variables de entorno, configura HikariCP y normaliza la URL.</p></div>
+<div class="tarjeta verde"><h4>NotaVenta</h4><p>Genera el ticket en 32 o 48 columnas según el papel.</p></div>
+<div class="tarjeta"><h4>ConfigImpresion</h4><p>Guarda papel, conexión, puerto y baudios en el perfil del usuario.</p></div>
+<div class="tarjeta ambar"><h4>UsuarioController</h4><p>Panel de accesos: ver y renovar claves de clientes.</p></div>
+</div></section>
+<section id="compilar"><h2><span class="num">4</span> Compilar y ejecutar</h2>
+<pre>cd "D:\CRUD DEPARTAMENTOS\SysAlquileres"
+mvn javafx:run
+mvn -B -DskipTests package
+
+# APK (JDK 17: Gradle 8.11 falla con GraalVM 21)
+cd android
+$env:JAVA_HOME="C:\Program Files\Java\jdk-17"
+.\gradlew.bat assembleRelease</pre>
+<div class="aviso"><strong>Login de prueba</strong> <code>admin / admin123</code>. Si usas Supabase, las credenciales se leen de variables de entorno.</div></section>
+<section id="dependencias"><h2><span class="num">5</span> Dependencias principales</h2>
+<table><tr><th>Librería</th><th>Uso</th></tr>
+<tr><td>JavaFX 21</td><td>Interfaz y FXML.</td></tr>
+<tr><td>H2 / PostgreSQL</td><td>Base local y remota.</td></tr>
+<tr><td>HikariCP</td><td>Pool de conexiones.</td></tr>
+<tr><td>Jakarta Validation</td><td>Anotaciones y validación.</td></tr>
+<tr><td>Lombok</td><td>Reduce getters/setters.</td></tr>
+<tr><td>jSerialComm</td><td>Puerto COM para Bluetooth.</td></tr>
+<tr><td>SLF4J + Logback</td><td>Logs.</td></tr>
+</table></section>
+<section id="convenciones"><h2><span class="num">6</span> Convenciones</h2>
+<ul class="checks">
+<li>Dinero siempre con <code>BigDecimal</code>.</li>
+<li>Fechas con <code>LocalDate</code> / <code>LocalDateTime</code>.</li>
+<li>Consultas con <code>?</code>: nunca concatenar valores.</li>
+<li>Errores de negocio con <code>BusinessException</code> y mensaje en pantalla.</li>
+<li>Estilos reutilizables en <code>app.css</code> (<code>card</code>, <code>badge</code>, <code>boton-primario</code>).</li>
+</ul></section>
+</main></div>
+<footer>SysAlquileres · Código fuente · POO 2026 · UPeU Juliaca</footer><script src="assets/docs.js"></script>
+</body></html>

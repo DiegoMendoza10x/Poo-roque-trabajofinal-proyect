@@ -64,7 +64,7 @@ public class LoginActivity extends Activity {
                     String u = URLEncoder.encode(usuario, "UTF-8");
                     String c = URLEncoder.encode(clave, "UTF-8");
                     String ruta = "/rest/v1/usuario?usuario=eq." + u + "&clave=eq." + c
-                            + "&select=usuario,nombre,rol&limit=1";
+                            + "&estado=eq.Activo&select=usuario,nombre,rol&limit=1";
                     JSONArray filas = new JSONArray(SupabaseClient.get(ruta));
 
                     if (filas.length() == 0) {
@@ -102,7 +102,17 @@ public class LoginActivity extends Activity {
     }
 
     private void abrirPrincipal() {
-        startActivity(new Intent(this, MainActivity.class));
+        SharedPreferences sesion = getSharedPreferences("sesion", MODE_PRIVATE);
+        String rol = sesion.getString("rol", "ADMIN");
+        SupabaseClient.cabeceraDni = sesion.getString("usuario", "");
+
+        Intent intent;
+        if ("CLIENTE".equalsIgnoreCase(rol)) {
+            intent = new Intent(this, ClienteActivity.class);
+        } else {
+            intent = new Intent(this, MainActivity.class);
+        }
+        startActivity(intent);
     }
 
     @Override

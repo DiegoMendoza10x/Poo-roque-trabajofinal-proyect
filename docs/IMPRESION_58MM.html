@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impresión térmica · SysAlquileres</title><link rel="stylesheet" href="assets/estilo-docs.css"></head>
+<body>
+<div class="barra"><div><strong>Impresión térmica 58 / 80 mm</strong><small>Nota de venta · SysAlquileres</small></div>
+<div class="acciones"><button class="boton suave" onclick="document.getElementById('inicio').scrollIntoView()">↑ Inicio</button><button class="boton pdf" onclick="window.print()">⬇ Descargar en PDF</button></div></div>
+<header class="hero" id="inicio"><div class="hero-inner"><span class="etq">Innovación</span><h1>Nota de venta térmica</h1>
+<p>Cómo se genera, se muestra y se envía el ticket a una impresora POS de 58 u 80 mm por cable o Bluetooth.</p>
+<div class="chips"><span class="chip">32 / 48 columnas</span><span class="chip">ESC/POS</span><span class="chip">Cable + Bluetooth</span></div></div></header>
+<div class="layout"><nav class="indice"><h3>Contenido</h3>
+<a href="#que-es">1. Qué es</a><a href="#anchos">2. Anchos de papel</a><a href="#flujo">3. Flujo al pagar</a>
+<a href="#vista">4. Vista previa</a><a href="#modos">5. Cable y Bluetooth</a><a href="#config">6. Configuración</a><a href="#problemas">7. Problemas</a></nav>
+<main>
+<section id="que-es"><h2><span class="num">1</span> Qué es la nota de venta</h2>
+<p>Es un <b>documento interno</b> que se entrega al inquilino cuando paga. No es factura ni boleta: no reemplaza comprobantes de SUNAT.</p>
+<div class="rejilla"><div class="tarjeta azul"><h4>Se emite al guardar el pago</h4><p>El sistema pregunta “Imprimir nota / Ahora no”.</p></div>
+<div class="tarjeta verde"><h4>También se puede reemitir</h4><p>Botón <b>Nota de venta</b> en la tabla de pagos.</p></div></div></section>
+<section id="anchos"><h2><span class="num">2</span> Anchos de papel</h2>
+<table><tr><th>Papel</th><th>Puntos</th><th>Columnas</th></tr>
+<tr><td>58 mm</td><td>384</td><td><b>384 / 12 = 32</b></td></tr>
+<tr><td>80 mm</td><td>576</td><td><b>576 / 12 = 48</b></td></tr></table>
+<div class="aviso"><strong>¿Por qué importa?</strong> Si el ticket se arma con 32 columnas y el papel es de 80 mm, se verá angosto. Por eso el ancho se elige en la ventana de impresión.</div></section>
+<section id="flujo"><h2><span class="num">3</span> Flujo al registrar un pago</h2>
+<div class="diagrama"><div class="cadena">
+<div class="nodo"><span class="icono">💾</span><b>Guardar pago</b><small>base de datos</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">❓</span><b>¿Imprimir?</b><small>pregunta al usuario</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">📝</span><b>Vista previa</b><small>ticket 32/48 cols</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">🖨️</span><b>Imprimir</b><small>POS térmica</small></div>
+</div></div>
+<pre>TOTAL = monto - descuento + IGV   (siempre con BigDecimal)</pre></section>
+<section id="vista"><h2><span class="num">4</span> Vista previa</h2>
+<ul class="checks"><li>Muestra el ticket exactamente como saldrá.</li><li>Cambiar entre 58 y 80 mm rearma el texto automáticamente.</li><li><b>Copiar texto</b> envía el ticket al portapapeles.</li><li>Incluye empresa, número <code>NV-000123</code>, cliente, depto, contrato, importes y atendido.</li></ul></section>
+<section id="modos"><h2><span class="num">5</span> Cable y Bluetooth</h2>
+<div class="diagrama"><div class="cadena">
+<div class="nodo"><span class="icono">🔌</span><b>Cable / Windows</b><small>PrintServiceLookup + PrinterJob</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">☁️</span><b>Driver Windows</b><small>USB o BT instalado</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">🖨️</span><b>Impresora POS</b><small>58 / 80 mm</small></div>
+</div></div>
+<div class="diagrama"><div class="cadena">
+<div class="nodo"><span class="icono">📶</span><b>Bluetooth / COM</b><small>jSerialComm</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">⌨️</span><b>Comandos ESC/POS</b><small>bytes en bruto</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">🖨️</span><b>Impresora POS</b><small>puerto SPP</small></div>
+</div></div>
+<table><tr><th>Comando</th><th>Bytes</th><th>Significado</th></tr>
+<tr><td>ESC @</td><td><code>1B 40</code></td><td>Inicializar impresora.</td></tr>
+<tr><td>ESC d 4</td><td><code>1B 64 04</code></td><td>Avanzar 4 líneas.</td></tr>
+</table></section>
+<section id="config"><h2><span class="num">6</span> Configuración persistente</h2>
+<p>Panel <b>Config. impresión</b>: papel, conexión, impresora, puerto y baudios. Se guarda en <code>%USERPROFILE%\.SysAlquileres\impresion.properties</code> y la nota de venta abre con esos valores.</p></section>
+<section id="problemas"><h2><span class="num">7</span> Solución de problemas</h2>
+<table><tr><th>Síntoma</th><th>Solución</th></tr>
+<tr><td>No aparece impresora</td><td>Instalarla y pulsar Actualizar listas.</td></tr>
+<tr><td>No hay COM</td><td>Emparejar Bluetooth y encender la impresora.</td></tr>
+<tr><td>Ticket cortado</td><td>Elegir el papel físico correcto.</td></tr>
+<tr><td>Símbolos raros</td><td>El modo COM ya envía ASCII sin tildes.</td></tr>
+</table></section>
+</main></div>
+<footer>SysAlquileres · Impresión térmica · POO 2026 · UPeU Juliaca</footer><script src="assets/docs.js"></script>
+</body></html>

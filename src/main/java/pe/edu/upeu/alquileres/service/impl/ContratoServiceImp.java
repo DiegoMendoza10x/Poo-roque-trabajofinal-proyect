@@ -9,6 +9,7 @@ import pe.edu.upeu.alquileres.repository.DepartamentoRepository;
 import pe.edu.upeu.alquileres.repository.FinalizacionContratoRepository;
 import pe.edu.upeu.alquileres.repository.PagoRepository;
 import pe.edu.upeu.alquileres.service.IContratoService;
+import pe.edu.upeu.alquileres.service.IUsuarioService;
 import pe.edu.upeu.alquileres.util.Validador;
 
 import java.math.BigDecimal;
@@ -23,15 +24,18 @@ public class ContratoServiceImp implements IContratoService {
     private final DepartamentoRepository departamentoRepository;
     private final PagoRepository pagoRepository;
     private final FinalizacionContratoRepository finalizacionRepository;
+    private final IUsuarioService usuarioService;
 
     public ContratoServiceImp(ContratoRepository repository,
                               DepartamentoRepository departamentoRepository,
                               PagoRepository pagoRepository,
-                              FinalizacionContratoRepository finalizacionRepository) {
+                              FinalizacionContratoRepository finalizacionRepository,
+                              IUsuarioService usuarioService) {
         this.repository = repository;
         this.departamentoRepository = departamentoRepository;
         this.pagoRepository = pagoRepository;
         this.finalizacionRepository = finalizacionRepository;
+        this.usuarioService = usuarioService;
     }
 
     @Override
@@ -57,6 +61,8 @@ public class ContratoServiceImp implements IContratoService {
         }
         Contrato guardado = repository.save(contrato);
         departamentoRepository.updateEstado(contrato.getDepartamento().getIdDepartamento(), EstadoDepartamento.OCUPADO);
+        // Un contrato nuevo implica acceso activo para la APK.
+        usuarioService.activarPorDni(contrato.getInquilino().getDni());
         return guardado;
     }
 
@@ -116,6 +122,8 @@ public class ContratoServiceImp implements IContratoService {
             throw new BusinessException("El motivo admite como máximo 20 caracteres.");
         }
         repository.finalizar(id, contrato.getDepartamento().getIdDepartamento(), motivoLimpio);
+        // Contrato finalizado → acceso del cliente desactivado en la APK.
+        usuarioService.desactivarPorDni(contrato.getInquilino().getDni());
     }
 
     @Override

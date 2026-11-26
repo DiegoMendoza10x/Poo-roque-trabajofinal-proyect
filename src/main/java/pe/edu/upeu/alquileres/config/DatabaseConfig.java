@@ -64,6 +64,21 @@ public final class DatabaseConfig {
         return "H2 local";
     }
 
+    public static String urlActiva() {
+        Properties props = loadProperties();
+        return props.getProperty("db.url", DEFAULT_URL);
+    }
+
+    /** Motor que se está usando en esta ejecución: "Supabase / PostgreSQL", "PostgreSQL" o "H2 local". */
+    public static String motorActivo() {
+        return motor(urlActiva());
+    }
+
+    /** true si la conexión actual apunta a Supabase. */
+    public static boolean usaSupabase() {
+        return motorActivo().startsWith("Supabase");
+    }
+
     public static DataSource getDataSource() {
         if (dataSource == null) {
             init();

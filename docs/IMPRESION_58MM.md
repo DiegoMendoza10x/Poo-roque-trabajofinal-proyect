@@ -1,207 +1,179 @@
-# Impresión de nota de venta en impresora térmica de 58 mm
+# Impresión de nota de venta en impresora térmica (58 mm / 80 mm)
 
 ## 1. ¿Qué se implementó?
 
-En el módulo **Pagos** ahora aparece el botón **“Nota de venta”**. Al seleccionar un
-pago de la tabla y presionar ese botón se abre una ventana con:
+El CRUD de **Pagos** quedó completo: al **registrar un pago nuevo**, el sistema
+guarda el pago y pregunta si se desea emitir la nota de venta.
 
-- La **vista previa** del ticket tal como saldrá impreso.
-- Dos formas de conexión:
-  1. **Windows (USB / Bluetooth):** usa la impresora instalada en Windows.
-  2. **Puerto COM (Bluetooth):** envía los comandos directamente a la impresora.
+Si la respuesta es **“Imprimir nota”**, se abre una ventana con:
 
-> La nota de venta **no es un comprobante fiscal**. No reemplaza a la boleta ni a la
-> factura electrónica de SUNAT; es un documento interno de control del alquiler.
+- **Vista previa** del ticket según el papel elegido.
+- **Papel:** 58 mm (32 columnas) o 80 mm (48 columnas).
+- **Conexión:**
+  1. **Cable / Windows** → impresora instalada en Windows (`POS-58-Series`, `POS-80-Series`, etc.).
+  2. **Bluetooth (COM)** → puerto serial creado al emparejar la impresora.
+- Botones **Imprimir nota**, **Copiar texto** y **Cerrar**.
 
----
+También se puede reemitir una nota desde el botón **“Nota de venta”** de la tabla,
+seleccionando primero un pago.
 
-## 2. ¿Cómo se usa?
+> La nota de venta **no es comprobante fiscal**: no reemplaza a la boleta ni a la
+> factura electrónica de SUNAT. Es un documento interno de control.
 
-1. Abrir el módulo **Pagos**.
-2. Seleccionar un pago en la tabla.
-3. Presionar **“Nota de venta”**.
-4. Elegir la forma de conexión:
-   - **Windows:** seleccionar la impresora (por ejemplo `POS-58-Series`).
-   - **Puerto COM:** seleccionar el puerto (por ejemplo `COM5`) y la velocidad
-     (normalmente `9600`).
-5. Presionar **Imprimir**.
-
-Si no se seleccionó ningún pago, el sistema muestra el mensaje
-“Selecciona un pago para emitir la nota de venta.”
+> Toda la configuración se hace desde el panel **Config. impresión** de la barra lateral.
+> Ahí se eligen papel, conexión, impresora/puerto y velocidad, se guarda y se puede
+> hacer una impresión de prueba. Ver [`CONFIGURACION.md`](CONFIGURACION.md).
 
 ---
 
-## 3. Archivos nuevos y modificados
-
-| Archivo | Función |
-|---|---|
-| `impresion/DatosEmpresa.java` | Nombre, RUC, dirección y teléfono de la cabecera. |
-| `impresion/NotaVenta.java` | Arma el texto del ticket en 32 caracteres por línea. |
-| `impresion/ImpresoraWindows.java` | Imprime usando una impresora instalada en Windows. |
-| `impresion/ImpresoraSerial.java` | Envía ESC/POS por un puerto COM (Bluetooth). |
-| `components/NotaVentaDialog.java` | Ventana de vista previa y selección de impresora. |
-| `controller/PagoController.java` | Método `onImprimirNota()` que abre la ventana. |
-| `view/pagos.fxml` | Botón “Nota de venta”. |
-| `pom.xml` | Dependencia `jSerialComm` para los puertos COM. |
-
----
-
-## 4. ¿Por qué 32 caracteres por línea?
-
-Una impresora térmica de 58 mm tiene **384 puntos** de ancho imprimible. La fuente
-normal usa **12 puntos por carácter**:
+## 2. Flujo completo al hacer un pago
 
 ```text
-384 / 12 = 32 caracteres por línea
+Formulario de pagos
+   → Guardar pago (service + base de datos)
+   → Pregunta: ¿Imprimir nota de venta?
+        → Ahora no: termina
+        → Imprimir nota:
+             → Elegir papel (58 / 80 mm)
+             → Elegir conexión (Windows o Bluetooth COM)
+             → Imprimir en la impresora térmica
 ```
 
-Por eso `NotaVenta.ANCHO = 32` y todas las líneas se centran, se recortan o se
-alinean a la derecha pensando en ese ancho. Así el ticket no se desordena.
+El pago se guarda **antes** de preguntar, así que el número de nota es el del
+pago recién creado (`NV-000123`, por ejemplo).
 
-Ejemplo de una línea:
+---
+
+## 3. ¿Cómo se usa?
+
+### Desde el registro de un pago
+
+1. Abrir **Pagos** → **Nuevo**.
+2. Llenar contrato, fecha, periodo, monto, método, descuento e IGV.
+3. Presionar **Guardar**.
+4. En el diálogo elegir **Imprimir nota** o **Ahora no**.
+5. Si se eligió imprimir:
+   - Elegir **Papel**: 58 u 80 mm.
+   - Elegir **Cable / Windows** o **Bluetooth (COM)**.
+   - Seleccionar la impresora o el puerto y presionar **Imprimir nota**.
+
+### Desde un pago ya registrado
+
+1. Seleccionar un pago de la tabla.
+2. Presionar **Nota de venta**.
+3. Configurar papel y conexión, luego imprimir.
+
+---
+
+## 4. Ancho del ticket: 58 mm y 80 mm
+
+La fuente normal de una impresora térmica usa **12 puntos por carácter**:
+
+| Papel | Puntos | Columnas |
+|---|---:|---:|
+| 58 mm | 384 | `384 / 12 = 32` |
+| 80 mm | 576 | `576 / 12 = 48` |
+
+`NotaVenta.columnas(milimetros)` decide cuántas columnas usar, y todas las
+líneas se centran, se recortan o se alinean a la derecha con ese valor.
+
+Ejemplo en 80 mm:
 
 ```text
-TOTAL                  S/ 680.00
+|Alquiler                             S/ 1,250.00|
+|TOTAL                                S/ 1,300.00|
 ```
 
 ---
 
-## 5. ¿Cómo funciona la impresión por cable (USB)?
+## 5. Impresión por cable (Windows)
 
 ```text
-Sistema Java  →  driver de Windows  →  cable USB  →  impresora
+Java → driver de Windows → cable USB → impresora
 ```
 
-1. El programa obtiene la lista de impresoras instaladas con
-   `PrintServiceLookup.lookupPrintServices(...)`.
-2. Se crea un `PrinterJob` de Java (AWT) y se le indica la impresora elegida.
-3. Se define un papel de **58 mm de ancho** y un alto calculado según la cantidad
-   de líneas del ticket.
-4. Se dibuja cada línea con una fuente monoespaciada (`Font.MONOSPACED`), que
-   hace que todas las letras ocupen lo mismo y las columnas queden alineadas.
-5. `PrinterJob.print()` entrega el trabajo al **driver de Windows**, y el driver
-   se encarga de hablar con la impresora por USB.
+- `ImpresoraWindows` lista las impresoras con `PrintServiceLookup`.
+- `PrinterJob` recibe un `PageFormat` con el ancho elegido (58 u 80 mm).
+- La fuente monoespaciada se ajusta para que quepan 32 o 48 caracteres.
+- Windows entrega el trabajo al controlador y este lo envía a la impresora.
 
-**Ventaja:** funciona con cualquier impresora que ya imprima desde Windows.
-**Requisito:** la impresora debe estar instalada y encendida.
-
-> En esta computadora el sistema detectó automáticamente `POS-58-Series` y
-> `POS-80-Series`, así que se puede probar por USB seleccionando `POS-58-Series`.
+En esta computadora se detectaron `POS-58-Series` y `POS-80-Series`.
 
 ---
 
-## 6. ¿Cómo funciona la impresión por Bluetooth?
-
-Windows no expone el Bluetooth como una impresora en todos los modelos. Lo que
-hace la mayoría de impresoras térmicas económicas es crear un **puerto COM virtual**
-al emparejarse (perfil **SPP**, Serial Port Profile).
+## 6. Impresión por Bluetooth (puerto COM)
 
 ```text
-Sistema Java  →  puerto COM (Bluetooth)  →  impresora
+Java → puerto COM virtual → Bluetooth → impresora
 ```
 
-1. Se empareja la impresora desde **Configuración → Bluetooth y dispositivos**.
-2. Windows le asigna un puerto, por ejemplo `COM5`.
-3. `ImpresoraSerial` abre ese puerto con **jSerialComm** a `9600` baudios
-   (8 bits de datos, 1 bit de parada, sin paridad).
-4. Se envían los bytes del ticket directamente, sin driver intermedio.
-
-### Comandos ESC/POS que se usan
+1. Emparejar la impresora en **Configuración → Bluetooth**.
+2. Windows crea un puerto COM (por ejemplo `COM5`).
+3. `ImpresoraSerial` usa **jSerialComm** con 8 datos, 1 parada, sin paridad y
+   velocidad configurable (9600 por defecto).
+4. Se envían comandos **ESC/POS** directamente:
 
 | Comando | Bytes | Significado |
 |---|---|---|
-| `ESC @` | `1B 40` | Inicializar la impresora |
+| `ESC @` | `1B 40` | Inicializar impresora |
 | Texto | ASCII | Contenido del ticket |
-| `ESC d 4` | `1B 64 04` | Avanzar 4 líneas al terminar |
+| `ESC d 4` | `1B 64 04` | Avanzar 4 líneas |
 
-A esto se le llama **ESC/POS**, el “idioma” estándar de las impresoras térmicas.
-
-> Las tildes y la letra ñ se quitan antes de enviar por COM, porque muchas
-> impresoras económicas no las interpretan bien. En la impresión por Windows sí
-> se conservan.
+Antes de enviar se quitan las tildes, porque muchas impresoras económicas no las
+interpretan bien.
 
 ---
 
-## 7. ¿Por qué hay dos modos y no uno solo?
-
-Porque no todas las impresoras se conectan igual:
-
-| Conexión | Modo recomendado | Motivo |
-|---|---|---|
-| USB con driver instalado | Windows | El driver ya sabe hablar con la impresora. |
-| Bluetooth emparejado como impresora | Windows | Windows la trata como impresora normal. |
-| Bluetooth que crea puerto COM | Puerto COM | No hay driver de impresión; se envía ESC/POS directo. |
-| USB que aparece como COM | Puerto COM | Se comporta como puerto serie. |
-
-Así el sistema funciona en más modelos sin cambiar el código.
-
----
-
-## 8. Cálculo del total
-
-El ticket muestra:
+## 7. Cálculo y contenido del ticket
 
 ```text
 TOTAL = monto - descuento + IGV
 ```
 
-Está implementado en `NotaVenta.total(Pago)` y usa `BigDecimal`, que es el tipo
-adecuado para dinero porque no pierde centavos.
+Se usa `BigDecimal` para no perder centavos.
+
+Incluye: empresa, RUC, dirección, teléfono, número `NV-`, fecha de emisión,
+cliente, DNI, departamento, contrato, periodo, fecha de pago, atendido,
+alquiler, descuento, IGV, total, método de pago y mensaje de no fiscalidad.
 
 ---
 
-## 9. Personalización
+## 8. Archivos
 
-Los datos de la cabecera están en:
-
-```text
-src/main/java/pe/edu/upeu/alquileres/impresion/DatosEmpresa.java
-```
-
-```java
-public static final String NOMBRE = "INMOBILIARIA JULIACA";
-public static final String RUC = "20123456789";
-public static final String DIRECCION = "Av. Los Andes 123 - Juliaca";
-public static final String TELEFONO = "Tel. 999 999 999";
-```
-
-Si se quiere cambiar el diseño del ticket (más líneas, otro texto, un logo en
-texto), solo se modifica `NotaVenta.lineas(...)`.
-
----
-
-## 10. Problemas frecuentes
-
-| Problema | Causa probable | Solución |
-|---|---|---|
-| No aparece la impresora | No está instalada en Windows | Instalarla o emparejarla por Bluetooth. |
-| “No se pudo abrir el puerto COM” | Puerto ocupado, apagado o mal emparejado | Encender, revisar el número de COM y desconectar otros programas. |
-| Sale texto con símbolos raros | Codificación distinta | El modo COM ya envía ASCII sin tildes; revisar la página de códigos de la impresora. |
-| Sale muy angosto o cortado | Ancho de papel distinto | Verificar que sea de 58 mm y usar `POS-58-Series`. |
-| No corta el papel | La impresora no tiene cuchilla | Es normal en impresoras de 58 mm económicas. |
-| Imprime una hoja larga | El driver ignora el alto personalizado | Ajustar el tamaño de papel en las propiedades de la impresora. |
+| Archivo | Función |
+|---|---|
+| `impresion/DatosEmpresa.java` | Datos de la cabecera (editar aquí). |
+| `impresion/NotaVenta.java` | Arma el ticket para 58 o 80 mm. |
+| `impresion/ImpresoraWindows.java` | Impresión por driver de Windows. |
+| `impresion/ImpresoraSerial.java` | Impresión ESC/POS por COM. |
+| `components/NotaVentaDialog.java` | Vista previa, papel y conexión. |
+| `config/ConfigImpresion.java` | Guarda y carga la configuración elegida. |
+| `controller/ConfiguracionImpresionController.java` | Lógica del panel de configuración. |
+| `view/configuracion-impresion.fxml` | Panel de configuración en la barra lateral. |
+| `components/Dialogos.java` | Pregunta “Imprimir nota / Ahora no”. |
+| `controller/PagoController.java` | Guarda el pago y dispara la pregunta. |
+| `view/pagos.fxml` | Botón “Nota de venta”. |
+| `pom.xml` | Dependencia `jSerialComm`. |
 
 ---
 
-## 11. Explicación corta para la exposición
+## 9. Problemas frecuentes
 
-> “Para la nota de venta usamos una impresora térmica de 58 mm. El sistema arma el
-> ticket en líneas de 32 caracteres, que es lo que entra en ese ancho. Si la
-> impresora está instalada en Windows, la mandamos por USB o Bluetooth a través del
-> driver con `PrinterJob`. Si el Bluetooth solo crea un puerto COM, usamos
-> `jSerialComm` y le enviamos comandos ESC/POS directamente. El total se calcula
-> con `BigDecimal` y el documento es una nota interna, no un comprobante fiscal de
-> SUNAT.”
+| Problema | Solución |
+|---|---|
+| No aparece la impresora | Instalarla o emparejarla por Bluetooth. |
+| “No se pudo abrir el puerto COM” | Encender la impresora y revisar el número de COM. |
+| Texto cortado | Elegir el papel correcto (58 u 80 mm). |
+| Símbolos raros | El modo COM ya envía ASCII sin tildes. |
+| No corta el papel | Normal en impresoras económicas; solo avanza líneas. |
 
 ---
 
-## 12. Prueba recomendada antes de exponer
+## 10. Explicación corta para exponer
 
-1. Encender la impresora y cargar papel de 58 mm.
-2. Confirmar en Windows que aparece `POS-58-Series`.
-3. Abrir el sistema → Pagos → seleccionar un pago → **Nota de venta**.
-4. Probar primero el modo **Windows**.
-5. Luego emparejar por Bluetooth, anotar el puerto COM y probar el modo
-   **Puerto COM** con `9600` baudios.
-6. Tener impreso un ticket de ejemplo por si falla el internet o el Bluetooth
-   durante la exposición.
+> “Cuando se registra un pago, el sistema lo guarda y pregunta si se quiere la
+> nota de venta. La nota se arma en 32 columnas para papel de 58 mm o 48 columnas
+> para 80 mm. Si la impresora está en Windows, se imprime por cable USB o
+> Bluetooth usando el driver; si el Bluetooth crea un puerto COM, se envían
+> comandos ESC/POS directamente. El total se calcula con `BigDecimal` y el
+> documento es interno, no fiscal.”

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_header"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mi alquiler"
+            android:textColor="@color/blanco"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Información de tu departamento y pagos"
+            android:textColor="@color/blanco"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TITULAR"
+                android:textColor="@color/primario"
+                android:textStyle="bold"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/lblTitular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="—"
+                android:textColor="@color/texto"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lblDni"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DNI: —"
+                android:textColor="@color/suave"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="14dp"
+                android:background="@color/borde" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="MI DEPARTAMENTO"
+                android:textColor="@color/primario"
+                android:textStyle="bold"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/lblDepto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="N° —"
+                android:textColor="@color/texto"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lblPiso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Piso: —"
+                android:textColor="@color/suave"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/lblDireccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dirección: —"
+                android:textColor="@color/suave"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="MI CONTRATO"
+                android:textColor="@color/primario"
+                android:textStyle="bold"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/lblContrato"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Contrato: —"
+                android:textColor="@color/texto"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/lblInicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Inicio: —"
+                android:textColor="@color/suave"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/lblFin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vencimiento: —"
+                android:textColor="@color/suave"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/lblMonto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Monto mensual: —"
+                android:textColor="@color/suave"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/lblEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Estado: —"
+                android:textColor="@color/suave"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_card"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HISTORIAL DE PAGOS"
+                android:textColor="@color/primario"
+                android:textStyle="bold"
+                android:textSize="11sp" />
+
+            <LinearLayout
+                android:id="@+id/listaPagos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lblMensaje"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:textColor="@color/suave"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/btnActualizar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_boton_primario"
+            android:text="Actualizar mis datos"
+            android:textColor="@color/blanco"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnSalir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_chip"
+            android:text="Cerrar sesión"
+            android:textColor="@color/texto" />
+    </LinearLayout>
+</ScrollView>

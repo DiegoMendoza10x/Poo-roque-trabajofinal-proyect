@@ -18,7 +18,7 @@
 | Archivo | Descripción |
 |---|---|
 | `dist/SysAlquileres-v2.0.0-portable.zip` | Programa de Windows con Java incluido |
-| `dist/SysAlquileres-Movil-v1.0.apk` | Versión Android (MVP con CRUD) |
+| `dist/SysAlquileres-Movil-v1.1.apk` | Versión Android de apoyo: roles ADMIN/CLIENTE y solo lectura |
 
 ## Credenciales de prueba
 

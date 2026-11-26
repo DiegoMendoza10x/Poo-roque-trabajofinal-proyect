@@ -20,9 +20,11 @@ import pe.edu.upeu.alquileres.exception.BusinessException;
 import pe.edu.upeu.alquileres.model.Contrato;
 import pe.edu.upeu.alquileres.model.Departamento;
 import pe.edu.upeu.alquileres.model.Inquilino;
+import pe.edu.upeu.alquileres.model.Usuario;
 import pe.edu.upeu.alquileres.service.IContratoService;
 import pe.edu.upeu.alquileres.service.IDepartamentoService;
 import pe.edu.upeu.alquileres.service.IInquilinoService;
+import pe.edu.upeu.alquileres.service.IUsuarioService;
 import pe.edu.upeu.alquileres.util.Formato;
 
 import java.math.BigDecimal;
@@ -35,6 +37,7 @@ public class ContratoController {
     private final IContratoService service;
     private final IInquilinoService inquilinoService;
     private final IDepartamentoService departamentoService;
+    private final IUsuarioService usuarioService;
 
     @FXML private TextField txtBuscar;
     @FXML private ComboBox<String> cbxFiltroEstado;
@@ -66,10 +69,12 @@ public class ContratoController {
 
     public ContratoController(IContratoService service,
                               IInquilinoService inquilinoService,
-                              IDepartamentoService departamentoService) {
+                              IDepartamentoService departamentoService,
+                              IUsuarioService usuarioService) {
         this.service = service;
         this.inquilinoService = inquilinoService;
         this.departamentoService = departamentoService;
+        this.usuarioService = usuarioService;
     }
 
     @FXML
@@ -210,16 +215,33 @@ public class ContratoController {
                 .departamento(cbxDepartamento.getValue())
                 .cantidadPersona(parseEntero(txtCantidad.getText()))
                 .build();
+        boolean esNuevo = idEditando == null;
         try {
-            if (idEditando == null) {
-                service.save(contrato);
+            Contrato guardado;
+            if (esNuevo) {
+                guardado = service.save(contrato);
                 mensaje("Contrato registrado correctamente.", false);
             } else {
-                service.update(idEditando, contrato);
+                guardado = service.update(idEditando, contrato);
                 mensaje("Contrato actualizado correctamente.", false);
             }
             cargar();
             limpiarFormulario();
+
+            // Al crear un contrato se genera el acceso del cliente para la APK.
+            if (esNuevo && guardado != null) {
+                try {
+                    Usuario cliente = usuarioService.crearCliente(guardado);
+                    Dialogos.informar("Acceso del cliente creado",
+                            "Entrega estos datos al inquilino para que ingrese en la APK:\n\n"
+                                    + "Usuario: " + cliente.getUsuario() + "\n"
+                                    + "Clave: " + cliente.getClave() + "\n\n"
+                                    + "El usuario es su DNI. Si ya tenía acceso, la clave fue renovada.");
+                } catch (Exception ex) {
+                    mensaje("Contrato guardado, pero no se pudo crear el acceso del cliente: "
+                            + ex.getMessage(), true);
+                }
+            }
         } catch (BusinessException e) {
             mensaje(e.getMessage(), true);
         } catch (Exception e) {

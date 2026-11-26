@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supabase · SysAlquileres</title><link rel="stylesheet" href="assets/estilo-docs.css"></head>
+<body>
+<div class="barra"><div><strong>Supabase · SysAlquileres</strong><small>Conexión, variables y scripts</small></div>
+<div class="acciones"><button class="boton suave" onclick="document.getElementById('inicio').scrollIntoView()">↑ Inicio</button><button class="boton pdf" onclick="window.print()">⬇ Descargar en PDF</button></div></div>
+<header class="hero" id="inicio"><div class="hero-inner"><span class="etq">Base de datos</span><h1>Supabase en el proyecto</h1>
+<p>Guía práctica de configuración, conexión y verificación. Para una explicación con diagramas, abre <a href="SUPABASE_EXPLICADO.html" style="color:#fff;text-decoration:underline">SUPABASE_EXPLICADO.html</a>.</p></div></header>
+<div class="layout"><nav class="indice"><h3>Contenido</h3>
+<a href="#config">1. Configuración</a><a href="#conexion">2. Cómo se conecta</a><a href="#tls">3. SSL y prepareThreshold</a>
+<a href="#scripts">4. Scripts SQL</a><a href="#rls">5. RLS de la APK</a><a href="#verificar">6. Verificación</a><a href="#problemas">7. Problemas</a></nav>
+<main>
+<section id="config"><h2><span class="num">1</span> Configuración</h2>
+<p class="intro"><code>application.properties</code> trae H2 por defecto, pero las variables de entorno lo sobrescriben.</p>
+<table><tr><th>Variable</th><th>Valor en este entorno</th></tr>
+<tr><td><code>SUPABASE_DB_URL</code></td><td><code>jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres</code></td></tr>
+<tr><td><code>SUPABASE_DB_USER</code></td><td><code>postgres.zarbbelqcsivzhjrpguu</code></td></tr>
+<tr><td><code>SUPABASE_DB_PASSWORD</code></td><td>🔒 solo en el entorno</td></tr>
+<tr><td><code>SUPABASE_DDL_AUTO</code></td><td><code>false</code></td></tr>
+<tr><td><code>SUPABASE_SEED_DEMO</code></td><td><code>false</code></td></tr>
+</table>
+<ol class="pasos"><li><code>application.properties</code>.</li><li>Propiedades <code>-D</code>.</li><li>Variables <code>DB_*</code>.</li><li><b>Variables <code>SUPABASE_DB_*</code></b> (ganan).</li></ol></section>
+<section id="conexion"><h2><span class="num">2</span> Cómo se conecta</h2>
+<div class="diagrama"><div class="cadena">
+<div class="nodo"><span class="icono">🚀</span><b>AppContext</b><small>Singleton</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">⚙️</span><b>DatabaseConfig</b><small>lee variables</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">🏊</span><b>HikariCP</b><small>pool máx. 5</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">☁️</span><b>Supabase</b><small>PostgreSQL</small></div>
+</div></div>
+<p>El escritorio usa <b>JDBC directo</b>. La APK usa <b>REST</b> (PostgREST) con la clave publicable y la cabecera <code>x-dni</code>.</p></section>
+<section id="tls"><h2><span class="num">3</span> SSL y prepareThreshold</h2>
+<div class="rejilla"><div class="tarjeta azul"><h4>sslmode=require</h4><p>Cifra la conexión para proteger credenciales y datos en internet.</p></div>
+<div class="tarjeta ambar"><h4>prepareThreshold=0</h4><p>El pooler en modo transacción no admite sentencias preparadas con nombre; evita el error <i>prepared statement already exists</i>.</p></div></div>
+<p>El código los agrega automáticamente en <code>normalizarUrl()</code>.</p></section>
+<section id="scripts"><h2><span class="num">4</span> Scripts SQL</h2>
+<table><tr><th>Archivo</th><th>Uso</th></tr>
+<tr><td><code>database/supabase_schema.sql</code></td><td>Crea las 7 tablas y datos de ejemplo.</td></tr>
+<tr><td><code>database/supabase_movil_policies.sql</code></td><td>Políticas RLS de solo lectura por rol/DNI.</td></tr>
+<tr><td><code>database/postgresql_sistema_alquileres.sql</code></td><td>PostgreSQL local.</td></tr>
+<tr><td><code>database/modelo-power-architect.architect</code></td><td>Modelo visual actualizado.</td></tr>
+</table>
+<div class="aviso ambar"><strong>Importante</strong> En Supabase, <code>ddl.auto</code> y <code>seed.demo</code> son <code>false</code>: los scripts se ejecutan manualmente en el SQL Editor.</div></section>
+<section id="rls"><h2><span class="num">5</span> RLS de la APK</h2>
+<ul class="checks"><li>Solo <code>SELECT</code> para el rol <code>anon</code>.</li><li><code>movil_dni()</code> lee la cabecera <code>x-dni</code> enviada por la APK.</li><li>El cliente ve inquilino, contrato, pago y finalización filtrados por su DNI.</li><li><code>admin</code> ve los listados generales.</li></ul></section>
+<section id="verificar"><h2><span class="num">6</span> Verificación</h2>
+<pre>INFO  c.z.hikari.HikariDataSource - SysAlquileresPool - Starting...
+INFO  p.e.u.a.config.DatabaseConfig - Base de datos lista:
+      jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres
+      ?sslmode=require&amp;prepareThreshold=0 [Supabase / PostgreSQL]</pre>
+<p>El panel <b>Config. impresión</b> también muestra el motor y la URL activa.</p></section>
+<section id="problemas"><h2><span class="num">7</span> Problemas</h2>
+<table><tr><th>Síntoma</th><th>Solución</th></tr>
+<tr><td>No conecta</td><td>Revisar internet y variables SUPABASE_DB_*.</td></tr>
+<tr><td>prepared statement already exists</td><td>Verificar prepareThreshold=0 en la URL.</td></tr>
+<tr><td>Error de certificado</td><td>Verificar sslmode=require.</td></tr>
+<tr><td>La APK no lista datos</td><td>Aplicar database/supabase_movil_policies.sql.</td></tr>
+</table></section>
+</main></div>
+<footer>SysAlquileres · Supabase · POO 2026 · UPeU Juliaca</footer><script src="assets/docs.js"></script>
+</body></html>

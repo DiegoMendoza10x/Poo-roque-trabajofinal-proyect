@@ -27,6 +27,19 @@ public final class Dialogos {
         return alert.showAndWait().filter(b -> b == aceptar).isPresent();
     }
 
+    public static boolean confirmarImpresion(String mensaje) {
+        ButtonType imprimir = new ButtonType("Imprimir nota", ButtonBar.ButtonData.OK_DONE);
+        ButtonType ahoraNo = new ButtonType("Ahora no", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Nota de venta");
+        alert.setHeaderText("¿Deseas imprimir la nota de venta?");
+        alert.setContentText(mensaje);
+        alert.getButtonTypes().setAll(imprimir, ahoraNo);
+        aplicarEstilo(alert.getDialogPane());
+        return alert.showAndWait().filter(b -> b == imprimir).isPresent();
+    }
+
     public static Optional<String> pedirTexto(String titulo, String cabecera, String valorInicial) {
         TextInputDialog dialog = new TextInputDialog(valorInicial);
         dialog.setTitle(titulo);

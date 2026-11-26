@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empaquetamiento · SysAlquileres</title><link rel="stylesheet" href="assets/estilo-docs.css"></head>
+<body>
+<div class="barra"><div><strong>Empaquetamiento · SysAlquileres</strong><small>.exe, ZIP portable y APK</small></div>
+<div class="acciones"><button class="boton suave" onclick="document.getElementById('inicio').scrollIntoView()">↑ Inicio</button><button class="boton pdf" onclick="window.print()">⬇ Descargar en PDF</button></div></div>
+<header class="hero" id="inicio"><div class="hero-inner"><span class="etq">Entregables</span><h1>Empaquetamiento</h1>
+<p>Cómo se generan los tres entregables: ejecutable de Windows, ZIP portable y APK informativa.</p></div></header>
+<div class="layout"><nav class="indice"><h3>Contenido</h3>
+<a href="#exe">1. Ejecutable .exe</a><a href="#zip">2. ZIP portable</a><a href="#apk">3. APK v1.1</a>
+<a href="#dist">4. Carpeta dist</a><a href="#preguntas">5. Preguntas</a></nav>
+<main>
+<section id="exe"><h2><span class="num">1</span> Ejecutable de Windows</h2>
+<p>Se genera una imagen de aplicación con <code>jpackage</code>: incluye Java y JavaFX, así que la PC destino no necesita JDK.</p>
+<pre>powershell -ExecutionPolicy Bypass -File scripts\build-exe.ps1
+
+# Resultado
+dist\SysAlquileres\SysAlquileres.exe</pre>
+<div class="aviso"><strong>Ojo</strong> El <code>.exe</code> necesita las carpetas <code>app\</code> y <code>runtime\</code> a su lado. Por eso se entrega el ZIP.</div></section>
+<section id="zip"><h2><span class="num">2</span> ZIP portable</h2>
+<div class="rejilla"><div class="tarjeta azul"><h4>Contenido</h4><p><code>app/</code>, <code>runtime/</code> y <code>SysAlquileres.exe</code>.</p></div>
+<div class="tarjeta verde"><h4>Tamaño</h4><p>Aproximadamente 60 MB.</p></div>
+<div class="tarjeta"><h4>Uso</h4><p>Extraer y ejecutar el <code>.exe</code>; no es instalador.</p></div></div>
+<p>Para generar un instalador <code>.exe</code> o <code>.msi</code> haría falta WiX Toolset 3.x.</p></section>
+<section id="apk"><h2><span class="num">3</span> APK informativa v1.1</h2>
+<pre>cd android
+$env:JAVA_HOME="C:\Program Files\Java\jdk-17"   # GraalVM 21 falla en jlink
+.\gradlew.bat assembleRelease
+
+# Salida
+android\app\build\outputs\apk\release\app-release.apk
+# Entregable
+dist\SysAlquileres-Movil-v1.1.apk</pre>
+<ul class="checks"><li>Login con rol ADMIN o CLIENTE.</li><li>Cliente ve solo su departamento y pagos.</li><li>Solo lectura: no crea ni edita datos.</li></ul>
+<pre>adb install -r "dist\SysAlquileres-Movil-v1.1.apk"</pre></section>
+<section id="dist"><h2><span class="num">4</span> Carpeta dist</h2>
+<table><tr><th>Archivo</th><th>Para qué sirve</th></tr>
+<tr><td><code>SysAlquileres-v2.0.0-portable.zip</code></td><td>Entregable principal de escritorio.</td></tr>
+<tr><td><code>SysAlquileres-Movil-v1.1.apk</code></td><td>APK de apoyo con roles.</td></tr>
+</table></section>
+<section id="preguntas"><h2><span class="num">5</span> Preguntas frecuentes</h2>
+<details><summary>¿El .exe necesita Java instalado?</summary><p>No. El runtime se incluye dentro del ZIP portable.</p></details>
+<details><summary>¿Por qué no usar GraalVM 21 para la APK?</summary><p>Gradle 8.11 falla al transformar el módulo JDK con <code>jlink</code>. Se usa JDK 17.</p></details>
+<details><summary>¿La APK imprime?</summary><p>Comparte el ticket por Android; la impresión térmica directa está en el escritorio.</p></details>
+</section>
+</main></div>
+<footer>SysAlquileres · Empaquetamiento · POO 2026 · UPeU Juliaca</footer><script src="assets/docs.js"></script>
+</body></html>

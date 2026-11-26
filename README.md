@@ -4,7 +4,7 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 
 | Login | Ventana principal |
 |---|---|
-| ![Login](docs/screenshots/login.png) | ![Ventana principal](docs/screenshots/principal.png) |
+| ![Login](docs/screenshots/v2/login.png) | ![Ventana principal](docs/screenshots/v2/principal.png) |
 
 ---
 
@@ -12,12 +12,17 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 
 | Documento | Contenido |
 |---|---|
-| [ENTREGABLES.md](ENTREGABLES.md) | Índice de los 3 requisitos del proyecto final |
-| [Manual de usuario](docs/MANUAL_USUARIO.md) · [Versión HTML](docs/MANUAL_USUARIO.html) | Uso paso a paso del escritorio y del APK |
-| [Código fuente](docs/CODIGO_FUENTE.md) | Estructura y compilación |
-| [Empaquetamiento .exe](docs/EMPAQUETAMIENTO.md) | Cómo se generó el ejecutable |
-| [Guía de exposición](docs/GUIA_EXPOSICION.md) | Explicación del código y guion de exposición |
-| [Supabase](docs/SUPABASE.md) | Conexión a la base en la nube |
+| [📘 Manual de usuario (HTML)](docs/MANUAL_USUARIO.html) · [MD](docs/MANUAL_USUARIO.md) | Uso paso a paso del escritorio y del APK |
+| [🎤 Guía de exposición (HTML)](docs/GUIA_EXPOSICION.html) · [MD](docs/GUIA_EXPOSICION.md) | Arquitectura, reglas, guion de 12 minutos y preguntas |
+| [🧱 Código fuente (HTML)](docs/CODIGO_FUENTE.html) · [MD](docs/CODIGO_FUENTE.md) | Estructura, capas y compilación |
+| [⚙️ Configuración (HTML)](docs/CONFIGURACION.html) · [MD](docs/CONFIGURACION.md) | Impresora, base activa, Architect y accesos |
+| [🖨️ Impresión 58/80 mm (HTML)](docs/IMPRESION_58MM.html) · [MD](docs/IMPRESION_58MM.md) | Ticket, cable, Bluetooth y ESC/POS |
+| [📦 Empaquetamiento (HTML)](docs/EMPAQUETAMIENTO.html) · [MD](docs/EMPAQUETAMIENTO.md) | `.exe`, ZIP portable y APK |
+| [☁️ Supabase (HTML)](docs/SUPABASE.html) · [MD](docs/SUPABASE.md) | Variables, conexión y scripts |
+| [☁️ Supabase didáctico (HTML)](docs/SUPABASE_EXPLICADO.html) | Diagramas y recorrido del dato |
+| [📱 APK de clientes (HTML)](docs/APK_CLIENTES.html) · [MD](docs/APK_CLIENTES.md) | Roles, claves y datos filtrados |
+| [🎬 Presentación interactiva](docs/PRESENTACION.html) | 23 diapositivas con simulador, quiz y miniaturas |
+| [📄 ENTREGABLES.md](ENTREGABLES.md) | Índice de requisitos del proyecto final |
 
 ---
 
@@ -28,6 +33,14 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 - Validación real contra la tabla `usuario` de la base de datos.
 - Mensaje de error si el usuario o la clave no son correctos.
 - Credenciales de prueba: **admin / admin123**.
+
+### Accesos de clientes (CRUD completo)
+- Panel **“Accesos clientes”** en la barra lateral: **alta, lectura, edición y eliminación**.
+- Lista de usuarios `CLIENTE` (DNI, nombre, rol, estado y clave); la clave puede ocultarse/mostrarse.
+- Botones: **Nuevo cliente**, **Generar clave**, **Guardar clave**, **Eliminar**, **Activar**, **Desactivar** y **Actualizar lista**.
+- Al crear un contrato se genera el acceso; si el cliente olvida su clave, se consulta o renueva aquí.
+- **Al finalizar un contrato**, la clave del cliente se desactiva automáticamente; **al crear uno nuevo**, se reactiva.
+- No requiere la *secret key* de Supabase: el escritorio edita la tabla `usuario` por JDBC.
 
 ### Ventana principal
 - Barra lateral de navegación con los cuatro módulos y acceso rápido a la sesión.
@@ -52,7 +65,8 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 - Registro de contrato con inquilino, departamento, fechas, monto mensual y cantidad de personas.
 - **Regla de negocio:** un departamento no puede tener dos contratos vigentes con fechas superpuestas.
 - Validación de fechas: la fecha de fin debe ser posterior a la de inicio.
-- Finalización con motivo (`Fin de plazo`, `Rescisión`, `Incumplimiento`, `Mutuo acuerdo`), liberando el departamento.
+- Finalización con motivo (`Fin de plazo`, `Rescisión`, `Incumplimiento`, `Mutuo acuerdo`), liberando el departamento y desactivando el acceso del cliente.
+- Al crear un contrato nuevo se reactiva el acceso del cliente para la APK.
 - No se pueden editar ni eliminar contratos finalizados; tampoco eliminar contratos con pagos.
 
 ### Pagos
@@ -61,11 +75,10 @@ Sistema de escritorio para administrar el alquiler de departamentos: departament
 - Edición y eliminación con confirmación.
 - Métodos: Efectivo, Transferencia, Yape, Plin, Tarjeta.
 
-### Nota de venta (impresión 58 mm)
-- Botón **Nota de venta** en el módulo de pagos: muestra la vista previa del ticket.
-- Impresión por **impresora de Windows** (USB o Bluetooth emparejado) o por **puerto COM**.
-- Incluye datos de la empresa, cliente, departamento, contrato, periodo, importes y total.
-- Opción **Copiar texto** para usar la nota en cualquier otro medio.
+### Nota de venta (impresión térmica 58/80 mm)
+- Al registrar un pago se pregunta si se desea imprimir la nota de venta; también se puede reemitir desde el botón **Nota de venta** del módulo de pagos.
+- Vista previa, selección de papel (**58 mm / 32 columnas** u **80 mm / 48 columnas**) y conexión por **Windows (USB/Bluetooth)** o **puerto COM**.
+- Incluye datos de la empresa, cliente, departamento, contrato, periodo, importes y total; opción **Copiar texto**.
 
 ### Base de datos en la nube (Supabase)
 - La aplicación puede trabajar con **Supabase (PostgreSQL)** además de H2 local.
@@ -82,8 +95,9 @@ src/main/java/pe/edu/upeu/alquileres
 ├── components/                  # Diálogos,NotaVentaDialog y Celdas (chips de tabla)
 ├── config/
 │   ├── AppContext.java          # Contenedor de dependencias (repos + servicios + controladores)
-│   └── DatabaseConfig.java      # HikariCP, esquema, seed y conexión a Supabase
-├── controller/                  # Login, ventana principal y controladores de cada módulo
+│   ├── DatabaseConfig.java      # HikariCP, esquema, seed y conexión a Supabase
+│   └── ConfigImpresion.java     # Configuración persistente de la impresora térmica
+├── controller/                  # Login, principal, módulos, ConfiguracionImpresionController y UsuarioController
 ├── enums/                       # EstadoDepartamento, EstadoContrato, MetodoPago
 ├── exception/                   # BusinessException
 ├── impresion/                   # NotaVenta, ImpresoraWindows e ImpresoraSerial (58 mm)
@@ -166,18 +180,22 @@ Notas:
 - Si se usa Supabase, las variables de entorno deben configurarse en la misma terminal
   desde la que se inicia el `.exe` (o de forma permanente con `setx`).
 
-### APK Android (MVP)
+### APK Android (apoyo informativo · v1.1)
 
-Versión móvil que reutiliza la misma base de datos de Supabase:
+Versión móvil de **solo lectura** que comparte la base de datos de Supabase:
 
 ```powershell
 cd android
+$env:JAVA_HOME="C:\Program Files\Java\jdk-17"   # Gradle 8.11 no compila con GraalVM 21
 .\gradlew.bat assembleRelease
 ```
 
-- APK: `android\app\build\outputs\apk\release\app-release.apk`
-- Incluye: login, listados de los 4 módulos, registro de pagos y nota de venta compartible.
-- Guía completa: [`docs/GUIA_EXPOSICION.md`](docs/GUIA_EXPOSICION.md) (sección 10).
+- APK entregable: `dist\SysAlquileres-Movil-v1.1.apk`
+- **Login valida el rol** de la tabla `usuario`:
+  - **ADMIN** → ve los listados de los 4 módulos solo para consulta.
+  - **CLIENTE** → ve únicamente **su** departamento, contrato, vencimiento e historial de pagos.
+- Al crear un contrato en el escritorio se genera automáticamente el usuario cliente (**su DNI**) y una clave aleatoria, que se muestran al administrador para entregarlas.
+- Guía completa: [`docs/APK_CLIENTES.md`](docs/APK_CLIENTES.md).
 
 ### Credenciales H2 por defecto
 
@@ -188,6 +206,10 @@ cd android
 | Contraseña | *(vacía)* |
 
 Para reiniciar la base de datos: cierra la aplicación y elimina la carpeta `data/`. Al volver a iniciar se recrea con los datos de ejemplo, incluido el usuario `admin`.
+
+> **Base activa en este entorno:** hay variables `SUPABASE_DB_*` configuradas, por lo que el sistema está usando **Supabase / PostgreSQL** (pooler `aws-0-us-east-1.pooler.supabase.com`). `application.properties` sigue trayendo H2 como valor por defecto; las variables de entorno tienen prioridad. Para volver a H2 local, cierra la app y elimina/desactiva esas variables de entorno. La ruta del panel **Config. impresión** muestra el motor activo en tiempo real.
+
+> El modelo **Power Architect** actualizado está en `database/modelo-power-architect.architect` (7 tablas, incluida `usuario`). El original entregado en REQUERIMIENTOS se conserva como `database/modelo-power-architect-original.architect`.
 
 > Si actualizas desde una versión anterior, elimina la carpeta `data/` una vez: las bases ya creadas no reciben automáticamente la tabla `usuario`.
 
@@ -277,11 +299,22 @@ Restricciones destacadas:
 SysAlquileres/
 ├── database/
 │   ├── postgresql_sistema_alquileres.sql
-│   └── supabase_schema.sql          # Script para Supabase
+│   ├── supabase_schema.sql                      # Script para Supabase
+│   ├── modelo-power-architect.architect         # Modelo actualizado (7 tablas)
+│   └── modelo-power-architect-original.architect # Modelo original de REQUERIMIENTOS
 ├── docs/
-│   ├── SUPABASE.md                  # Guía de conexión a Supabase
+│   ├── index.html                   # índice de documentación
+│   ├── MANUAL_USUARIO.html          # Manual con botón Descargar en PDF
+│   ├── MANUAL_USUARIO.md
+│   ├── PRESENTACION.html            # Presentación interactiva
+│   ├── CONFIGURACION.md             # Panel de impresora y base activa
 │   ├── IMPRESION_58MM.md            # Guía de impresión térmica
-│   └── screenshots/
+│   ├── GUIA_EXPOSICION.md
+│   ├── SUPABASE.md                  # Guía de conexión a Supabase
+│   ├── CODIGO_FUENTE.md
+│   ├── EMPAQUETAMIENTO.md
+│   ├── assets/                      # SVG de portada e impresora
+│   └── screenshots/v2/              # Capturas actuales del sistema
 ├── scripts/
 │   └── build-exe.ps1                # Genera el .exe portable
 ├── dist/                            # .exe y ZIP (se generan con build-exe.ps1)
@@ -298,7 +331,9 @@ SysAlquileres/
 │       ├── departamentos.fxml
 │       ├── inquilinos.fxml
 │       ├── contratos.fxml
-│       └── pagos.fxml
+│       ├── pagos.fxml
+│       ├── configuracion-impresion.fxml
+│       └── usuarios.fxml
 ├── data/                        # Base H2 (se genera al ejecutar)
 └── pom.xml
 ```

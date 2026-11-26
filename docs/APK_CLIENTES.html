@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APK de clientes · SysAlquileres</title><link rel="stylesheet" href="assets/estilo-docs.css"></head>
+<body>
+<div class="barra"><div><strong>APK de clientes · SysAlquileres v1.1</strong><small>ADMIN / CLIENTE · solo lectura</small></div>
+<div class="acciones"><button class="boton suave" onclick="document.getElementById('inicio').scrollIntoView()">↑ Inicio</button><button class="boton pdf" onclick="window.print()">⬇ Descargar en PDF</button></div></div>
+<header class="hero" id="inicio"><div class="hero-inner"><span class="etq">Versión móvil</span><h1>APK de apoyo</h1>
+<p>Ya no es un CRUD móvil: valida el rol y muestra información. El administrador consulta; el cliente ve solamente lo suyo.</p>
+<div class="chips"><span class="chip">Rol ADMIN</span><span class="chip">Rol CLIENTE</span><span class="chip">Solo lectura</span></div></div></header>
+<div class="layout"><nav class="indice"><h3>Contenido</h3>
+<a href="#idea">1. Idea general</a><a href="#alta">2. Alta del cliente</a><a href="#login">3. Login por rol</a>
+<a href="#cliente">4. Vista del cliente</a><a href="#admin">5. Vista del admin</a><a href="#clave">6. Recuperar clave</a>
+<a href="#rls">7. RLS</a><a href="#build">8. Compilación</a><a href="#prueba">9. Prueba</a></nav>
+<main>
+<section id="idea"><h2><span class="num">1</span> Idea general</h2>
+<div class="rejilla"><div class="tarjeta azul"><h4>👤 ADMIN</h4><p>Listados generales de los 4 módulos, sin crear ni editar.</p></div>
+<div class="tarjeta verde"><h4>🏠 CLIENTE</h4><p>Su departamento, contrato, vencimiento e historial de pagos.</p></div></div>
+<p>La APK es una <b>bandeja de entrada informativa</b>. Toda escritura se hace en el escritorio.</p></section>
+<section id="alta"><h2><span class="num">2</span> Alta del cliente al crear contrato</h2>
+<div class="diagrama"><div class="cadena">
+<div class="nodo"><span class="icono">📄</span><b>Nuevo contrato</b><small>en el .exe</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">👤</span><b>Usuario = DNI</b><small>clave aleatoria</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">🔑</span><b>Diálogo</b><small>muestra credenciales</small></div><div class="flecha">→</div>
+<div class="nodo"><span class="icono">📱</span><b>APK</b><small>ingreso del cliente</small></div>
+</div></div>
+<p>Si el DNI ya tenía acceso, la clave se renueva. No se agregaron columnas a la base.</p></section>
+<section id="login"><h2><span class="num">3</span> Login por rol</h2>
+<pre>/rest/v1/usuario?usuario=eq.&lt;dni&gt;&amp;clave=eq.&lt;clave&gt;
+              &amp;estado=eq.Activo&amp;select=usuario,nombre,rol&amp;limit=1</pre>
+<table><tr><th>Rol</th><th>Actividad</th></tr><tr><td>CLIENTE</td><td><code>ClienteActivity</code></td></tr><tr><td>ADMIN</td><td><code>MainActivity</code> (solo lectura)</td></tr></table></section>
+<section id="cliente"><h2><span class="num">4</span> Vista del cliente</h2>
+<ul class="checks"><li>Titular y DNI.</li><li>Departamento: número, piso y dirección.</li><li>Contrato: número, inicio, <b>vencimiento</b>, monto y estado.</li><li>Historial de pagos con total <code>monto - descuento + IGV</code>.</li><li>Último pago y próximo vencimiento.</li></ul>
+<div class="aviso"><strong>Detalle técnico</strong> En PostgREST hay que incluir la relación en el <code>select</code> para filtrar (<code>inquilino(dni)</code>). Los pagos se consultan en un segundo paso con <code>idcontrato=in.(...)</code>.</div></section>
+<section id="admin"><h2><span class="num">5</span> Vista del administrador</h2>
+<ul class="checks"><li>Cuatro pestañas: Departamentos, Inquilinos, Contratos y Pagos.</li><li>Botón <b>Nuevo</b> oculto.</li><li>Editar/Eliminar reemplazados por <b>Ver detalle</b>.</li><li>En Pagos se conserva <b>Ver nota de venta</b> para compartir.</li></ul></section>
+<section id="clave"><h2><span class="num">6</span> Recuperación de clave</h2>
+<ol class="pasos"><li>En el escritorio, abrir <b>Accesos clientes</b>.</li><li>Buscar por DNI o nombre y seleccionar el cliente.</li><li>Marcar <b>Mostrar claves</b> o pulsar <b>Generar clave</b>.</li><li><b>Guardar clave</b> y entregarla al inquilino.</li><li>Activar/Desactivar el acceso si hace falta.</li><li><b>Nuevo cliente</b> da de alta un acceso manual; <b>Eliminar</b> lo borra con confirmación.</li></ol>
+<div class="aviso verde"><strong>Sin secret key</strong> El escritorio edita <code>usuario</code> por JDBC con <code>SUPABASE_DB_*</code>.</div>
+<div class="aviso ambar"><strong>Regla automática</strong> Finalizar un contrato desactiva la clave; crear uno nuevo la reactiva.</div></section>
+<section id="rls"><h2><span class="num">7</span> Seguridad RLS</h2>
+<ul class="checks"><li><code>SupabaseClient</code> envía la cabecera <code>x-dni</code>.</li><li><code>movil_dni()</code> la lee en PostgreSQL.</li><li>Solo <code>SELECT</code> para anon; filtros por DNI salvo <code>admin</code>.</li><li>Script: <code>database/supabase_movil_policies.sql</code>.</li></ul></section>
+<section id="build"><h2><span class="num">8</span> Compilación</h2>
+<pre>cd android
+$env:JAVA_HOME="C:\Program Files\Java\jdk-17"
+.\gradlew.bat assembleRelease
+# Entregable: dist\SysAlquileres-Movil-v1.1.apk</pre></section>
+<section id="prueba"><h2><span class="num">9</span> Prueba recomendada</h2>
+<ol class="pasos"><li>Crear contrato nuevo en el escritorio y anotar DNI/clave.</li><li>Ingresar en la APK con esos datos.</li><li>Verificar que solo aparece ese alquiler.</li><li>Ingresar con admin y confirmar que no hay botones de escritura.</li></ol></section>
+</main></div>
+<footer>SysAlquileres · APK de clientes · POO 2026 · UPeU Juliaca</footer><script src="assets/docs.js"></script>
+</body></html>

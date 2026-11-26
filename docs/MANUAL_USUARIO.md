@@ -17,7 +17,7 @@ Ambas comparten la misma base de datos (H2 local o Supabase en la nube).
 
 ### 1.2 Versión móvil (APK)
 
-1. Copia `dist/SysAlquileres-Movil-v1.0.apk` al celular.
+1. Copia `dist/SysAlquileres-Movil-v1.1.apk` al celular.
 2. Habilita *Instalar aplicaciones desconocidas* y abre el APK.
 3. Concede permiso de red (solo se usa `INTERNET`).
 
@@ -112,21 +112,37 @@ El DNI no se puede repetir. Al seleccionar una fila se carga el formulario para 
 2. Elige el **Contrato**; el monto se rellena con la renta mensual.
 3. Revisa Fecha de pago y Periodo (se normaliza al primer día del mes).
 4. Elige el método (Efectivo, Transferencia, Yape, Plin o Tarjeta) y, si aplica, descuento e IGV.
-5. **Guardar**.
+5. **Guardar**. El sistema pregunta si deseas **Imprimir nota** o **Ahora no**: el pago ya quedó guardado en ambos casos.
 
 **Buscar/filtrar:** por inquilino, departamento o periodo; el desplegable filtra por método de pago.
 
 **Emitir la nota de venta:**
-1. Selecciona un pago en la tabla.
-2. Clic en **Nota de venta**.
-3. Revisa la vista previa del ticket de **58 mm / 32 columnas**.
-4. Elige la forma de impresión:
-   - **Windows (USB / Bluetooth)**: selecciona la impresora (o *Microsoft Print to PDF* para guardar un PDF).
-   - **Puerto COM (Bluetooth)**: elige el puerto y la velocidad (9600 por defecto).
-5. Clic en **Imprimir nota**.
-6. **Copiar texto** envía el ticket al portapapeles.
+1. Selecciona un pago en la tabla y clic en **Nota de venta** (o acepta la pregunta al guardar).
+2. Revisa la vista previa del ticket: **58 mm / 32 columnas** u **80 mm / 48 columnas**.
+3. Elige la forma de impresión:
+   - **Cable / Windows:** selecciona la impresora instalada (por ejemplo `POS-58-Series` o `POS-80-Series`).
+   - **Bluetooth (COM):** elige el puerto y la velocidad (9600 por defecto).
+4. Clic en **Imprimir nota**.
+5. **Copiar texto** envía el ticket al portapapeles.
 
 La nota incluye empresa, número `NV-00000X`, cliente, DNI, departamento, contrato, periodo, importes, total, método y el nombre de quien atiende.
+
+> La nota de venta **no es comprobante fiscal**: no reemplaza a la boleta ni a la factura de SUNAT.
+
+---
+
+## 7.1 Configuración de impresión
+
+En la barra lateral hay un botón **Config. impresión**. Desde ese panel se puede:
+
+- Elegir la conexión: **Cable / Windows** o **Bluetooth / puerto COM**.
+- Elegir el papel: **58 mm (32 columnas)** u **80 mm (48 columnas)**.
+- Seleccionar la impresora de Windows, el puerto COM y los baudios.
+- **Guardar configuración**: se persiste en `%USERPROFILE%\.SysAlquileres\impresion.properties`.
+- **Imprimir prueba**: envía un ticket corto para verificar la impresora.
+- **Actualizar listas**: vuelve a buscar impresoras y puertos.
+
+La ventana de nota de venta abre con esos valores ya seleccionados. El panel muestra además la base de datos activa y la ruta del archivo de configuración.
 
 ---
 
@@ -137,27 +153,54 @@ La nota incluye empresa, número `NV-00000X`, cliente, DNI, departamento, contra
 
 ---
 
-## 9. Versión móvil (APK)
+## 9. Versión móvil (APK de apoyo · v1.1)
+
+La APK es de **solo lectura**. El login valida el **rol** de la tabla `usuario`:
+
+| Rol | Qué abre | Qué ve |
+|---|---|---|
+| **CLIENTE** | pantalla *Mi alquiler* | Departamento, contrato, vencimiento e historial de pagos **solo suyos** |
+| **ADMIN** | listados generales | Los 4 módulos para consultar, sin botones de escritura |
+
+**Acceso del cliente:** al crear un contrato en el escritorio se genera su usuario y clave:
+
+- Usuario = **DNI del inquilino**.
+- Clave = 8 caracteres aleatorios que el sistema muestra al administrador.
+- Entrega esos datos al inquilino para que ingrese en la APK.
 
 | Acción | Cómo hacerlo |
 |---|---|
-| Cambiar de módulo | Pestañas **Departamentos / Inquilinos / Contratos / Pagos** |
-| Buscar | Cuadro *Buscar* (filtra mientras escribes) |
-| Actualizar | Botón **Actualizar** |
-| Crear | Botón **+ Nuevo …** |
-| Editar | Toca una fila → **Editar** |
-| Eliminar | Toca una fila → **Eliminar** → confirmar |
+| Actualizar datos | Botón **Actualizar mis datos** (cliente) o **Actualizar** (admin) |
+| Ver detalle | Toca una fila → **Ver detalle** (solo lectura) |
 | Ver nota | En Pagos, toca una fila → **Ver nota de venta** → **Compartir / imprimir** |
-| Salir | Botón **Salir** en la cabecera |
+| Cerrar sesión | Botón **Cerrar sesión** |
 
-Los formularios móviles tienen combos que se llenan desde Supabase (inquilinos, departamentos, tipos de personería y contratos vigentes).
+El archivo es `dist/SysAlquileres-Movil-v1.1.apk`. Guía completa: `docs/APK_CLIENTES.md`.
+
+---
+
+## 9.1 Recuperación de clave del cliente (escritorio)
+
+Si el inquilino olvida su clave:
+
+1. En el `.exe`, abre **Accesos clientes** en la barra lateral.
+2. Busca por DNI o nombre y selecciona al cliente.
+3. Marca **Mostrar claves** si quieres ver la clave actual en la tabla.
+4. Pulsa **Generar clave** y luego **Guardar clave** para asignar una nueva.
+5. Entrega la nueva clave al inquilino para que ingrese en la APK.
+
+También puedes **Activar** o **Desactivar** el acceso, dar de alta con **Nuevo cliente** y borrar con **Eliminar** (confirmación): el panel es un CRUD completo. No se necesita la *secret key* de Supabase: el escritorio actualiza la tabla `usuario` por JDBC.
+
+**Automático:** al finalizar un contrato la clave se desactiva; al crear un contrato nuevo se reactiva.
 
 ---
 
 ## 10. Base de datos (información para el usuario)
 
-- Por defecto la app usa **H2** y guarda la base en `~/SysAlquileres/data/alquileres.mv.db`.
-- Con internet y las variables de entorno configuradas, usa **Supabase** automáticamente; la consola muestra `[Supabase / PostgreSQL]`.
+- **Base activa en este entorno: Supabase / PostgreSQL**, porque las variables `SUPABASE_DB_*` están configuradas y tienen prioridad. `application.properties` trae H2 como valor por defecto.
+- Prioridad: `application.properties` → propiedades `-D` → variables `DB_*` → variables `SUPABASE_DB_*` (máxima).
+- La URL de Supabase se ajusta sola con `sslmode=require` y `prepareThreshold=0`.
+- Para volver a H2: cierra la app, quita las variables `SUPABASE_DB_*` y `DB_*`, y ejecuta de nuevo. La base local se crea en `~/SysAlquileres/data/alquileres.mv.db`.
 - Para reiniciar la base local: cierra la app, elimina la carpeta `~/SysAlquileres/data` y vuelve a abrir. Se recargan los datos de ejemplo.
 - Datos de ejemplo: 6 departamentos, 5 inquilinos, 5 contratos y 8 pagos.
 
@@ -176,4 +219,21 @@ Los formularios móviles tienen combos que se llenan desde Supabase (inquilinos,
 
 ---
 
-*Manual actualizado para la versión 2.0 (interfaz rediseñada, notas de venta, Supabase, `.exe` y APK con CRUD).*
+## 12. Modelo Power Architect
+
+Dentro del proyecto:
+
+- `database/modelo-power-architect.architect`: modelo **actualizado** con 7 tablas (incluida `usuario`).
+- `database/modelo-power-architect-original.architect`: modelo original entregado en REQUERIMIENTOS.
+
+Cambios del actualizado: tabla `usuario` agregada para el login; `descuento` e `igv` corregidos a `numeric(10,2)`; RUC de 11 caracteres; `id_finalizacion` como BIGINT; índices `idx_contrato_departamento`, `idx_contrato_inquilino` e `idx_pago_contrato`.
+
+---
+
+## 13. Manual HTML y PDF
+
+El manual completo en formato navegable está en `docs/MANUAL_USUARIO.html`. Incluye índice lateral, capturas reales, tablas, preguntas frecuentes y un botón **Descargar en PDF**: al pulsarlo se abre el diálogo de impresión del navegador; elige **Guardar como PDF** como destino.
+
+---
+
+*Manual actualizado para la versión 2.0 (interfaz rediseñada, notas de venta 58/80 mm, panel de impresión, Supabase activo, `.exe`, APK y modelo Architect actualizado).*

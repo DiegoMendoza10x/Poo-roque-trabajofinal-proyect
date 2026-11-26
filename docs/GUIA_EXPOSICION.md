@@ -315,6 +315,8 @@ Si abres un FXML en Scene Builder verás controles grises, tablas vacías y text
 
 ## 6. Flujo completo: crear un contrato y emitir una nota
 
+> **Punto para exponer:** al crear el contrato también se genera el acceso del cliente para la APK (usuario = DNI, clave aleatoria mostrada al admin). Si luego olvida la clave, el panel **Accesos clientes** (CRUD completo: alta, consulta, clave, activar/desactivar y eliminar) permite verla, generar una nueva o borrarla, sin necesidad de la *secret key* de Supabase. Al finalizar un contrato la clave se desactiva automáticamente y al crear uno nuevo se reactiva. Ver `docs/APK_CLIENTES.md`.
+
 1. **Contratos → Nuevo**: se cargan combos de inquilinos y departamentos disponibles.
 2. Al elegir departamento, `actualizarInfoDepartamento()` rellena el monto con el precio de referencia.
 3. **Guardar** → `ContratoServiceImp.save()` valida fechas, solapamiento y reglas; luego `repository.save()` hace el `INSERT` y `departamentoRepository.updateEstado(..., OCUPADO)`.
@@ -452,7 +454,12 @@ Se usa `jpackage` (incluido en JDK 21). El script `scripts/build-exe.ps1`:
 
 ---
 
-## 10. APK Android (MVP)
+## 10. APK Android (apoyo informativo · v1.1)
+
+> **Cambio reciente:** la APK ya no es un CRUD móvil. Valida el rol (`ADMIN` o `CLIENTE`).
+> El administrador ve los listados solo para consulta; el cliente ve únicamente su
+> departamento, contrato, vencimiento e historial de pagos. Al crear un contrato en
+> el escritorio se genera el usuario (DNI) y la clave del cliente. Ver `docs/APK_CLIENTES.md`.
 
 ### 10.1 Qué se reutilizó y qué no
 

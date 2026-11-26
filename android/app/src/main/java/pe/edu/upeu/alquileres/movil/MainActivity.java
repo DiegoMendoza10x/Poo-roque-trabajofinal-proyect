@@ -67,7 +67,11 @@ public class MainActivity extends Activity {
 
         SharedPreferences sesion = getSharedPreferences("sesion", MODE_PRIVATE);
         String nombre = sesion.getString("nombre", "Administrador");
-        lblUsuario.setText(nombre + " · " + sesion.getString("rol", "ADMIN"));
+        lblUsuario.setText(nombre + " · " + sesion.getString("rol", "ADMIN") + " · solo lectura");
+        SupabaseClient.cabeceraDni = sesion.getString("usuario", "");
+
+        // La APK es solo apoyo informativo: no se crean ni editan registros aquí.
+        btnNuevo.setVisibility(View.GONE);
 
         pestañas[0] = findViewById(R.id.tab0);
         pestañas[1] = findViewById(R.id.tab1);
@@ -113,6 +117,7 @@ public class MainActivity extends Activity {
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 getSharedPreferences("sesion", MODE_PRIVATE).edit().clear().apply();
+                SupabaseClient.cabeceraDni = "";
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 finish();
             }
@@ -151,9 +156,9 @@ public class MainActivity extends Activity {
 
     private void mostrarOpciones(final Item elegido) {
         final JSONArray opciones = new JSONArray();
-        opciones.put("Editar");
-        opciones.put("Eliminar");
         if (moduloActual == 3) opciones.put("Ver nota de venta");
+        opciones.put("Ver detalle");
+        opciones.put("Cerrar");
 
         String[] items = new String[opciones.length()];
         for (int i = 0; i < opciones.length(); i++) items[i] = opciones.optString(i);
@@ -164,14 +169,20 @@ public class MainActivity extends Activity {
                     @Override public void onClick(android.content.DialogInterface d, int which) {
                         String accion = opciones.optString(which);
                         try {
-                            long id = elegido.json.getLong(IDS[moduloActual]);
-                            if ("Editar".equals(accion)) {
-                                abrirFormulario(id, elegido.json, false);
-                            } else if ("Eliminar".equals(accion)) {
-                                abrirFormulario(id, elegido.json, true);
-                            } else {
+                            if ("Ver nota de venta".equals(accion)) {
                                 mostrarNota(notaVenta(elegido.json,
                                         elegido.json.optJSONObject("contrato")));
+                            } else if ("Ver detalle".equals(accion)) {
+                                TextView detalle = new TextView(MainActivity.this);
+                                detalle.setText(elegido.json.toString(2));
+                                detalle.setTextSize(12);
+                                detalle.setTypeface(android.graphics.Typeface.MONOSPACE);
+                                detalle.setPadding(18, 10, 18, 10);
+                                new AlertDialog.Builder(MainActivity.this)
+                                        .setTitle("Detalle (solo lectura)")
+                                        .setView(detalle)
+                                        .setPositiveButton("Cerrar", null)
+                                        .show();
                             }
                         } catch (Exception e) {
                             Toast.makeText(MainActivity.this, "Error: " + e.getMessage(),

@@ -6,4 +6,5 @@
     <color name="texto">#0F172A</color>
     <color name="suave">#64748B</color>
     <color name="blanco">#FFFFFF</color>
+    <color name="borde">#E2E8F0</color>
 </resources>

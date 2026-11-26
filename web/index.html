@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de estudio completa · SysAlquileres v2.0</title>
+<style>
+:root{
+  --azul:#2563EB; --azul-osc:#1D4ED8; --azul-claro:#DBEAFE; --indigo:#1E3A8A;
+  --fondo:#F1F5F9; --surface:#FFFFFF; --texto:#0F172A; --suave:#64748B;
+  --borde:#E2E8F0; --verde:#059669; --rojo:#DC2626; --ambar:#D97706; --morado:#7C3AED;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--fondo);color:var(--texto);
+  font-family:"Segoe UI",Tahoma,Arial,sans-serif;font-size:15px;line-height:1.65}
+a{color:var(--azul);text-decoration:none}
+a:hover{text-decoration:underline}
+code{background:#EEF2F7;padding:2px 6px;border-radius:5px;color:var(--azul-osc);
+  font-family:Consolas,"Courier New",monospace;font-size:12.5px}
+pre{background:#0F172A;color:#E2E8F0;padding:16px 18px;border-radius:12px;overflow:auto;
+  font-family:Consolas,"Courier New",monospace;font-size:12.5px;line-height:1.55;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+pre code{background:none;color:inherit;padding:0}
+
+/* Barra */
+.barra{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.95);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);
+  padding:10px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.barra strong{color:var(--indigo);font-size:14px;white-space:nowrap}
+.barra input{flex:1;min-width:220px;border:1px solid var(--borde);border-radius:9px;
+  padding:8px 12px;font-size:13px;outline:none}
+.barra input:focus{border-color:var(--azul);box-shadow:0 0 0 3px var(--azul-claro)}
+.barra button{border:0;background:var(--azul);color:#fff;padding:8px 13px;border-radius:9px;
+  font-size:12px;font-weight:600;cursor:pointer}
+.barra button.sec{background:#E2E8F0;color:#334155}
+.btn-descarga{border:0;background:var(--verde);color:#fff;padding:8px 13px;
+  border-radius:9px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.btn-descarga:hover{background:#047857;text-decoration:none}
+.btn-equipo{border:0;background:var(--morado);color:#fff;padding:8px 13px;
+  border-radius:9px;font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.btn-equipo:hover{background:#6D28D9;text-decoration:none}
+.btn-video{border:0;background:#D97706;color:#fff;padding:8px 13px;border-radius:9px;
+ font-size:12px;font-weight:600;text-decoration:none;white-space:nowrap}
+.btn-video:hover{background:#B45309;text-decoration:none}
+.toc a.destacado{background:var(--indigo);color:#fff;font-weight:700}
+.apk-apartado{display:none !important}
+.apk-apartado.visible{display:block !important}
+.banner-aparte{background:#FEF3C7;border-left:4px solid #D97706;color:#92400E;
+  padding:10px 15px;border-radius:8px;font-size:13px;margin:0 0 16px}
+.persona{background:var(--surface);border:1px solid var(--borde);border-top:5px solid var(--azul);
+  border-radius:16px;padding:20px;box-shadow:0 8px 24px rgba(15,23,42,.05)}
+.persona.diego{border-top-color:var(--verde)}
+.persona.jimmi{border-top-color:var(--morado)}
+.crud{display:inline-block;background:#DBEAFE;color:#1D4ED8;border-radius:8px;
+  padding:5px 11px;font-size:12px;font-weight:800;margin:10px 0 4px}
+.diego .crud{background:#DCFCE7;color:#15803D}
+.jimmi .crud{background:#EDE9FE;color:#6D28D9}
+.lista{list-style:none;padding:0;margin:8px 0}
+.lista li{margin:7px 0;font-size:13px;display:flex;gap:8px;align-items:flex-start}
+.lista input{margin-top:4px;accent-color:var(--azul)}
+.diego .lista input{accent-color:var(--verde)}
+.jimmi .lista input{accent-color:var(--morado)}
+.vinculo{display:block;font-size:11px;color:var(--suave);margin-top:2px}
+.nota{font-size:12.5px;color:#334155;background:#F8FAFC;border-radius:9px;padding:10px;margin-top:12px}
+.progreso{height:8px;background:#E2E8F0;border-radius:999px;overflow:hidden;margin-top:12px}
+.progreso i{display:block;height:100%;width:0;background:var(--azul);transition:width .2s}
+.diego .progreso i{background:var(--verde)}
+.jimmi .progreso i{background:var(--morado)}
+.ptexto{font-size:11px;color:var(--suave);margin-top:4px}
+.resumen{background:var(--surface);border:1px solid var(--borde);border-radius:14px;
+  padding:20px;margin-bottom:20px;box-shadow:0 8px 24px rgba(15,23,42,.05)}
+.resumen h2{margin:0 0 8px;font-size:18px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#0B1B3A 0%,#1E3A8A 50%,#2563EB 100%);
+  color:#fff;padding:44px 24px 52px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-120px;top:-120px;width:380px;height:380px;
+  border-radius:50%;background:rgba(255,255,255,.06)}
+.hero-inner{max-width:1180px;margin:auto;position:relative;z-index:1}
+.hero h1{margin:0;font-size:34px;letter-spacing:-.5px}
+.hero p{margin:8px 0 0;color:#C7D2FE;max-width:760px}
+.hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  padding:5px 12px;border-radius:999px;font-size:12px;font-weight:600}
+
+/* Layout */
+.layout{max-width:1180px;margin:26px auto 70px;padding:0 20px;
+  display:grid;grid-template-columns:240px 1fr;gap:26px;align-items:start}
+.toc{position:sticky;top:72px;background:var(--surface);border:1px solid var(--borde);
+  border-radius:14px;padding:16px;box-shadow:0 8px 24px rgba(15,23,42,.05);
+  max-height:calc(100vh - 90px);overflow:auto}
+.toc h3{margin:0 0 8px;font-size:10.5px;letter-spacing:1.1px;color:var(--suave);
+  text-transform:uppercase}
+.toc a{display:block;padding:6px 9px;border-radius:7px;font-size:12.5px;color:#334155}
+.toc a:hover{background:var(--azul-claro);color:var(--azul-osc);text-decoration:none}
+.contenido{min-width:0}
+
+/* Secciones */
+section{background:var(--surface);border:1px solid var(--borde);border-radius:16px;
+  padding:26px 30px;margin-bottom:22px;box-shadow:0 8px 26px rgba(15,23,42,.05)}
+section h2{margin:0 0 6px;font-size:23px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.num{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:34px;
+  padding:0 6px;border-radius:10px;background:var(--azul-claro);color:var(--azul-osc);
+  font-size:14px;font-weight:800}
+.intro{color:var(--suave);margin:0 0 16px}
+h3.sub{margin:24px 0 10px;font-size:16px;color:var(--azul-osc)}
+h4{margin:16px 0 6px;font-size:14px;color:#1E293B}
+p{margin:9px 0}
+ul,ol{margin:8px 0 8px 6px;padding-left:22px}
+li{margin:5px 0}
+.hidden{display:none !important}
+mark{background:#FEF08A;padding:1px 3px;border-radius:3px}
+
+/* Rejillas y tarjetas */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:14px;margin-top:14px}
+.card{border:1px solid var(--borde);border-radius:13px;padding:15px;background:#FCFDFF}
+.card b{display:block;color:var(--azul-osc);font-size:13.5px;margin-bottom:4px}
+.card small{color:var(--suave);font-size:12px}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700;margin:2px 3px 2px 0}
+.p-azul{background:#DBEAFE;color:#1D4ED8}.p-verde{background:#DCFCE7;color:#15803D}
+.p-gris{background:#E2E8F0;color:#475569}.p-rojo{background:#FEE2E2;color:#B91C1C}
+.p-morado{background:#EDE9FE;color:#6D28D9}.p-ambar{background:#FEF3C7;color:#B45309}
+
+/* Tablas */
+.tbl-wrap{overflow:auto}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--borde);vertical-align:top}
+th{background:#F8FAFC;color:#475569;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px}
+tr:hover td{background:#F8FAFC}
+
+/* Diagramas */
+.diag{background:#F8FAFC;border:1px solid var(--borde);border-radius:13px;padding:18px;margin:14px 0;overflow:auto}
+.capa{display:flex;align-items:center;gap:10px;justify-content:center;flex-wrap:wrap;margin:7px 0}
+.caja{background:#fff;border:1px solid #CBD5E1;border-left:4px solid var(--azul);
+  border-radius:10px;padding:8px 13px;font-size:12.5px;min-width:150px;text-align:center}
+.caja.v{border-left-color:var(--morado)}.caja.s{border-left-color:var(--verde)}
+.caja.r{border-left-color:var(--ambar)}.caja.d{border-left-color:var(--rojo)}
+.flecha{color:var(--azul);font-weight:800;font-size:17px}
+.flujo{background:#F8FAFC;border:1px solid var(--borde);border-left:4px solid var(--azul);
+  border-radius:12px;padding:14px 18px;margin:12px 0}
+.flujo h4{margin:0 0 8px;color:var(--indigo)}
+.paso{display:flex;gap:10px;align-items:flex-start;margin:7px 0}
+.paso .n{flex:0 0 22px;height:22px;border-radius:50%;background:var(--azul);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.paso div{font-size:13px}
+
+/* Mapas visuales con flechas */
+.vtit{font-size:13px;font-weight:800;color:var(--indigo);margin:18px 0 6px}
+.vflujo{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:#F8FAFC;
+  border:1px solid var(--borde);border-radius:12px;padding:12px;margin:8px 0}
+.vbox{border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;
+  border:1px solid #CBD5E1;background:#fff;min-width:118px;text-align:center;color:#0F172A}
+.vbox.a{background:#EDE9FE;border-color:#7C3AED;color:#5B21B6}
+.vbox.b{background:#DBEAFE;border-color:#2563EB;color:#1E40AF}
+.vbox.c{background:#DCFCE7;border-color:#059669;color:#14532D}
+.vbox.d{background:#FEF3C7;border-color:#D97706;color:#92400E}
+.vbox.e{background:#FEE2E2;border-color:#DC2626;color:#991B1B}
+.varrow{font-size:23px;font-weight:900;color:var(--azul);line-height:1}
+.varrow.back{color:var(--verde)}
+.vnota{font-size:11.5px;color:var(--suave);margin:4px 0 10px}
+
+/* Avisos y detalles */
+.aviso{border-left:4px solid var(--azul);background:var(--azul-claro);color:#1E40AF;
+  padding:11px 15px;border-radius:8px;margin:14px 0;font-size:13.5px}
+.aviso.verde{border-color:var(--verde);background:#DCFCE7;color:#14532D}
+.aviso.rojo{border-color:var(--rojo);background:#FEE2E2;color:#991B1B}
+.aviso.ambar{border-color:var(--ambar);background:#FEF3C7;color:#92400E}
+details{border:1px solid var(--borde);border-radius:10px;padding:10px 14px;margin:10px 0;background:#FCFDFF}
+summary{cursor:pointer;font-weight:700;color:var(--azul-osc);font-size:13.5px}
+pre.arb{background:#F8FAFC;color:#1E293B;border:1px solid var(--borde);font-size:12px}
+footer{text-align:center;color:var(--suave);font-size:12px;padding:22px}
+
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:3px}
+  .toc h3{width:100%}
+  .hero h1{font-size:27px}
+  section{padding:20px}
+}
+@media print{
+  body{background:#fff}
+  .barra,.toc{display:none}
+  .layout{display:block;max-width:none;margin:0;padding:0}
+  section{break-inside:avoid;box-shadow:none}
+  .hero{background:#1E3A8A !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <strong>📘 SysAlquileres · Estudio completo</strong>
+  <input id="buscar" type="search" placeholder="Buscar: polimorfismo, flujo login, Supabase, OOP…">
+  <button class="sec" onclick="window.print()">🖨 Descargar PDF</button>
+  <a class="btn-descarga" href="INFORME_PARA_IA.md" download>⬇ Informe para IA (.md)</a>
+  <a class="btn-equipo" href="#s25">👥 Reparto del equipo</a>
+  <a class="btn-video" href="#s24-5">🎬 Videos de apoyo</a>
+  <button class="sec" id="btnApk" onclick="toggleApk()">📱 Mostrar APK (apartado)</button>
+</div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Guía de estudio completa</h1>
+    <p>Todo el proyecto SysAlquileres explicado: cómo se conectan las clases, los flujos reales de cada operación, los pilares de la programación orientada a objetos, la base de datos, Supabase, el APK, el <code>.exe</code> y los iconos.</p>
+    <div class="chips">
+      <span class="chip">Java 21 + JavaFX 21</span>
+      <span class="chip">Arquitectura por capas</span>
+      <span class="chip">JDBC + HikariCP + Supabase</span>
+      <span class="chip">Android nativo + REST</span>
+      <span class="chip">jpackage → .exe</span>
+      <span class="chip">v2.0 · UPeU Juliaca</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <h3>Ruta de estudio</h3>
+    <a href="#s25" class="destacado">★ Reparto del equipo</a>
+    <a href="#s1">1. Mapa general</a>
+    <a href="#s2">2. Carpetas</a>
+    <a href="#s3">3. Arquitectura por capas</a>
+    <a href="#s4">4. Inyección de dependencias</a>
+    <a href="#s5">5. Mapa de clases</a>
+    <a href="#s6">6. Flujos conectados</a>
+    <a href="#s7">7. Los 4 pilares OOP</a>
+    <a href="#s8">8. Patrones y conceptos</a>
+    <a href="#s9">9. Base de datos</a>
+    <a href="#s10">10. Supabase</a>
+    <a href="#s11">11. Interfaz y Scene Builder</a>
+    <a href="#s12" class="apk-apartado">12. APK (apartado)</a>
+    <a href="#s13">13. .exe e iconos</a>
+    <a href="#s14">14. Seguridad</a>
+    <a href="#s15">15. Preguntas de examen</a>
+    <a href="#s16">16. Glosario</a>
+    <a href="#s17">17. Cómo estudiar / comandos</a>
+    <a href="#s18">18. Diagramas visuales</a>
+    <a href="#s19">19. Catálogo de clases (E/S)</a>
+    <a href="#s20">20. Generics &lt;T, ID&gt;</a>
+    <a href="#s21">21. Cómo viaja un dato</a>
+    <a href="#s22">22. Informe para IA / descargas</a>
+    <a href="#s23">23. Mapas visuales con flechas</a>
+    <a href="#s24">24. Desde cero + videos</a>
+    <a href="#s24-5">🎬 Videos (YouTube)</a>
+  </nav>
+
+  <div class="contenido" id="contenido">
+
+    <!-- 1 -->
+    <section id="s1">
+      <h2><span class="num">1</span> Mapa general del proyecto</h2>
+      <p class="intro">Antes de mirar código, entiende <em>qué problema resuelve</em> y <em>qué se entrega</em>.</p>
+      <p><strong>Problema:</strong> llevar el alquiler de departamentos en papel o Excel permite errores: alquilar dos veces el mismo departamento, pagos sin contrato, inquilinos duplicados o fechas imposibles. El sistema centraliza los datos y valida reglas antes de guardar.</p>
+      <div class="banner-aparte">📱 <strong>Android/APK está apartado temporalmente.</strong> No se estudia ni se expone por ahora. Pulsa el botón <em>Mostrar APK</em> de la barra si necesitas ver ese contenido.</div>
+
+      <div class="grid">
+        <div class="card"><b>4 módulos</b><small>Departamentos, Inquilinos, Contratos y Pagos (+ login).</small></div>
+        <div class="card"><b>3 entregables</b><small>Manual de usuario, código fuente y empaquetamiento <code>.exe</code>.</small></div>
+        <div class="card"><b>3 formatos</b><small>Escritorio JavaFX, Android (APK) y base Supabase en la nube.</small></div>
+        <div class="card"><b>Reglas de negocio</b><small>DNI único, número único, contratos sin solapamiento, pagos ≥ 0.</small></div>
+      </div>
+      <h3 class="sub">Stack tecnológico</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Capa</th><th>Tecnología</th><th>Archivo clave</th></tr>
+        <tr><td>Vista</td><td>JavaFX 21 + FXML + CSS</td><td><code>view/*.fxml</code>, <code>css/app.css</code></td></tr>
+        <tr><td>Control</td><td>JavaFX controllers</td><td><code>controller/*.java</code></td></tr>
+        <tr><td>Negocio</td><td>Interfaces + implementaciones</td><td><code>service/impl/*.java</code></td></tr>
+        <tr><td>Persistencia</td><td>JDBC + HikariCP + SQL</td><td><code>repository/*.java</code></td></tr>
+        <tr><td>Base</td><td>H2 local / Supabase PostgreSQL 17</td><td><code>schema.sql</code>, <code>supabase_schema.sql</code></td></tr>
+        <tr><td>Validación</td><td>Jakarta Validation</td><td><code>util/Validador.java</code></td></tr>
+        <tr><td>Impresión</td><td>javax.print + jSerialComm</td><td><code>impresion/*.java</code></td></tr>
+        <tr><td>Móvil</td><td>Android Java + HttpURLConnection</td><td><code>android/…/movil/*.java</code></td></tr>
+        <tr><td>Empaquetado</td><td>jpackage (JDK 21)</td><td><code>scripts/build-exe.ps1</code></td></tr>
+      </table></div>
+      <div class="aviso verde"><strong>Credenciales de prueba:</strong> <code>admin</code> / <code>admin123</code>.</div>
+    </section>
+
+    <!-- 2 -->
+    <section id="s2">
+      <h2><span class="num">2</span> Estructura de carpetas</h2>
+      <pre class="arb">SysAlquileres/
+├─ ENTREGABLES.md              ← índice de los 3 requisitos
+├─ README.md                   ← descripción general
+├─ pom.xml                     ← dependencias Maven
+├─ database/
+│  ├─ postgresql_sistema_alquileres.sql   (PostgreSQL local)
+│  ├─ supabase_schema.sql                 (tablas en Supabase)
+│  └─ supabase_movil_policies.sql         (RLS para el APK)
+├─ docs/
+│  ├─ MANUAL_USUARIO.md / .html  ← manual (el HTML es el atractivo)
+│  ├─ GUIA_EXPOSICION.md         ← guion de exposición + explained code
+│  ├─ SUPABASE.md / IMPRESION_58MM.md
+│  └─ ESTUDIO_COMPLETO.html      ← ESTA guía
+├─ icono/                       ← JPG original + icono-1024.png + icono.ico
+├─ scripts/
+│  ├─ build-exe.ps1              ← genera el .exe portable
+│  └─ prepare_icon.py            ← recorta y genera iconos
+├─ dist/                        ← .exe + ZIP + APK (generado)
+├─ android/                     ← proyecto Android (Gradle)
+└─ src/main/
+   ├─ java/pe/edu/upeu/alquileres/
+   │  ├─ App.java, SysAlquileres.java
+   │  ├─ components/  config/  controller/  enums/  exception/
+   │  ├─ impresion/   model/    repository/  service/  util/
+   └─ resources/
+      ├─ application.properties, schema.sql, seed.sql, logback.xml
+      ├─ css/app.css
+      ├─ images/app-icon.png
+      └─ view/*.fxml</pre>
+      <div class="aviso"><strong>Regla rápida:</strong> si quieres cambiar colores → <code>css/app.css</code>; distribución → <code>view/*.fxml</code>; qué hace un botón → <code>controller/*.java</code>; una regla → <code>service/impl/*.java</code>; una consulta → <code>repository/*.java</code>.</div>
+    </section>
+
+    <!-- 3 -->
+    <section id="s3">
+      <h2><span class="num">3</span> Arquitectura por capas</h2>
+      <div class="diag">
+        <div class="capa"><div class="caja v">Vista · FXML + CSS</div><span class="flecha">→</span><div class="caja">Controller · eventos</div></div>
+        <div class="capa"><span class="flecha">↓</span></div>
+        <div class="capa"><div class="caja s">Service · reglas de negocio</div><span class="flecha">→</span><div class="caja r">Repository · JDBC</div></div>
+        <div class="capa"><span class="flecha">↓</span></div>
+        <div class="capa"><div class="caja d">DatabaseConfig + HikariCP</div><span class="flecha">→</span><div class="caja">H2 / Supabase PostgreSQL</div></div>
+      </div>
+      <div class="tbl-wrap"><table>
+        <tr><th>Capa</th><th>Responsabilidad</th><th>NO debe hacer</th><th>Ejemplo</th></tr>
+        <tr><td>Vista (FXML)</td><td>Mostrar controles y distribución</td><td>Lógica ni SQL</td><td><code>departamentos.fxml</code></td></tr>
+        <tr><td>Controller</td><td>Recibir clics, leer campos, llenar tablas</td><td>Reglas complejas ni SQL</td><td><code>PagoController</code></td></tr>
+        <tr><td>Service</td><td>Validar reglas antes de guardar</td><td>Conocer botones</td><td><code>ContratoServiceImp</code></td></tr>
+        <tr><td>Repository</td><td>Traducir objetos a SQL</td><td>Decidir reglas</td><td><code>ContratoRepository</code></td></tr>
+        <tr><td>Model</td><td>Representar datos</td><td>Acceder a la base</td><td><code>Departamento</code></td></tr>
+        <tr><td>Config/Util</td><td>Conexión, DI y ayudas</td><td>—</td><td><code>AppContext</code>, <code>Formato</code></td></tr>
+      </table></div>
+      <div class="aviso"><strong>Frase para exponer:</strong> “Separé el proyecto en capas para que cada clase tenga una sola responsabilidad. Si cambia la base, solo toco el repository; si cambia una regla, solo el service; si cambia la pantalla, solo el FXML y el CSS.”</div>
+    </section>
+
+    <!-- 4 -->
+    <section id="s4">
+      <h2><span class="num">4</span> Inyección de dependencias: AppContext</h2>
+      <p><code>AppContext</code> es un <strong>singleton</strong> que crea todas las piezas una sola vez y las guards en un <code>Map&lt;Class&lt;?&gt;, Object&gt;</code>.</p>
+      <pre>private AppContext() {
+    DatabaseConfig.init();          // abre el pool de conexiones
+    registrarRepositorios();
+    registrarServicios();
+    registrarControladores();
+}</pre>
+      <p>Cuando JavaFX carga un FXML, se usa:</p>
+      <pre>loader.setControllerFactory(AppContext.getInstance()::getBean);</pre>
+      <p>Eso significa: “cuando el FXML necesite un controlador, pídeselo a <code>AppContext</code>”, que ya lo tiene con sus servicios inyectados por constructor.</p>
+      <h3 class="sub">Grafo real de dependencias</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Controlador</th><th>Servicios que recibe</th><th>Repositorios del service</th></tr>
+        <tr><td><code>LoginController</code></td><td><code>IUsuarioService</code></td><td><code>UsuarioRepository</code></td></tr>
+        <tr><td><code>MainController</code></td><td>—</td><td>usa <code>AppContext</code> para cargar vistas</td></tr>
+        <tr><td><code>DepartamentoController</code></td><td><code>IDepartamentoService</code></td><td><code>DepartamentoRepository</code> + <code>ContratoRepository</code></td></tr>
+        <tr><td><code>InquilinoController</code></td><td><code>IInquilinoService</code></td><td><code>InquilinoRepository</code> + <code>ContratoRepository</code> + <code>TipoPersoneriaRepository</code></td></tr>
+        <tr><td><code>ContratoController</code></td><td><code>IContratoService</code>, <code>IInquilinoService</code>, <code>IDepartamentoService</code></td><td><code>ContratoRepository</code>, <code>PagoRepository</code>, <code>FinalizacionContratoRepository</code>, …</td></tr>
+        <tr><td><code>PagoController</code></td><td><code>IPagoService</code>, <code>IContratoService</code></td><td><code>PagoRepository</code>, <code>ContratoRepository</code></td></tr>
+      </table></div>
+      <div class="aviso verde">Esto es un contenedor IoC “casero”: mismo principio que Spring, pero con un <code>HashMap</code> y sin framework.</div>
+    </section>
+
+    <!-- 5 -->
+    <section id="s5">
+      <h2><span class="num">5</span> Mapa de clases importante</h2>
+      <div class="tbl-wrap"><table>
+        <tr><th>Clase</th><th>Paquete</th><th>Responsabilidad</th><th>Se conecta con</th></tr>
+        <tr><td><code>App</code></td><td>raíz</td><td>Arranca JavaFX, carga FXML, aplica CSS e icono</td><td><code>App.Ventana</code>, <code>AppContext</code></td></tr>
+        <tr><td><code>App.Ventana</code></td><td>raíz</td><td>Ciclo de vida: <code>start()</code>, <code>stop()</code></td><td><code>DatabaseConfig.shutdown()</code></td></tr>
+        <tr><td><code>AppContext</code></td><td>config</td><td>Singleton + factory de beans</td><td>todos los controllers/services</td></tr>
+        <tr><td><code>DatabaseConfig</code></td><td>config</td><td>HikariCP, variables de entorno, esquema/seed, SSL</td><td>H2, PostgreSQL, Supabase</td></tr>
+        <tr><td><code>Sesion</code></td><td>util</td><td>Guarda el usuario actual en memoria</td><td>LoginController, MainController, NotaVenta</td></tr>
+        <tr><td><code>Validador</code></td><td>util</td><td>Jakarta Validation centralizado</td><td>todos los services</td></tr>
+        <tr><td><code>Formato</code></td><td>util</td><td>dinero, fechas, normalizar texto</td><td>controllers y models</td></tr>
+        <tr><td><code>BusinessException</code></td><td>exception</td><td>Error de negocio con mensaje para el usuario</td><td>services → controllers</td></tr>
+        <tr><td><code>AbstractJpaRepository&lt;T,ID&gt;</code></td><td>repository</td><td>CRUD genérico + transacciones</td><td><code>SqlHelper</code></td></tr>
+        <tr><td><code>Celdas</code></td><td>components</td><td>Chips de colores en tablas</td><td>3 controllers</td></tr>
+        <tr><td><code>NotaVenta</code></td><td>impresion</td><td>Genera las 32 líneas del ticket</td><td><code>NotaVentaDialog</code></td></tr>
+        <tr><td><code>ImpresoraWindows</code></td><td>impresion</td><td><code>javax.print</code>, papel 58 mm</td><td>impresora del usuario / PDF</td></tr>
+        <tr><td><code>ImpresoraSerial</code></td><td>impresion</td><td>ESC/POS por puerto COM</td><td>jSerialComm</td></tr>
+      </table></div>
+      <details><summary>Modelos y enums (detalle)</summary>
+        <p><code>Usuario</code>, <code>Departamento</code>, <code>Inquilino</code>, <code>Contrato</code>, <code>Pago</code>, <code>TipoPersoneria</code>, <code>FinalizacionContrato</code>. Usan Lombok <code>@Data</code>, <code>@Builder</code>, <code>@NoArgsConstructor</code>, <code>@AllArgsConstructor</code>.</p>
+        <p>Enums: <code>EstadoDepartamento</code> (DISPONIBLE/OCUPADO), <code>EstadoContrato</code> (VIGENTE/FINALIZADO), <code>MetodoPago</code> (EFECTIVO, TRANSFERENCIA, YAPE, PLIN, TARJETA) con <code>getDescripcion()</code> y <code>desde(String)</code>.</p>
+      </details>
+    </section>
+
+    <!-- 6 -->
+    <section id="s6">
+      <h2><span class="num">6</span> Flujos conectados (clase por clase)</h2>
+      <p class="intro">Cada flujo muestra el camino real de una acción, desde el clic hasta la base de datos y de vuelta a la pantalla.</p>
+
+      <div class="flujo"><h4>Flujo A · Arranque de la aplicación</h4>
+        <div class="paso"><span class="n">1</span><div><code>App.main()</code> → <code>Application.launch(App.Ventana.class, args)</code></div></div>
+        <div class="paso"><span class="n">2</span><div><code>App.Ventana.start()</code> guarda el <code>Stage</code>, llama a <code>AppContext.getInstance()</code></div></div>
+        <div class="paso"><span class="n">3</span><div><code>AppContext</code> → <code>DatabaseConfig.init()</code> (pool + esquema/seed) → registra repos → services → controllers</div></div>
+        <div class="paso"><span class="n">4</span><div><code>App.mostrarLogin()</code> → <code>cargar("/view/login.fxml", …)</code>: <code>FXMLLoader</code> + <code>controllerFactory</code> + <code>app.css</code> + icono</div></div>
+        <div class="paso"><span class="n">5</span><div><code>App.Ventana.stop()</code> → <code>DatabaseConfig.shutdown()</code> cierra HikariCP</div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo B · Login</h4>
+        <div class="paso"><span class="n">1</span><div><code>login.fxml</code>: <code>onAction="#onIngresar"</code> en campos y botón</div></div>
+        <div class="paso"><span class="n">2</span><div><code>LoginController.onIngresar()</code> → <code>IUsuarioService.login(usuario, clave)</code></div></div>
+        <div class="paso"><span class="n">3</span><div><code>UsuarioServiceImp</code> valida campos → <code>UsuarioRepository.login()</code></div></div>
+        <div class="paso"><span class="n">4</span><div>SQL: <code>SELECT * FROM usuario WHERE usuario=? AND clave=? AND estado='Activo'</code></div></div>
+        <div class="paso"><span class="n">5</span><div>Si hay fila: <code>Sesion.iniciar(usuario)</code> → <code>App.mostrarPrincipal()</code>. Si no: mensaje rojo en <code>lblError</code></div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo C · Navegación del sidebar</h4>
+        <div class="paso"><span class="n">1</span><div>Botón del sidebar → <code>MainController.irInquilinos()</code> (o el correspondiente)</div></div>
+        <div class="paso"><span class="n">2</span><div><code>abrir("inquilinos")</code> busca en <code>cache</code>; si no existe, carga el FXML</div></div>
+        <div class="paso"><span class="n">3</span><div><code>contenido.getChildren().setAll(root)</code>, actualiza <code>lblTitulo</code>/<code>lblSub</code> y marca <code>nav-button-activo</code></div></div>
+        <div class="paso"><span class="n">4</span><div><code>InquilinoController.initialize()</code> dispara <code>cargar()</code> → tabla con datos</div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo D · Guardar un departamento</h4>
+        <div class="paso"><span class="n">1</span><div><code>departamentos.fxml</code> → <code>DepartamentoController.onGuardar()</code></div></div>
+        <div class="paso"><span class="n">2</span><div>Construye <code>Departamento.builder()…build()</code> con los campos</div></div>
+        <div class="paso"><span class="n">3</span><div><code>IDepartamentoService.save()</code> → <code>DepartamentoServiceImp</code>: <code>normalizar()</code>, <code>Validador.validar()</code>, <code>validarNumeroUnico()</code>, estado = DISPONIBLE</div></div>
+        <div class="paso"><span class="n">4</span><div><code>AbstractJpaRepository.save()</code>: <code>setAutoCommit(false)</code> → <code>insert(conn, entity)</code> → <code>commit()</code> (o <code>rollback()</code>)</div></div>
+        <div class="paso"><span class="n">5</span><div>El controller vuelve a <code>cargar()</code> y <code>limpiarFormulario()</code>; mensaje verde</div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo E · Inquilino natural vs. jurídica</h4>
+        <div class="paso"><span class="n">1</span><div><code>cbxTipoPersoneria.valueProperty()</code> dispara <code>actualizarCamposLegales()</code></div></div>
+        <div class="paso"><span class="n">2</span><div>Si es “Jurídica”: <code>boxLegal.setVisible(true)</code> y <code>setManaged(true)</code></div></div>
+        <div class="paso"><span class="n">3</span><div><code>InquilinoServiceImp.normalizar()</code> limpia representante/RUC/dirección fiscal si es Natural</div></div>
+        <div class="paso"><span class="n">4</span><div><code>validarDniUnico()</code> evita duplicados; borrar bloquea si <code>contratoRepository.existsByInquilino(id)</code></div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo F · Crear y finalizar contrato</h4>
+        <div class="paso"><span class="n">1</span><div><code>ContratoController.onGuardar()</code> → <code>ContratoServiceImp.save()</code> → <code>validarContrato()</code></div></div>
+        <div class="paso"><span class="n">2</span><div><code>repository.findVigenteSuperpuesto(depto, inicio, fin, excluirId)</code>: si existe → <code>BusinessException</code></div></div>
+        <div class="paso"><span class="n">3</span><div><code>repository.save()</code> + <code>departamentoRepository.updateEstado(depto, OCUPADO)</code></div></div>
+        <div class="paso"><span class="n">4</span><div>Finalizar: <code>ContratoRepository.finalizar()</code> hace en UNA transacción: <code>UPDATE contrato</code>, <code>INSERT finalizacion_contrato</code>, <code>UPDATE departamento</code> a Disponible solo si no queda otro vigente</div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo G · Registrar pago</h4>
+        <div class="paso"><span class="n">1</span><div><code>PagoController.onGuardar()</code> construye <code>Pago</code> con contrato, monto, método, descuento e IGV</div></div>
+        <div class="paso"><span class="n">2</span><div><code>PagoServiceImp.normalizar()</code>: <code>periodo.withDayOfMonth(1)</code>, valores nulos → <code>BigDecimal.ZERO</code>, descuento/IGV ≥ 0</div></div>
+        <div class="paso"><span class="n">3</span><div><code>Validador.validar()</code> (anotaciones Jakarta) → <code>PagoRepository.insert()</code> con <code>PreparedStatement</code></div></div>
+        <div class="paso"><span class="n">4</span><div>La tabla carga <code>findAll()</code> con JOINs: pago → contrato → inquilino → departamento</div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo H · Nota de venta</h4>
+        <div class="paso"><span class="n">1</span><div>Seleccionar pago → <code>PagoController.onImprimirNota()</code> → <code>NotaVentaDialog.mostrar(owner, pago)</code></div></div>
+        <div class="paso"><span class="n">2</span><div><code>NotaVenta.lineas(pago)</code> arma 32 caracteres por línea con <code>centrar()</code>, <code>fila()</code>, <code>separador()</code></div></div>
+        <div class="paso"><span class="n">3</span><div><code>ImpresoraWindows.imprimir()</code> (javax.print, papel 58 mm) o <code>ImpresoraSerial.imprimir()</code> (ESC/POS)</div></div>
+        <div class="paso"><span class="n">4</span><div>El botón <em>Copiar texto</em> usa <code>Clipboard</code>; “Atendido” sale de <code>Sesion.nombre()</code></div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo I · Supabase desde el escritorio</h4>
+        <div class="paso"><span class="n">1</span><div><code>DatabaseConfig.loadProperties()</code> lee <code>application.properties</code> y sobrescribe con variables <code>SUPABASE_DB_*</code></div></div>
+        <div class="paso"><span class="n">2</span><div><code>normalizarUrl()</code> agrega <code>sslmode=require</code> y <code>prepareThreshold=0</code> si detecta Supabase</div></div>
+        <div class="paso"><span class="n">3</span><div>HikariCP crea el pool → driver PostgreSQL → TLS → Supabase (puerto 5432 del pooler)</div></div>
+        <div class="paso"><span class="n">4</span><div><code>db.ddl.auto=false</code> y <code>db.seed.demo=false</code>: las tablas ya están creadas con <code>supabase_schema.sql</code></div></div>
+      </div>
+
+      <div class="flujo apk-apartado"><h4>Flujo J · APK (login, listas y CRUD)</h4>
+        <div class="paso"><span class="n">1</span><div><code>LoginActivity</code> → <code>SupabaseClient.get("/rest/v1/usuario?...", apikey)</code> → <code>HttpURLConnection</code> + <code>org.json</code></div></div>
+        <div class="paso"><span class="n">2</span><div><code>MainActivity</code>: pestañas → <code>cargar()</code> → <code>convertir()</code> → <code>ItemAdapter.setDatos()</code></div></div>
+        <div class="paso"><span class="n">3</span><div><code>ItemAdapter</code> mantiene <code>todos</code> y <code>visibles</code>; <code>filtrar()</code> normaliza acentos (esto corrigió el bug de cambiar de pestaña)</div></div>
+        <div class="paso"><span class="n">4</span><div><code>FormularioActivity</code>: campos dinámicos por módulo; <code>POST</code> / <code>PATCH</code> / <code>DELETE</code> con filtros <code>?id=eq.X</code></div></div>
+        <div class="paso"><span class="n">5</span><div>En Pagos, tocar una fila → <em>Ver nota de venta</em> → <code>ACTION_SEND</code></div></div>
+      </div>
+
+      <div class="flujo"><h4>Flujo K · Generación del .exe y los iconos</h4>
+        <div class="paso"><span class="n">1</span><div><code>prepare_icon.py</code>: recorta el JPG, elimina fondo blanco conectado al borde, genera PNG 1024, ICO y mipmaps</div></div>
+        <div class="paso"><span class="n">2</span><div><code>build-exe.ps1</code>: <code>mvn package</code> → copia JARs a <code>target\app</code></div></div>
+        <div class="paso"><span class="n">3</span><div><code>jpackage --type app-image --icon icono\icono.ico</code> con módulos extra (<code>java.scripting</code>, <code>jdk.crypto.ec</code>, <code>jdk.crypto.cryptoki</code>)</div></div>
+        <div class="paso"><span class="n">4</span><div>Comprime <code>dist\SysAlquileres</code> en el ZIP portable</div></div>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section id="s7">
+      <h2><span class="num">7</span> Los 4 pilares de la POO (con código real)</h2>
+
+      <h3 class="sub">7.1 Encapsulamiento</h3>
+      <p>Ocultar los datos internos y exponer solo métodos controlados.</p>
+      <pre>private Long idPago;                 // campo privado
+private BigDecimal monto;
+// Lombok genera getMonto() / setMonto(...)
+public String getMontoTexto() {      // lógica de formato encapsulada
+    return "S/ " + String.format(Locale.US, "%,.2f", monto);
+}</pre>
+      <p><span class="pill p-azul">Sesion</span> guarda <code>private static Usuario actual</code> y solo permite <code>iniciar()</code>, <code>actual()</code>, <code>cerrar()</code>. <span class="pill p-azul">Repository</span> esconde el SQL: el controller nunca ve un <code>PreparedStatement</code>.</p>
+
+      <h3 class="sub">7.2 Abstracción</h3>
+      <p>Mostrar solo lo esencial: trabajar con interfaces sin importar la implementación.</p>
+      <pre>public interface ICrudGenericoRepository&lt;T, ID&gt; {
+    T save(T entity);
+    T update(T entity);
+    Optional&lt;T&gt; findById(ID id);
+    List&lt;T&gt; findAll();
+    void deleteById(ID id);
+    boolean existsById(ID id);
+}</pre>
+      <p>El controller usa <code>IDepartamentoService</code>, no <code>DepartamentoServiceImp</code>. <code>App</code> abstrae JavaFX: el resto del programa solo llama <code>mostrarLogin()</code> / <code>mostrarPrincipal()</code>.</p>
+
+      <h3 class="sub">7.3 Herencia</h3>
+      <p>Reutilizar comportamiento común en una clase base.</p>
+      <pre>public abstract class AbstractJpaRepository&lt;T, ID&gt;
+        extends SqlHelper&lt;T&gt;
+        implements ICrudGenericoRepository&lt;T, ID&gt; {
+
+    protected abstract String getTableName();
+    protected abstract String getPkColumn();
+    protected abstract T insert(Connection c, T e) throws SQLException;
+
+    @Override public T save(T entity) { /* transacción + commit/rollback */ }
+}</pre>
+      <p>Cada repositorio concreto (<code>DepartamentoRepository</code>, <code>PagoRepository</code>…) <strong>extends</strong> esa clase y solo define nombre de tabla, PK e <code>insert</code>/<code>updateRow</code>. Otras herencias: <code>App.Ventana extends Application</code>, <code>BusinessException extends RuntimeException</code>.</p>
+
+      <h3 class="sub">7.4 Polimorfismo</h3>
+      <p>Una misma interfaz, distintas implementaciones; el código que la usa no cambia.</p>
+      <pre>loader.setControllerFactory(AppContext.getInstance()::getBean);
+// getBean(IContratoService.class) devuelve ContratoServiceImp
+// getBean(IPagoService.class)     devuelve PagoServiceImp</pre>
+      <p>También aparece al sobrescribir <code>updateItem()</code> en las celdas de tabla (<code>Celdas</code>, <code>celdaDinero()</code>, <code>celdaFecha()</code>): JavaFX llama al método de la subclase aunque la referencia sea <code>TableCell</code>.</p>
+
+      <h3 class="sub">Tabla: dónde está cada pilar</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Pilar</th><th>Archivos donde se ve</th><th>Qué puedes decir</th></tr>
+        <tr><td>Encapsulamiento</td><td><code>model/*.java</code>, <code>Sesion</code>, <code>repository/*</code></td><td>“Los campos son privados y solo se accede con métodos”</td></tr>
+        <tr><td>Abstracción</td><td><code>service/*.java</code>, <code>repository/ICrudGenericoRepository</code>, <code>App</code></td><td>“Programo contra interfaces, no contra implementaciones”</td></tr>
+        <tr><td>Herencia</td><td><code>AbstractJpaRepository</code>, <code>App.Ventana</code>, <code>BusinessException</code></td><td>“El CRUD común está en la clase base; las concretas solo cambian lo suyo”</td></tr>
+        <tr><td>Polimorfismo</td><td><code>AppContext.getBean()</code>, <code>TableCell.updateItem()</code>, lambdas</td><td>“La misma interfaz sirve para varios módulos”</td></tr>
+      </table></div>
+    </section>
+
+    <!-- 8 -->
+    <section id="s8">
+      <h2><span class="num">8</span> Patrones y conceptos adicionales</h2>
+      <div class="grid">
+        <div class="card"><b>Singleton</b><small><code>AppContext</code>, <code>Sesion</code>, <code>DatabaseConfig</code>. Una sola instancia global.</small></div>
+        <div class="card"><b>Inyección de dependencias</b><small>Constructores reciben servicios; <code>setControllerFactory</code> los entrega.</small></div>
+        <div class="card"><b>Repository / DAO</b><small>Objetos que concentran SQL y devuelven modelos.</small></div>
+        <div class="card"><b>Factory</b><small><code>Celdas.chip…()</code> fabrica celdas; <code>getBean()</code> fabrica objetos.</small></div>
+        <div class="card"><b>Builder</b><small><code>Departamento.builder().numero(...).build()</code> (Lombok).</small></div>
+        <div class="card"><b>Observer</b><small><code>addListener()</code> en buscadores, combos y selección de tabla.</small></div>
+        <div class="card"><b>Template Method</b><small><code>AbstractJpaRepository.save()</code> fija el algoritmo; <code>insert()</code> es abstracto.</small></div>
+        <div class="card"><b>MVC</b><small>Modelo (model), Vista (FXML), Controlador (controller).</small></div>
+        <div class="card"><b>Generics</b><small><code>AbstractJpaRepository&lt;T,ID&gt;</code>, <code>FilteredList&lt;Pago&gt;</code>.</small></div>
+        <div class="card"><b>Lambda / Stream</b><small><code>d -&gt; d.getEstado()…</code>, <code>.stream().filter().count()</code>.</small></div>
+        <div class="card"><b>Optional</b><small><code>findById()</code> y <code>login()</code> devuelven Optional para evitar null.</small></div>
+        <div class="card"><b>BigDecimal</b><small>Dinero exacto; nunca <code>double</code>.</small></div>
+      </div>
+      <div class="aviso ambar"><strong>Ojo con <code>Optional</code>:</strong> en <code>DepartamentoServiceImp.validarNumeroUnico()</code> se usa <code>ifPresent(otro -&gt; …)</code>; si el ID es distinto, lanza <code>BusinessException</code>.</div>
+    </section>
+
+    <!-- 9 -->
+    <section id="s9">
+      <h2><span class="num">9</span> Base de datos y modelo ER</h2>
+      <pre class="arb">usuario (independiente, solo login)
+
+tipo_personeria 1 ─── N inquilino
+                          │
+                          │ 1
+                          N
+departamento 1 ─── N contrato ─── N pago
+                       │
+                       │ 0..1
+                       └─ finalizacion_contrato</pre>
+      <div class="tbl-wrap"><table>
+        <tr><th>Tabla</th><th>Campos principales</th><th>Reglas</th></tr>
+        <tr><td><code>usuario</code></td><td>usuario, clave, nombre, rol, estado</td><td>login con estado Activo</td></tr>
+        <tr><td><code>tipo_personeria</code></td><td>Natural / Jurídica</td><td>catálogo</td></tr>
+        <tr><td><code>departamento</code></td><td>numero, piso, direccion, precio_mensual, estado</td><td>número único, estado Disponible/Ocupado</td></tr>
+        <tr><td><code>inquilino</code></td><td>dni, nombre, apellido, teléfono, dirección, tipo, RUC</td><td>DNI 8 dígitos único, RUC 10–11</td></tr>
+        <tr><td><code>contrato</code></td><td>fechas, monto, estado, inquilino, departamento, personas</td><td>fin &gt; inicio, sin solapamiento vigente</td></tr>
+        <tr><td><code>pago</code></td><td>fecha_pago, periodo, monto, método, idcontrato, descuento, IGV</td><td>monto &gt; 0, descuento/IGV ≥ 0</td></tr>
+        <tr><td><code>finalizacion_contrato</code></td><td>idcontrato, fecha, motivo</td><td>uno por contrato (UNIQUE)</td></tr>
+      </table></div>
+      <p><strong>Vistas:</strong> <code>vw_contrato_detalle</code> y <code>vw_pago_detalle</code>.</p>
+      <h3 class="sub">Scripts</h3>
+      <ul>
+        <li><code>src/main/resources/schema.sql</code> → H2 (y compatible con PostgreSQL).</li>
+        <li><code>seed.sql</code> → 6 departamentos, 5 inquilinos, 5 contratos, 8 pagos y <code>admin</code>.</li>
+        <li><code>database/postgresql_sistema_alquileres.sql</code> → PostgreSQL local (con restricción <code>EXCLUDE</code> + <code>btree_gist</code>).</li>
+        <li><code>database/supabase_schema.sql</code> → Supabase (sin <code>EXCLUDE</code>, la regla se valida en Java).</li>
+      </ul>
+      <div class="aviso"><strong>Transacción clave:</strong> <code>ContratoRepository.finalizar()</code> usa <code>setAutoCommit(false)</code>, ejecuta 3 sentencias y hace <code>commit()</code>; si falla, <code>rollback()</code>.</div>
+    </section>
+
+    <!-- 10 -->
+    <section id="s10">
+      <h2><span class="num">10</span> Supabase explicado</h2>
+      <p>Supabase es <strong>PostgreSQL como servicio</strong>: base de datos + API REST (PostgREST) + autenticación. Proyecto: <code>https://zarbbelqcsivzhjrpguu.supabase.co</code>.</p>
+      <h3 class="sub">Escritorio (JDBC directo)</h3>
+      <pre>jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres
+     ?sslmode=require&amp;prepareThreshold=0</pre>
+      <ul>
+        <li><code>sslmode=require</code>: Supabase no acepta conexiones sin cifrar.</li>
+        <li><code>prepareThreshold=0</code>: el pooler en modo transacción no conserva sentencias preparadas.</li>
+        <li>Usuario: <code>postgres.&lt;project-ref&gt;</code>; clave: solo en variables de entorno.</li>
+        <li><code>ddl.auto=false</code> y <code>seed.demo=false</code>: no se ejecuta el esquema encima de Supabase.</li>
+      </ul>
+      <h3 class="sub">APK (REST, no JDBC)</h3>
+      <pre>GET   /rest/v1/departamento?select=*
+POST  /rest/v1/pago
+PATCH /rest/v1/pago?idpago=eq.9
+DELETE /rest/v1/pago?idpago=eq.9
+Headers: apikey / Authorization: Bearer &lt;anon key&gt;</pre>
+      <p>Android no puede usar JDBC/HikariCP. La <strong>anon key</strong> es pública; la seguridad real son las políticas RLS creadas en <code>database/supabase_movil_policies.sql</code>.</p>
+      <div class="aviso rojo"><strong>Nunca</strong> pongas la <code>sb_secret_…</code> en el APK: saltea RLS. Si se compartió, rótala en el dashboard.</div>
+    </section>
+
+    <!-- 11 -->
+    <section id="s11">
+      <h2><span class="num">11</span> Interfaz: FXML, CSS y Scene Builder</h2>
+      <p><strong>FXML = estructura</strong> (qué controles y dónde). <strong>CSS = apariencia</strong> (colores, bordes, sombras). <strong>Controller = comportamiento</strong> (qué pasa al hacer clic).</p>
+      <p>En los FXML hay <code>styleClass="modulo"</code>, <code>card</code>, <code>nav-button</code>, <code>boton-primario</code>, etc. Esos nombres son “ganchos” que <code>app.css</code> usa.</p>
+      <div class="aviso ambar"><strong>El resaltado azul del sidebar NO está en el FXML:</strong> los iconos <code>&lt;SVGPath&gt;</code> sí están en <code>main.fxml</code>, pero la clase <code>nav-button-activo</code> la añade en tiempo de ejecución <code>MainController.marcarBotonActivo()</code> y es <code>app.css</code> la que la pinta azul. Por eso en Scene Builder los botones se ven grises: está viendo el FXML estático, sin Java ni CSS aplicados.</div>
+      <div class="aviso"><strong> ¿Por qué Scene Builder se ve gris y sin datos?</strong> Porque Scene Builder no ejecuta los controladores ni aplica por defecto el CSS de la app. Ahora cada FXML declara <code>stylesheets="@../css/app.css"</code> para que el preview cargue los estilos. La tabla seguirá diciendo <em>“No content in table”</em> hasta que <code>initialize()</code> consulta la base.</div>
+      <h3 class="sub">Pantallas</h3>
+      <ul>
+        <li><code>login.fxml</code>: tarjeta sobre degradado, logo, campos y botón principal.</li>
+        <li><code>main.fxml</code>: sidebar con iconos SVG + cabecera con usuario + <code>StackPane</code> de contenido.</li>
+        <li>Módulos: buscador arriba, tarjeta de formulario y tarjeta de tabla.</li>
+        <li>Chips de estado: verde = disponible, rojo = ocupado, azul = vigente, gris = finalizado.</li>
+      </ul>
+    </section>
+
+    <!-- 12 -->
+    <section id="s12" class="apk-apartado">
+      <h2><span class="num">12</span> APK: qué se reutilizó y qué no</h2>
+      <div class="tbl-wrap"><table>
+        <tr><th>Sí se reutilizó</th><th>No se pudo reutilizar</th></tr>
+        <tr><td>Base de datos Supabase (misma fuente)</td><td>Pantallas FXML / JavaFX</td></tr>
+        <tr><td>Modelos y reglas adaptadas</td><td><code>javax.print</code> / jSerialComm</td></tr>
+        <tr><td>Login <code>admin/admin123</code></td><td>JDBC + HikariCP</td></tr>
+        <tr><td>Diseño de nota de 32 columnas</td><td>Conexión JDBC directa</td></tr>
+      </table></div>
+      <p>Clases: <code>SupabaseClient</code> (GET/POST/PATCH/DELETE), <code>LoginActivity</code>, <code>MainActivity</code> (pestañas, filtro, nota) y <code>FormularioActivity</code> (campos dinámicos y CRUD).</p>
+    </section>
+
+    <!-- 13 -->
+    <section id="s13">
+      <h2><span class="num">13</span> .exe e iconos</h2>
+      <p><code>jpackage</code> crea una imagen de aplicación: ejecutable + dependencias + JRE embebido. No requiere Java instalado.</p>
+      <p>Módulos añadidos al runtime y por qué:</p>
+      <div class="tbl-wrap"><table>
+        <tr><th>Módulo</th><th>Motivo</th></tr>
+        <tr><td><code>java.scripting</code></td><td>FXML lo usa: sin él falla con <code>javax/script/Bindings</code></td></tr>
+        <tr><td><code>jdk.crypto.ec</code>, <code>jdk.crypto.cryptoki</code></td><td>TLS con Supabase (<code>insufficient_security</code>)</td></tr>
+        <tr><td><code>java.desktop</code></td><td>Impresión <code>javax.print</code></td></tr>
+      </table></div>
+      <p>El icono pasa por <code>prepare_icon.py</code>: recorte → transparencia → PNG 1024 → ICO (6 tamaños) → mipmaps Android → <code>app-icon.png</code> para la ventana JavaFX y el login.</p>
+      <div class="aviso">El ZIP se entrega porque el <code>.exe</code> necesita las carpetas <code>app\</code> y <code>runtime\</code>.</div>
+    </section>
+
+    <!-- 14 -->
+    <section id="s14">
+      <h2><span class="num">14</span> Seguridad y credenciales</h2>
+      <ul>
+        <li>La clave de Supabase se lee de variables <code>SUPABASE_DB_*</code>, no del código.</li>
+        <li><code>database/Coenction.txt</code> está ignorado por git (contiene la clave real).</li>
+        <li>La anon key del APK es pública; la protección son las políticas RLS.</li>
+        <li>La secret key <code>sb_secret_…</code> nunca se usa en el cliente y debería rotarse.</li>
+        <li>Las contraseñas de <code>usuario</code> están en texto plano por ser proyecto académico; en producción irían con hash BCrypt.</li>
+      </ul>
+    </section>
+
+    <!-- 15 -->
+    <section id="s15">
+      <h2><span class="num">15</span> Preguntas probables (y respuestas cortas)</h2>
+      <div class="tbl-wrap"><table>
+        <tr><th>Pregunta</th><th>Respuesta</th></tr>
+        <tr><td>¿Por qué capas?</td><td>Separan responsabilidades; cada clase tiene una sola tarea.</td></tr>
+        <tr><td>¿Dónde está la lógica de negocio?</td><td>En <code>service/impl</code>.</td></tr>
+        <tr><td>¿Cómo evitas contratos solapados?</td><td><code>findVigenteSuperpuesto()</code> + <code>BusinessException</code>.</td></tr>
+        <tr><td>¿Por qué BigDecimal?</td><td>Evita errores de redondeo de <code>double</code>.</td></tr>
+        <tr><td>¿Qué es AppContext?</td><td>Singleton que crea e inyecta dependencias.</td></tr>
+        <tr><td>¿Qué es una transacción?</td><td>Operaciones que se confirman juntas con commit o se deshacen con rollback.</td></tr>
+        <tr><td>¿Qué hace HikariCP?</td><td>Reutiliza conexiones (pool) en vez de abrir una por consulta.</td></tr>
+        <tr><td>¿Cómo conectas Supabase?</td><td>JDBC + TLS + variables de entorno; el APK usa REST.</td></tr>
+        <tr><td>¿Qué pasa si no hay internet?</td><td>Se usa H2 local automáticamente.</td></tr>
+        <tr><td>¿Cómo imprintes la nota?</td><td><code>javax.print</code> en Windows o ESC/POS por puerto COM.</td></tr>
+        <tr><td>¿Cómo generaste el .exe?</td><td>Con <code>jpackage</code> y módulos extra para FXML y TLS.</td></tr>
+        <tr><td>¿Por qué no JavaFX en el APK?</td><td>Requiere Gluon; se reutilizó base, reglas y diseño, no las pantallas.</td></tr>
+        <tr><td>¿Es segura la anon key?</td><td>Sí, es pública; la seguridad la dan las políticas RLS.</td></tr>
+        <tr><td>¿Qué es un PreparedStatement?</td><td>Consulta con parámetros <code>?</code> que evita inyección SQL.</td></tr>
+        <tr><td>¿Por qué el FXML se ve distinto en Scene Builder?</td><td>No aplica el CSS ni ejecuta los controladores que cargan los datos.</td></tr>
+        <tr><td>¿Qué patrones usaste?</td><td>Singleton, DI, Repository, Builder, Factory, Observer, Template Method.</td></tr>
+        <tr><td>¿Cómo se prueba que funciona?</td><td><code>mvn javafx:run</code>, smoke test de FXML, emulador Android y ejecución del <code>.exe</code>.</td></tr>
+      </table></div>
+    </section>
+
+    <!-- 16 -->
+    <section id="s16">
+      <h2><span class="num">16</span> Glosario express</h2>
+      <div class="grid">
+        <div class="card"><b>Stage / Scene</b><small>Stage = ventana; Scene = contenido dentro de ella.</small></div>
+        <div class="card"><b>FXML</b><small>XML que describe la interfaz.</small></div>
+        <div class="card"><b>@FXML</b><small>Conecta un campo Java con un control del FXML.</small></div>
+        <div class="card"><b>ObservableList</b><small>Lista que avisa a la tabla cuando cambia.</small></div>
+        <div class="card"><b>FilteredList</b><small>Lista filtrada conectada a la tabla.</small></div>
+        <div class="card"><b>JDBC</b><small>API de Java para hablar con bases de datos.</small></div>
+        <div class="card"><b>DriverManager / DataSource</b><small>Formas de obtener una conexión; HikariCP es un DataSource.</small></div>
+        <div class="card"><b>RLS</b><small>Row Level Security: políticas por fila en Supabase.</small></div>
+        <div class="card"><b>PostgREST</b><small>API REST automática de Supabase.</small></div>
+        <div class="card"><b>ESC/POS</b><small>Comandos de impresoras térmicas.</small></div>
+        <div class="card"><b>jpackage</b><small>Herramienta del JDK para crear ejecutables.</small></div>
+        <div class="card"><b>Bean</b><small>Objeto gestionado por el contenedor <code>AppContext</code>.</small></div>
+      </div>
+    </section>
+
+    <!-- 17 -->
+    <section id="s17">
+      <h2><span class="num">17</span> Cómo estudiar (ruta recomendada) y comandos</h2>
+      <ol>
+        <li>Lee las secciones <strong>1 → 4</strong>: mapa, carpetas, capas e inyección.</li>
+        <li>Aprende los <strong>4 pilares</strong> (sección 7) con los ejemplos de código.</li>
+        <li>Sigue los <strong>flujos A–K</strong> (sección 6) señalando los archivos en tu editor.</li>
+        <li>Mira el modelo ER y Supabase (secciones 9 y 10).</li>
+        <li>Repasa las preguntas (sección 15) y el glosario (16).</li>
+      </ol>
+      <h3 class="sub">Comandos útiles</h3>
+      <pre>mvn -q -DskipTests compile        # compilar escritorio
+mvn -B javafx:run                 # ejecutar escritorio
+powershell -ExecutionPolicy Bypass -File scripts\build-exe.ps1   # generar .exe
+python scripts\prepare_icon.py    # regenerar iconos
+cd android
+.\gradlew.bat assembleRelease     # generar APK
+adb install -r app\build\outputs\apk\release\app-release.apk</pre>
+      <h3 class="sub">Checklist antes de exponer</h3>
+      <ul>
+        <li>Sé explicar las 4 capas y un flujo completo sin mirar.</li>
+        <li>Sé decir dónde está cada pilar de la POO.</li>
+        <li>Puedo explicar por qué Scene Builder se ve distinto.</li>
+        <li>Sé explicar la diferencia entre H2, Supabase JDBC y Supabase REST.</li>
+        <li>Conozco el propósito del <code>.exe</code>, el ZIP y el APK.</li>
+      </ul>
+      <div class="aviso verde">Esta guía es <strong>autocontenida</strong>: funciona sin internet y se puede imprimir en PDF con el botón de arriba.</div>
+    </section>
+
+    <!-- 18 -->
+    <section id="s18">
+      <h2><span class="num">18</span> Diagramas visuales de flujo</h2>
+      <p class="intro">Estos diagramas muestran gráficamente cómo se conectan las piezas. Sigue las flechas en el mismo orden que el código.</p>
+
+      <h3 class="sub">18.1 Cómo viaja un dato del formulario a la tabla</h3>
+      <div class="diag">
+      <svg viewBox="0 0 980 210" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="fl" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+          <polygon points="0 0,9 3.5,0 7" fill="#2563EB"/></marker></defs>
+        <g font-family="Segoe UI" font-size="11.5" text-anchor="middle">
+          <rect x="8" y="50" width="132" height="62" rx="10" fill="#EDE9FE" stroke="#7C3AED"/>
+          <text x="74" y="72" font-weight="bold">1. FXML</text><text x="74" y="90">txtNumero.getText()</text>
+          <rect x="170" y="50" width="132" height="62" rx="10" fill="#DBEAFE" stroke="#2563EB"/>
+          <text x="236" y="72" font-weight="bold">2. Controller</text><text x="236" y="90">onGuardar()</text>
+          <rect x="332" y="50" width="132" height="62" rx="10" fill="#DCFCE7" stroke="#059669"/>
+          <text x="398" y="72" font-weight="bold">3. Modelo</text><text x="398" y="90">Departamento.builder()</text>
+          <rect x="494" y="50" width="132" height="62" rx="10" fill="#FEF3C7" stroke="#D97706"/>
+          <text x="560" y="72" font-weight="bold">4. Service</text><text x="560" y="90">validar + normalizar</text>
+          <rect x="656" y="50" width="132" height="62" rx="10" fill="#FEE2E2" stroke="#DC2626"/>
+          <text x="722" y="72" font-weight="bold">5. Repository</text><text x="722" y="90">INSERT PreparedStatement</text>
+          <rect x="818" y="50" width="152" height="62" rx="10" fill="#E2E8F0" stroke="#475569"/>
+          <text x="894" y="72" font-weight="bold">6. Base de datos</text><text x="894" y="90">fila guardada</text>
+          <line x1="140" y1="81" x2="168" y2="81" stroke="#2563EB" stroke-width="2" marker-end="url(#fl)"/>
+          <line x1="302" y1="81" x2="330" y2="81" stroke="#2563EB" stroke-width="2" marker-end="url(#fl)"/>
+          <line x1="464" y1="81" x2="492" y2="81" stroke="#2563EB" stroke-width="2" marker-end="url(#fl)"/>
+          <line x1="626" y1="81" x2="654" y2="81" stroke="#2563EB" stroke-width="2" marker-end="url(#fl)"/>
+          <line x1="788" y1="81" x2="816" y2="81" stroke="#2563EB" stroke-width="2" marker-end="url(#fl)"/>
+          <text x="490" y="160" fill="#64748B">Ida: texto → objeto → validación → SQL → fila</text>
+          <text x="490" y="182" fill="#64748B">Vuelta: fila → objeto → ObservableList → TableView (cargar())</text>
+        </g>
+      </svg>
+      </div>
+
+      <h3 class="sub">18.2 Decisión: base local H2 o Supabase</h3>
+      <div class="diag">
+      <svg viewBox="0 0 900 280" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="fl2" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+          <polygon points="0 0,9 3.5,0 7" fill="#2563EB"/></marker></defs>
+        <g font-family="Segoe UI" font-size="11.5" text-anchor="middle">
+          <rect x="330" y="12" width="240" height="48" rx="10" fill="#DBEAFE" stroke="#2563EB"/>
+          <text x="450" y="32" font-weight="bold">application.properties</text><text x="450" y="49">db.url por defecto = H2</text>
+          <line x1="450" y1="60" x2="450" y2="82" stroke="#2563EB" stroke-width="2" marker-end="url(#fl2)"/>
+          <rect x="300" y="84" width="300" height="50" rx="10" fill="#FEF3C7" stroke="#D97706"/>
+          <text x="450" y="104" font-weight="bold">DatabaseConfig.loadProperties()</text>
+          <text x="450" y="122">System props → DB_* → SUPABASE_DB_*</text>
+          <line x1="450" y1="134" x2="450" y2="154" stroke="#2563EB" stroke-width="2" marker-end="url(#fl2)"/>
+          <rect x="330" y="156" width="240" height="46" rx="10" fill="#E2E8F0" stroke="#475569"/>
+          <text x="450" y="176" font-weight="bold">normalizarUrl()</text><text x="450" y="193">sslmode + prepareThreshold</text>
+          <line x1="380" y1="202" x2="240" y2="226" stroke="#2563EB" stroke-width="2" marker-end="url(#fl2)"/>
+          <line x1="520" y1="202" x2="660" y2="226" stroke="#2563EB" stroke-width="2" marker-end="url(#fl2)"/>
+          <rect x="90" y="228" width="300" height="46" rx="10" fill="#DCFCE7" stroke="#059669"/>
+          <text x="240" y="247" font-weight="bold">H2 local (sin internet)</text>
+          <text x="240" y="264">~/SysAlquileres/data + schema.sql + seed.sql</text>
+          <rect x="510" y="228" width="300" height="46" rx="10" fill="#EDE9FE" stroke="#7C3AED"/>
+          <text x="660" y="247" font-weight="bold">Supabase (PostgreSQL 17)</text>
+          <text x="660" y="264">jdbc:postgresql://…pooler…:5432 + TLS</text>
+          <text x="450" y="12" text-anchor="start" fill="#64748B" font-size="10">Mismo código Java: solo cambia la URL y las variables</text>
+        </g>
+      </svg>
+      </div>
+
+      <h3 class="sub">18.3 Cómo se aplica el CSS (por qué Scene Builder se ve distinto)</h3>
+      <div class="diag">
+      <svg viewBox="0 0 900 240" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="fl3" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+          <polygon points="0 0,9 3.5,0 7" fill="#2563EB"/></marker></defs>
+        <g font-family="Segoe UI" font-size="11.5" text-anchor="middle">
+          <rect x="20" y="70" width="180" height="56" rx="10" fill="#F1F5F9" stroke="#94A3B8"/>
+          <text x="110" y="92" font-weight="bold">1. Tema por defecto</text><text x="110" y="110">user-agent stylesheet</text>
+          <rect x="240" y="70" width="180" height="56" rx="10" fill="#DBEAFE" stroke="#2563EB"/>
+          <text x="330" y="92" font-weight="bold">2. Scene CSS</text><text x="330" y="110">App.cargar() → app.css</text>
+          <rect x="460" y="70" width="180" height="56" rx="10" fill="#EDE9FE" stroke="#7C3AED"/>
+          <text x="550" y="92" font-weight="bold">3. FXML CSS</text><text x="550" y="110">stylesheets="@../css/app.css"</text>
+          <rect x="680" y="70" width="190" height="56" rx="10" fill="#FEF3C7" stroke="#D97706"/>
+          <text x="775" y="92" font-weight="bold">4. styleClass</text><text x="775" y="110">.modulo, .card, .nav-button</text>
+          <line x1="200" y1="98" x2="238" y2="98" stroke="#2563EB" stroke-width="2" marker-end="url(#fl3)"/>
+          <line x1="420" y1="98" x2="458" y2="98" stroke="#2563EB" stroke-width="2" marker-end="url(#fl3)"/>
+          <line x1="640" y1="98" x2="678" y2="98" stroke="#2563EB" stroke-width="2" marker-end="url(#fl3)"/>
+          <rect x="300" y="170" width="300" height="48" rx="10" fill="#DCFCE7" stroke="#059669"/>
+          <text x="450" y="190" font-weight="bold">Resultado final en pantalla</text>
+          <text x="450" y="208">azul #2563EB, tarjetas, chips, tablas</text>
+          <line x1="775" y1="126" x2="590" y2="168" stroke="#2563EB" stroke-width="2" marker-end="url(#fl3)"/>
+          <text x="450" y="20" fill="#64748B" text-anchor="start">Scene Builder aplica solo (1) y parte de (3)-(4): por eso se ve gris y sin datos.</text>
+        </g>
+      </svg>
+      </div>
+
+      <h3 class="sub">18.4 Jerarquía de clases (quién es hijo de quién)</h3>
+      <pre class="arb">java.lang.Object
+├─ javafx.application.Application
+│    └─ App.Ventana                         ← start() / stop()
+├─ java.lang.RuntimeException
+│    └─ BusinessException                   ← mensajes de negocio
+├─ SqlHelper&lt;T&gt;  (abstract)
+│    └─ AbstractJpaRepository&lt;T, ID&gt;  (abstract)   implements ICrudGenericoRepository&lt;T, ID&gt;
+│         ├─ UsuarioRepository
+│         ├─ DepartamentoRepository
+│         ├─ InquilinoRepository
+│         ├─ ContratoRepository
+│         ├─ PagoRepository
+│         ├─ TipoPersoneriaRepository
+│         └─ FinalizacionContratoRepository
+├─ IUsuarioService          ← UsuarioServiceImp
+├─ IDepartamentoService     ← DepartamentoServiceImp
+├─ IInquilinoService        ← InquilinoServiceImp
+├─ IContratoService         ← ContratoServiceImp
+├─ IPagoService             ← PagoServiceImp
+└─ App, AppContext, DatabaseConfig, Sesion, Validador, Formato (clases finales/utilitarias)
+
+Android (otro proyecto):
+android.app.Activity
+├─ LoginActivity
+├─ MainActivity
+└─ FormularioActivity</pre>
+      <div class="aviso"><strong>Lectura:</strong> las flechas hacia abajo son <em>herencia</em> (extends). Las líneas con “←” son <em>implementación de interfaz</em>. Los repositorios concretos heredan el CRUD de <code>AbstractJpaRepository</code> y solo definen tabla, PK e <code>insert</code>/<code>updateRow</code>.</div>
+
+      <h3 class="sub">18.5 Flujo del APK con Supabase REST</h3>
+      <div class="capa">
+        <div class="caja v">LoginActivity</div><span class="flecha">→</span>
+        <div class="caja">SupabaseClient.get()</div><span class="flecha">→</span>
+        <div class="caja d"> Supabase REST</div><span class="flecha">→</span>
+        <div class="caja s">JSONArray / JSONObject</div>
+      </div>
+      <div class="capa">
+        <div class="caja v">MainActivity</div><span class="flecha">→</span>
+        <div class="caja">ItemAdapter.setDatos()</div><span class="flecha">→</span>
+        <div class="caja">visibles (filtrados)</div><span class="flecha">→</span>
+        <div class="caja s">ListView</div>
+      </div>
+      <div class="capa">
+        <div class="caja v">FormularioActivity</div><span class="flecha">→</span>
+        <div class="caja">POST / PATCH / DELETE</div><span class="flecha">→</span>
+        <div class="caja d">Supabase</div><span class="flecha">→</span>
+        <div class="caja s">onActivityResult → cargar()</div>
+      </div>
+    </section>
+
+    <!-- 19 -->
+    <section id="s19">
+      <h2><span class="num">19</span> Catálogo de clases: entradas, salidas y jerarquía</h2>
+      <p class="intro">Para cada clase: de dónde hereda, qué datos recibe, qué devuelve y qué hace.</p>
+      <div class="tbl-wrap"><table>
+        <tr><th>Clase</th><th>Hereda / implementa</th><th>Datos que recibe</th><th>Datos que devuelve / produce</th><th>Métodos clave</th></tr>
+        <tr><td><code>App</code></td><td>—</td><td>ruta FXML, título, ancho/alto</td><td>escena configurada con CSS e icono</td><td><code>mostrarLogin</code>, <code>mostrarPrincipal</code>, <code>cargar</code></td></tr>
+        <tr><td><code>App.Ventana</code></td><td>extends <code>Application</code></td><td><code>Stage</code></td><td>ciclo de vida</td><td><code>start</code>, <code>stop</code></td></tr>
+        <tr><td><code>AppContext</code></td><td>Singleton</td><td>—</td><td>beans (repos, services, controllers)</td><td><code>getInstance</code>, <code>getBean</code></td></tr>
+        <tr><td><code>DatabaseConfig</code></td><td>Singleton</td><td>properties + variables de entorno</td><td><code>DataSource</code> / <code>Connection</code></td><td><code>init</code>, <code>getConnection</code>, <code>normalizarUrl</code></td></tr>
+        <tr><td><code>LoginController</code></td><td>—</td><td><code>IUsuarioService</code>, texto de campos</td><td>llamada a <code>App.mostrarPrincipal()</code></td><td><code>onIngresar</code></td></tr>
+        <tr><td><code>MainController</code></td><td>—</td><td>clave del módulo</td><td><code>Parent</code> en el <code>StackPane</code></td><td><code>abrir</code>, <code>marcarBotonActivo</code></td></tr>
+        <tr><td><code>DepartamentoController</code></td><td>—</td><td><code>IDepartamentoService</code>, campos del formulario</td><td>filas en <code>TableView</code>, mensajes</td><td><code>onGuardar</code>, <code>cargar</code>, <code>aplicarFiltro</code></td></tr>
+        <tr><td><code>InquilinoController</code></td><td>—</td><td><code>IInquilinoService</code>, tipo de personería</td><td>filas; visibilidad de <code>boxLegal</code></td><td><code>actualizarCamposLegales</code></td></tr>
+        <tr><td><code>ContratoController</code></td><td>—</td><td>3 services, fechas, monto, personas</td><td>filas; estado del departamento</td><td><code>onFinalizar</code>, <code>actualizarInfoDepartamento</code></td></tr>
+        <tr><td><code>PagoController</code></td><td>—</td><td><code>IPagoService</code>, <code>IContratoService</code>, pago</td><td>filas + nota de venta</td><td><code>onImprimirNota</code></td></tr>
+        <tr><td><code>Departamento</code></td><td>modelo (Lombok)</td><td>número, piso, dirección, precio, estado</td><td>getters + <code>getEstado()</code></td><td><code>equals/hashCode/toString</code></td></tr>
+        <tr><td><code>Contrato</code></td><td>modelo (Lombok)</td><td>inquilino, departamento, fechas, monto…</td><td><code>getInquilinoNombre()</code>, <code>getDepartamentoNumero()</code></td><td>getters calculados</td></tr>
+        <tr><td><code>Pago</code></td><td>modelo (Lombok)</td><td>contrato, fecha, periodo, monto, método…</td><td><code>getMontoTexto()</code>, <code>getPeriodoTexto()</code></td><td>getters calculados</td></tr>
+        <tr><td><code>AbstractJpaRepository&lt;T,ID&gt;</code></td><td>extends <code>SqlHelper&lt;T&gt;</code>, implements interfaz</td><td>entidad <code>T</code> o id <code>ID</code></td><td><code>T</code>, <code>List&lt;T&gt;</code>, <code>Optional&lt;T&gt;</code></td><td><code>save</code>, <code>update</code>, <code>findAll</code>, <code>deleteById</code></td></tr>
+        <tr><td><code>DepartamentoServiceImp</code></td><td>implements <code>IDepartamentoService</code></td><td><code>DepartamentoRepository</code>, <code>ContratoRepository</code>, entidad</td><td>entidad validada o excepción</td><td><code>save</code>, <code>delete</code></td></tr>
+        <tr><td><code>ContratoServiceImp</code></td><td>implements <code>IContratoService</code></td><td>4 repositorios, contrato, motivo</td><td>contrato guardado / <code>BusinessException</code></td><td><code>save</code>, <code>finalizar</code></td></tr>
+        <tr><td><code>PagoServiceImp</code></td><td>implements <code>IPagoService</code></td><td><code>PagoRepository</code>, pago</td><td>pago normalizado; totales</td><td><code>normalizar</code>, <code>totalRecaudado</code></td></tr>
+        <tr><td><code>Validador</code></td><td>utilidad final</td><td>cualquier objeto anotado</td><td><code>BusinessException</code> si hay violaciones</td><td><code>validar</code>, <code>texto</code></td></tr>
+        <tr><td><code>Sesion</code></td><td>utilidad final</td><td><code>Usuario</code></td><td>nombre, rol, usuario actual</td><td><code>iniciar</code>, <code>actual</code>, <code>cerrar</code></td></tr>
+        <tr><td><code>Celdas</code></td><td>utilidad final</td><td>función texto + función estilo</td><td><code>TableCell</code> con chip</td><td><code>chipEstado…</code>, <code>chipMetodoPago</code></td></tr>
+        <tr><td><code>NotaVenta</code></td><td>utilidad final</td><td><code>Pago</code></td><td><code>List&lt;String&gt;</code> de 32 columnas</td><td><code>lineas</code>, <code>total</code>, <code>centrar</code></td></tr>
+        <tr><td><code>SupabaseClient</code> (APK)</td><td>utilidad final</td><td>ruta REST + JSON</td><td>respuesta HTTP como <code>String</code></td><td><code>get</code>, <code>post</code>, <code>patch</code>, <code>delete</code></td></tr>
+      </table></div>
+    </section>
+
+    <!-- 20 -->
+    <section id="s20">
+      <h2><span class="num">20</span> Generics: ¿qué significa &lt;T, ID&gt;?</h2>
+      <p>Los <strong>generics</strong> permiten escribir una clase una sola vez y especializarla con tipos concretos. Es como un molde: tú pones el tipo.</p>
+      <pre>public abstract class AbstractJpaRepository&lt;T, ID&gt; extends SqlHelper&lt;T&gt; { … }</pre>
+      <ul>
+        <li><code>T</code> = <strong>tipo de la entidad</strong> (Departamento, Pago, Contrato…).</li>
+        <li><code>ID</code> = <strong>tipo de la llave primaria</strong> (aquí siempre <code>Long</code>).</li>
+      </ul>
+      <h3 class="sub">Sustitución real</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Clase concreta</th><th>T</th><th>ID</th><th>Método resultante</th></tr>
+        <tr><td><code>DepartamentoRepository extends AbstractJpaRepository&lt;Departamento, Long&gt;</code></td><td><code>Departamento</code></td><td><code>Long</code></td><td><code>Optional&lt;Departamento&gt; findById(Long id)</code></td></tr>
+        <tr><td><code>PagoRepository extends AbstractJpaRepository&lt;Pago, Long&gt;</code></td><td><code>Pago</code></td><td><code>Long</code></td><td><code>List&lt;Pago&gt; findAll()</code></td></tr>
+        <tr><td><code>ICrudGenericoRepository&lt;T, ID&gt;</code></td><td>variable</td><td>variable</td><td>contrato genérico compartido</td></tr>
+      </table></div>
+      <p>Gracias a esto, el método <code>findById(ID id)</code> escrito una sola vez sirve para <strong>todas</strong> las tablas, y el compilador garantiza que <code>PagoRepository</code> devuelva <code>Pago</code>, no cualquier cosa.</p>
+      <div class="aviso verde"><strong>Ventaja:</strong> evita duplicar el código del CRUD 7 veces y evita <code>Cast</code> peligrosos. Es el mismo principio que <code>List&lt;Pago&gt;</code>: una lista “tipada”.</div>
+      <p>Otros generics del proyecto: <code>ObservableList&lt;Pago&gt;</code>, <code>FilteredList&lt;Contrato&gt;</code>, <code>TableColumn&lt;Pago, BigDecimal&gt;</code>, <code>Callback&lt;TableColumn&lt;S,T&gt;, TableCell&lt;S,T&gt;&gt;</code> en <code>Celdas</code>, <code>Optional&lt;Usuario&gt;</code>.</p>
+    </section>
+
+    <!-- 21 -->
+    <section id="s21">
+      <h2><span class="num">21</span> Cómo viaja un dato (ejemplo completo)</h2>
+      <p class="intro">Sigue un departamento desde que el usuario escribe “101” hasta que aparece en la tabla.</p>
+      <div class="flujo"><h4>Vuelta de ida: del texto a la fila de la base</h4>
+        <div class="paso"><span class="n">1</span><div><code>TextField txtNumero</code> contiene el <code>String "101"</code>.</div></div>
+        <div class="paso"><span class="n">2</span><div><code>DepartamentoController.onGuardar()</code> llama a <code>Formato.decimal(txtPrecio.getText())</code> → <code>BigDecimal(650.00)</code> y arma un <code>Departamento</code> con <code>numero="101"</code>, <code>piso=1</code>, etc.</div></div>
+        <div class="paso"><span class="n">3</span><div><code>DepartamentoServiceImp.save()</code>: <code>normalizar()</code> recorta espacios; <code>Validador.validar()</code> comprueba anotaciones; <code>validarNumeroUnico()</code> consulta <code>findByNumero</code>; fuerza <code>idDepartamento=null</code> y estado DISPONIBLE.</div></div>
+        <div class="paso"><span class="n">4</span><div><code>DepartamentoRepository.insert(Connection, Departamento)</code> ejecuta <code>INSERT INTO departamento (...) VALUES (?, ?, ?, ?, ?)</code> con parámetros. El ID lo genera la base (<code>IDENTITY</code>).</div></div>
+        <div class="paso"><span class="n">5</span><div><code>AbstractJpaRepository.save()</code> confirma con <code>commit()</code>. Si algo falla, <code>rollback()</code>.</div></div>
+      </div>
+      <div class="flujo"><h4>Vuelta de regreso: de la base a la pantalla</h4>
+        <div class="paso"><span class="n">1</span><div>El controller llama <code>cargar()</code> → <code>service.findAll()</code> → <code>Repository.findAll()</code> → <code>SELECT * FROM departamento</code>.</div></div>
+        <div class="paso"><span class="n">2</span><div><code>SqlHelper.mapRow(ResultSet)</code> convierte cada fila en un objeto <code>Departamento</code>.</div></div>
+        <div class="paso"><span class="n">3</span><div>Se guarda en <code>ObservableList&lt;Departamento&gt; datos</code> y se envuelve en <code>FilteredList</code>.</div></div>
+        <div class="paso"><span class="n">4</span><div><code>TableView</code> usa <code>PropertyValueFactory&lt;&gt;("numero")</code> para pedir <code>getNumero()</code> y <code>Celdas.chipEstadoDepartamento()</code> para el chip.</div></div>
+        <div class="paso"><span class="n">5</span><div>El usuario ve la fila con su estado. El buscador dispara <code>aplicarFiltro()</code> y la tabla se actualiza sola.</div></div>
+      </div>
+      <div class="aviso"><strong>Pregunta clave:</strong> “¿Qué datos recibe cada clase?” → El controller recibe texto y servicios; el service recibe objetos del modelo; el repository recibe entidades o IDs; el modelo recibe valores de campos; la base recibe parámetros SQL.</div>
+    </section>
+
+    <!-- 22 -->
+    <section id="s22">
+      <h2><span class="num">22</span> Informe para IA y descargas</h2>
+      <p>Descarga aquí un informe detallado y analízalo con ChatGPT, Claude o Gemini: es un documento de texto plano con todo el contexto del proyecto y un prompt listo para pegar.</p>
+      <div class="grid">
+        <div class="card"><b>Descargar informe (.md)</b><small><a href="INFORME_PARA_IA.md" download>INFORME_PARA_IA.md</a> — abre con cualquier editor o súbelo a tu IA.</small></div>
+        <div class="card"><b>Descargar esta guía en PDF</b><small>Botón <strong>🖨 Descargar PDF</strong> de la barra superior (se guarda como PDF).</small></div>
+        <div class="card"><b>Compartir la guía</b><small>El archivo <code>ESTUDIO_COMPLETO.html</code> es único: puedes enviarlo por correo o WhatsApp.</small></div>
+      </div>
+      <h3 class="sub">Prompt sugerido para tu IA</h3>
+      <pre>Eres un profesor de Programación Orientada a Objetos. Analiza el siguiente
+informe del proyecto SysAlquileres. Explícame:
+1) la arquitectura por capas y cómo viajan los datos,
+2) los 4 pilares OOP con ejemplos del código,
+3) el flujo completo de login, guardar contrato e imprimir nota,
+4) cómo se conecta Supabase desde JavaFX y desde Android,
+5) qué preguntas podrían hacerme en una exposición y cómo responderlas.
+Usa un lenguaje sencillo y ejemplos concretos. [Pega aquí el informe]</pre>
+      <div class="aviso verde">El informe incluye: árbol de carpetas, clases y responsabilidades, servicios, repositorios, SQL, Supabase, APK, empaquetado y credenciales de prueba (sin claves reales).</div>
+    </section>
+
+    <!-- 23 -->
+    <section id="s23">
+      <h2><span class="num">23</span> Mapas visuales con flechas</h2>
+      <p class="intro">Aprende viendo: cada caja es una clase o un archivo, cada flecha es un dato que viaja. Las flechas verdes son el regreso de la información a la pantalla.</p>
+      <div class="vnota">Leyenda: <span class="pill p-morado">Vista/FXML</span> <span class="pill p-azul">Controller</span> <span class="pill p-verde">Service/Modelo</span> <span class="pill p-ambar">Repository/SQL</span> <span class="pill p-rojo">Base de datos</span></div>
+
+      <div class="vtit">23.1 Mapa general del sistema</div>
+      <div class="vflujo">
+        <div class="vbox a">FXML · pantalla</div><span class="varrow">⟶</span>
+        <div class="vbox b">Controller · clics</div><span class="varrow">⟶</span>
+        <div class="vbox c">Service · reglas</div><span class="varrow">⟶</span>
+        <div class="vbox d">Repository · SQL</div><span class="varrow">⟶</span>
+        <div class="vbox e">H2 / Supabase</div>
+      </div>
+      <div class="vflujo">
+        <div class="vbox e">Fila de la BD</div><span class="varrow back">⟵</span>
+        <div class="vbox d">ResultSet → objeto</div><span class="varrow back">⟵</span>
+        <div class="vbox c">ObservableList</div><span class="varrow back">⟵</span>
+        <div class="vbox b">TableView</div><span class="varrow back">⟵</span>
+        <div class="vbox a">Usuario lo ve</div>
+      </div>
+
+      <div class="vtit">23.2 Arranque de la aplicación</div>
+      <div class="vflujo">
+        <div class="vbox b">App.main()</div><span class="varrow">⟶</span>
+        <div class="vbox b">App.Ventana.start()</div><span class="varrow">⟶</span>
+        <div class="vbox c">AppContext</div><span class="varrow">⟶</span>
+        <div class="vbox d">DatabaseConfig.init()</div><span class="varrow">⟶</span>
+        <div class="vbox e">Pool HikariCP</div>
+      </div>
+      <div class="vflujo">
+        <div class="vbox c">App.mostrarLogin()</div><span class="varrow">⟶</span>
+        <div class="vbox a">login.fxml</div><span class="varrow">⟶</span>
+        <div class="vbox b">LoginController</div><span class="varrow">⟶</span>
+        <div class="vbox c">Sesion</div><span class="varrow">⟶</span>
+        <div class="vbox a">main.fxml</div>
+      </div>
+
+      <div class="vtit">23.3 Login</div>
+      <div class="vflujo">
+        <div class="vbox a">txtUsuario / txtClave</div><span class="varrow">⟶</span>
+        <div class="vbox b">onIngresar()</div><span class="varrow">⟶</span>
+        <div class="vbox c">IUsuarioService.login()</div><span class="varrow">⟶</span>
+        <div class="vbox d">UsuarioRepository</div><span class="varrow">⟶</span>
+        <div class="vbox e">SELECT usuario</div>
+      </div>
+      <div class="vflujo">
+        <div class="vbox e">Optional&lt;Usuario&gt;</div><span class="varrow back">⟵</span>
+        <div class="vbox c">Sesion.iniciar()</div><span class="varrow back">⟵</span>
+        <div class="vbox b">App.mostrarPrincipal()</div><span class="varrow back">⟵</span>
+        <div class="vbox a">Sidebar + módulos</div>
+      </div>
+
+      <div class="vtit">23.4 Navegación entre módulos</div>
+      <div class="vflujo">
+        <div class="vbox a">Botón "Inquilinos"</div><span class="varrow">⟶</span>
+        <div class="vbox b">irInquilinos()</div><span class="varrow">⟶</span>
+        <div class="vbox b">abrir("inquilinos")</div><span class="varrow">⟶</span>
+        <div class="vbox c">cache / FXMLLoader</div><span class="varrow">⟶</span>
+        <div class="vbox a">StackPane contenido</div>
+      </div>
+
+      <div class="vtit">23.5 Guardar un departamento</div>
+      <div class="vflujo">
+        <div class="vbox a">Campos del formulario</div><span class="varrow">⟶</span>
+        <div class="vbox b">onGuardar()</div><span class="varrow">⟶</span>
+        <div class="vbox c">Departamento.builder()</div><span class="varrow">⟶</span>
+        <div class="vbox c">Service: normalizar + validar</div><span class="varrow">⟶</span>
+        <div class="vbox d">Repository.insert()</div><span class="varrow">⟶</span>
+        <div class="vbox e">INSERT + commit</div>
+      </div>
+
+      <div class="vtit">23.6 Crear y finalizar un contrato</div>
+      <div class="vflujo">
+        <div class="vbox a">cbxInquilino + cbxDepto</div><span class="varrow">⟶</span>
+        <div class="vbox b">onGuardar()</div><span class="varrow">⟶</span>
+        <div class="vbox c">validarContrato()</div><span class="varrow">⟶</span>
+        <div class="vbox d">findVigenteSuperpuesto()</div><span class="varrow">⟶</span>
+        <div class="vbox e">INSERT contrato</div>
+      </div>
+      <div class="vflujo">
+        <div class="vbox b">onFinalizar()</div><span class="varrow">⟶</span>
+        <div class="vbox c">ContratoServiceImp.finalizar()</div><span class="varrow">⟶</span>
+        <div class="vbox d">UPDATE + INSERT + UPDATE</div><span class="varrow">⟶</span>
+        <div class="vbox e">Una transacción</div>
+      </div>
+
+      <div class="vtit">23.7 Pago y nota de venta</div>
+      <div class="vflujo">
+        <div class="vbox a">Formulario de pago</div><span class="varrow">⟶</span>
+        <div class="vbox b">onGuardar()</div><span class="varrow">⟶</span>
+        <div class="vbox c">periodo → día 1</div><span class="varrow">⟶</span>
+        <div class="vbox d">PagoRepository.insert()</div><span class="varrow">⟶</span>
+        <div class="vbox e">INSERT pago</div>
+      </div>
+      <div class="vflujo">
+        <div class="vbox a">Fila seleccionada</div><span class="varrow">⟶</span>
+        <div class="vbox b">onImprimirNota()</div><span class="varrow">⟶</span>
+        <div class="vbox c">NotaVenta.lineas()</div><span class="varrow">⟶</span>
+        <div class="vbox d">ImpresoraWindows / Serial</div><span class="varrow">⟶</span>
+        <div class="vbox e">Ticket 58 mm</div>
+      </div>
+
+      <div class="vtit">23.8 Conexión a la base (H2 o Supabase)</div>
+      <div class="vflujo">
+        <div class="vbox d">application.properties</div><span class="varrow">⟶</span>
+        <div class="vbox d">SUPABASE_DB_* (env)</div><span class="varrow">⟶</span>
+        <div class="vbox c">DatabaseConfig</div><span class="varrow">⟶</span>
+        <div class="vbox c">HikariCP</div><span class="varrow">⟶</span>
+        <div class="vbox e">JDBC PostgreSQL / H2</div>
+      </div>
+      <div class="vflujo">
+        <div class="vbox e">Supabase PostgreSQL 17</div><span class="varrow back">⟵</span>
+        <div class="vbox d">PreparedStatement</div><span class="varrow back">⟵</span>
+        <div class="vbox c">Repository</div><span class="varrow back">⟵</span>
+        <div class="vbox b">Controller</div>
+      </div>
+
+      <div class="vtit">23.9 Cómo se aplica el CSS</div>
+      <div class="vflujo">
+        <div class="vbox a">Tema por defecto</div><span class="varrow">⟶</span>
+        <div class="vbox b">App.cargar() → app.css</div><span class="varrow">⟶</span>
+        <div class="vbox a">FXML stylesheets</div><span class="varrow">⟶</span>
+        <div class="vbox b">styleClass (.card, .nav-button)</div><span class="varrow">⟶</span>
+        <div class="vbox c">Interfaz final azul</div>
+      </div>
+
+      <div class="vtit apk-apartado">23.10 APK con Supabase REST</div>
+      <div class="vflujo apk-apartado">
+        <div class="vbox a">LoginActivity / MainActivity</div><span class="varrow">⟶</span>
+        <div class="vbox b">SupabaseClient</div><span class="varrow">⟶</span>
+        <div class="vbox d">GET / POST / PATCH / DELETE</div><span class="varrow">⟶</span>
+        <div class="vbox e">Supabase REST</div><span class="varrow">⟶</span>
+        <div class="vbox c">JSONObject / JSONArray</div>
+      </div>
+      <div class="vflujo apk-apartado">
+        <div class="vbox c">ItemAdapter.setDatos()</div><span class="varrow">⟶</span>
+        <div class="vbox b">filtrar()</div><span class="varrow">⟶</span>
+        <div class="vbox a">ListView + nota compartible</div>
+      </div>
+
+      <div class="vtit">23.11 Generación del .exe</div>
+      <div class="vflujo">
+        <div class="vbox d">mvn package</div><span class="varrow">⟶</span>
+        <div class="vbox d">target\app (JARs)</div><span class="varrow">⟶</span>
+        <div class="vbox c">jpackage + icono.ico</div><span class="varrow">⟶</span>
+        <div class="vbox b">SysAlquileres.exe + runtime</div><span class="varrow">⟶</span>
+        <div class="vbox c">ZIP portable</div>
+      </div>
+
+      <div class="vtit">23.12 Los 4 pilares como mapa</div>
+      <div class="vflujo">
+        <div class="vbox a">Encapsulamiento · campos privados</div><span class="varrow">⟶</span>
+        <div class="vbox b">Abstracción · interfaces</div><span class="varrow">⟶</span>
+        <div class="vbox c">Herencia · AbstractJpaRepository</div><span class="varrow">⟶</span>
+        <div class="vbox d">Polimorfismo · getBean()</div>
+      </div>
+      <div class="aviso verde">Si entiendes estos 12 mapas, entiendes el proyecto completo: quién llama a quién y dónde viaja cada dato.</div>
+    </section>
+
+    <!-- 24 -->
+    <section id="s24">
+      <h2><span class="num">24</span> Desde cero (para quien solo sabe fundamentos)</h2>
+      <p class="intro">Esta sección está escrita para alguien que apenas sabe qué es una variable, un <code>if</code> y un método. Si puedes explicar esto, puedes explicar el proyecto entero.</p>
+
+      <h3 class="sub">24.1 Idea mínima de cada concepto</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Concepto</th><th>Qué es</th><th>Analogía</th><th>Dónde está en SysAlquileres</th></tr>
+        <tr><td>Clase</td><td>Molde para crear objetos</td><td>Plano de un departamento</td><td><code>Departamento.java</code></td></tr>
+        <tr><td>Objeto</td><td>Una instancia de la clase</td><td>El departamento 101</td><td><code>Departamento.builder()…build()</code></td></tr>
+        <tr><td>Atributo</td><td>Dato dentro del objeto</td><td>Número, piso, precio</td><td><code>private BigDecimal precioMensual</code></td></tr>
+        <tr><td>Método</td><td>Acción que puede hacer</td><td>Guardar, buscar, eliminar</td><td><code>save()</code>, <code>findAll()</code></td></tr>
+        <tr><td>Constructor</td><td>Cómo se crea el objeto</td><td>Llenar el plano al construir</td><td><code>DepartamentoController(service)</code></td></tr>
+        <tr><td>Interfaz</td><td>Contrato de métodos, sin cuerpo</td><td>La lista de tareas del puesto</td><td><code>IDepartamentoService</code></td></tr>
+        <tr><td>Implementación</td><td>La clase que hace lo que dice la interfaz</td><td>La persona que hace el trabajo</td><td><code>DepartamentoServiceImp</code></td></tr>
+        <tr><td>Herencia</td><td>Hijo recibe métodos del padre</td><td>Un hijo aprende oficio del padre</td><td><code>DepartamentoRepository</code> hereda el CRUD</td></tr>
+        <tr><td>Encapsulamiento</td><td>Ocultar datos internos</td><td>No dar la llave del cajón, dar un recibo</td><td>campos <code>private</code> + getters</td></tr>
+        <tr><td>Polimorfismo</td><td>Una interfaz, varias implementaciones</td><td>Mismo botón sirve para varios módulos</td><td><code>getBean(IContratoService)</code></td></tr>
+        <tr><td><code>static</code></td><td>Único para toda la clase</td><td>Una sola sesión para todo el programa</td><td><code>Sesion.actual</code></td></tr>
+        <tr><td><code>new</code></td><td>Crea un objeto en memoria</td><td>Fabricar una ficha nueva</td><td><code>new TableCell&lt;&gt;()</code></td></tr>
+      </table></div>
+
+      <h3 class="sub">24.2 Cómo leer un archivo <code>.java</code> en 5 pasos</h3>
+      <ol>
+        <li>Mira el <strong>package</strong>: dónde vive dentro del proyecto.</li>
+        <li>Lee los <strong>import</strong>: de qué otras clases depende.</li>
+        <li>Mira la firma: <code>class X extends Y implements Z</code> → herencia e interfaces.</li>
+        <li>Busca los <strong>campos</strong> (datos) y el <strong>constructor</strong> (qué recibe).</li>
+        <li>Lee los <strong>métodos</strong>: cada uno es una acción. Empieza por <code>initialize()</code> o <code>on…()</code>.</li>
+      </ol>
+
+      <h3 class="sub">24.3 Cómo leer un <code>.fxml</code> en 5 pasos</h3>
+      <ol>
+        <li>Lee los <code>&lt;?import …?&gt;</code> del inicio: qué controles se usan.</li>
+        <li>Busca <code>fx:controller</code>: qué clase Java maneja esa pantalla.</li>
+        <li>Busca los <code>fx:id</code>: son los nombres que el controlador usa con <code>@FXML</code>.</li>
+        <li>Busca los <code>onAction="#metodo"</code>: qué método se ejecuta al hacer clic.</li>
+        <li>Mira <code>styleClass</code>: engancha el diseño del <code>app.css</code>.</li>
+      </ol>
+      <pre>&lt;Button fx:id="btnGuardar" text="Guardar" onAction="#onGuardar"
+        styleClass="boton-primario"/&gt;
+// → el FXML dice: "botón Guardar, llámase btnGuardar, al clicar ejecuta onGuardar,
+//    y ponle el estilo boton-primario del CSS"</pre>
+
+      <h3 class="sub">24.4 Cómo leer el <code>app.css</code> en 5 pasos</h3>
+      <ol>
+        <li>Un <code>.clase</code> (punto) aplica a todos los nodos con ese <code>styleClass</code>.</li>
+        <li>Las propiedades siempre empiezan con <code>-fx-</code>, por ejemplo <code>-fx-background-color</code>.</li>
+        <li><code>:hover</code> es el efecto al pasar el mouse; <code>:focused</code> al seleccionar.</li>
+        <li>Los colores pueden ser hexadecimales (<code>#2563EB</code>) o <code>linear-gradient(...)</code>.</li>
+        <li><code>-fx-effect: dropshadow(...)</code> es la sombra de las tarjetas.</li>
+      </ol>
+      <pre>.boton-primario {
+    -fx-background-color: #2563EB;   /* color azul */
+    -fx-text-fill: white;            /* texto blanco */
+    -fx-background-radius: 9;        /* esquinas redondeadas */
+}
+.boton-primario:hover { -fx-background-color: #1D4ED8; }  /* al pasar el mouse */</pre>
+
+      <h3 class="sub" id="s24-5">24.5 Videos para reforzar (búsquedas de YouTube)</h3>
+      <p>Son enlaces de <strong>búsqueda</strong>, no videos concretos: así siempre aparecen los resultados vigentes y puedes elegir el que mejor explique. Busca los que tengan muchas vistas y estén en español.</p>
+      <div class="tbl-wrap"><table>
+        <tr><th>Tema</th><th>Qué buscar en YouTube</th></tr>
+        <tr><td>POO desde cero (clase, objeto, herencia…)</td><td><a href="https://www.youtube.com/results?search_query=programacion+orientada+a+objetos+java+espa%C3%B1ol+principiantes" target="_blank" rel="noopener">Abrir búsqueda: POO Java español</a></td></tr>
+        <tr><td>JavaFX + FXML</td><td><a href="https://www.youtube.com/results?search_query=javafx+fxml+tutorial+espa%C3%B1ol+principiantes" target="_blank" rel="noopener">Abrir búsqueda: JavaFX FXML español</a></td></tr>
+        <tr><td>CSS en JavaFX</td><td><a href="https://www.youtube.com/results?search_query=javafx+css+styles+tutorial+espa%C3%B1ol" target="_blank" rel="noopener">Abrir búsqueda: JavaFX CSS español</a></td></tr>
+        <tr><td>JDBC y bases de datos en Java</td><td><a href="https://www.youtube.com/results?search_query=java+jdbc+base+de+datos+tutorial+espa%C3%B1ol" target="_blank" rel="noopener">Abrir búsqueda: JDBC Java español</a></td></tr>
+        <tr><td>Supabase / PostgreSQL</td><td><a href="https://www.youtube.com/results?search_query=supabase+postgresql+tutorial+espa%C3%B1ol" target="_blank" rel="noopener">Abrir búsqueda: Supabase español</a></td></tr>
+        <tr><td>Git y GitHub</td><td><a href="https://www.youtube.com/results?search_query=git+github+tutorial+espa%C3%B1ol+principiantes" target="_blank" rel="noopener">Abrir búsqueda: Git GitHub español</a></td></tr>
+        <tr class="apk-apartado"><td>Android en Java</td><td><a href="https://www.youtube.com/results?search_query=android+java+tutorial+espa%C3%B1ol+principiantes" target="_blank" rel="noopener">Abrir búsqueda: Android Java español</a></td></tr>
+      </table></div>
+      <div class="aviso ambar">No hace falta verlos todos: elige <strong>uno por tema</strong>, de 10 a 20 minutos, y vuelve a esta guía. Lo importante es reconocer los mismos nombres (<code>FXMLLoader</code>, <code>@FXML</code>, <code>-fx-</code>, <code>PreparedStatement</code>).</div>
+
+      <h3 class="sub">24.6 Ruta de estudio de 7 días</h3>
+      <div class="tbl-wrap"><table>
+        <tr><th>Día</th><th>Qué hacer</th><th>Secciones de esta guía</th></tr>
+        <tr><td>1</td><td>Entender problema, capas y carpetas</td><td>1, 2, 3</td></tr>
+        <tr><td>2</td><td>Aprender los 4 pilares</td><td>7, 24.1</td></tr>
+        <tr><td>3</td><td>Seguir el arranque y el login</td><td>4, 6 (A y B), 23.2, 23.3</td></tr>
+        <tr><td>4</td><td>Guardar departamentos e inquilinos</td><td>6 (D y E), 21, 23.5</td></tr>
+        <tr><td>5</td><td>Contratos, pagos y nota</td><td>6 (F, G, H), 23.6, 23.7</td></tr>
+        <tr><td>6</td><td>Base de datos y Supabase</td><td>9, 10, 23.8</td></tr>
+        <tr><td>7</td><td>APK, exe, preguntas y exposición</td><td>12, 13, 15, 23.10, 23.11</td></tr>
+      </table></div>
+
+      <h3 class="sub">24.7 Cómo explicarlo en 3 frases</h3>
+      <ol>
+        <li>“Es un sistema de escritorio y móvil para alquilar departamentos, con cuatro módulos y validaciones.”</li>
+        <li>“Está por capas: la vista muestra, el controller recibe clics, el service valida y el repository habla con la base.”</li>
+        <li>“La base puede ser H2 local o Supabase en la nube, y el mismo modelo se usa en el APK con REST.”</li>
+      </ol>
+      <div class="aviso verde"><strong>Prueba rápida:</strong> si puedes explicar esas 3 frases y dibujar el mapa 23.1 sin mirar, ya puedes exponer el proyecto.</div>
+    </section>
+
+
+    <!-- 25 -->
+    <section id="s25">
+      <h2><span class="num">★</span> Reparto del equipo (Jhoel, Diego y Jimmi)</h2>
+      <p class="intro">Esta es la exposición del <strong>proyecto</strong>, no de esta guía. Cada persona explica clases, flujos y su CRUD. Marca tu progreso: se guarda en el navegador.</p>
+
+      <div class="resumen">
+        <h2>Reparto del proyecto</h2>
+        <div class="tbl-wrap"><table>
+          <tr><th>Persona</th><th>CRUD que explica</th><th>Código que explica</th><th>Demo en vivo</th></tr>
+          <tr><td>Jhoel</td><td>Departamentos e Inquilinos</td><td><code>App</code>, <code>App.Ventana</code>, <code>AppContext</code>, controladores y modelos</td><td>Login, alta de departamento e inquilino jurídica</td></tr>
+          <tr><td>Diego</td><td>Contratos</td><td><code>DatabaseConfig</code>, repositorios, services, SQL y Supabase</td><td>Crear contrato, error por solapamiento y finalizar</td></tr>
+          <tr><td>Jimmi</td><td>Pagos + nota de venta</td><td>FXML/CSS, <code>impresion/</code>, <code>jpackage</code> e iconos</td><td>Registrar pago e imprimir/compartir la nota; mostrar el <code>.exe</code></td></tr>
+        </table></div>
+        <p class="ptexto">Hay 4 módulos y 3 personas: Jhoel toma los dos CRUD más simples y explica la arquitectura; Diego el CRUD con más reglas y la base; Jimmi Pagos (con impresión) y la entrega.</p>
+      </div>
+
+      <div class="grid">
+        <div class="persona" id="jhoel">
+          <h3>Jhoel</h3>
+          <div class="ptexto">Arquitectura, clases base y los dos CRUD simples</div>
+          <span class="crud">CRUD: Departamentos + Inquilinos</span>
+          <ul class="lista">
+            <li><input type="checkbox" data-k="j1"><div>Explicar <code>App.java</code> y <code>App.Ventana</code>: arranque, FXML, CSS e icono<span class="vinculo">Apoyo: guía §1, §3 y flujo A</span></div></li>
+            <li><input type="checkbox" data-k="j2"><div>Explicar <code>AppContext</code>: singleton e inyección con <code>getBean()</code><span class="vinculo">Apoyo: guía §4 y flujo C</span></div></li>
+            <li><input type="checkbox" data-k="j3"><div>Explicar los 4 pilares OOP con clases reales<span class="vinculo">Apoyo: guía §7</span></div></li>
+            <li><input type="checkbox" data-k="j4"><div>CRUD Departamentos: controller → service → repository; número único y no borrar con contratos<span class="vinculo">Apoyo: guía flujo D y §21</span></div></li>
+            <li><input type="checkbox" data-k="j5"><div>CRUD Inquilinos: natural vs jurídica y DNI único<span class="vinculo">Apoyo: guía flujo E</span></div></li>
+            <li><input type="checkbox" data-k="j6"><div>Explicar <code>Sesion</code>, <code>LoginController</code> y el login<span class="vinculo">Apoyo: guía flujo B</span></div></li>
+          </ul>
+          <div class="nota"><strong>Demo:</strong> entrar con admin/admin123, registrar departamento e inquilino jurídica y mostrar el error de DNI repetido.</div>
+          <div class="progreso"><i></i></div><div class="ptexto">Progreso: <span>0</span>/6</div>
+        </div>
+
+        <div class="persona diego" id="diego">
+          <h3>Diego</h3>
+          <div class="ptexto">Base de datos, reglas de negocio y transacciones</div>
+          <span class="crud">CRUD: Contratos</span>
+          <ul class="lista">
+            <li><input type="checkbox" data-k="d1"><div>Explicar <code>DatabaseConfig</code>: H2 vs Supabase, HikariCP, SSL y variables de entorno<span class="vinculo">Apoyo: guía §10 y flujo I</span></div></li>
+            <li><input type="checkbox" data-k="d2"><div>Explicar el modelo de datos: 7 tablas, relaciones, vistas y scripts SQL<span class="vinculo">Apoyo: guía §9</span></div></li>
+            <li><input type="checkbox" data-k="d3"><div>Explicar <code>AbstractJpaRepository&lt;T,ID&gt;</code>, <code>SqlHelper</code>, PreparedStatement y generics<span class="vinculo">Apoyo: guía §20</span></div></li>
+            <li><input type="checkbox" data-k="d4"><div>CRUD Contratos: controller → service → repository<span class="vinculo">Apoyo: guía flujo F</span></div></li>
+            <li><input type="checkbox" data-k="d5"><div>Explicar <code>findVigenteSuperpuesto()</code> y el <code>BusinessException</code> por fechas cruzadas</div></li>
+            <li><input type="checkbox" data-k="d6"><div>Explicar <code>ContratoRepository.finalizar()</code>: transacción con UPDATE, INSERT y liberación del departamento</div></li>
+          </ul>
+          <div class="nota"><strong>Demo:</strong> crear contrato, intentar uno con fechas cruzadas y finalizar para ver el departamento disponible.</div>
+          <div class="progreso"><i></i></div><div class="ptexto">Progreso: <span>0</span>/6</div>
+        </div>
+
+        <div class="persona jimmi" id="jimmi">
+          <h3>Jimmi</h3>
+          <div class="ptexto">Interfaz, impresión y empaquetado</div>
+          <span class="crud">CRUD: Pagos + nota de venta</span>
+          <ul class="lista">
+            <li><input type="checkbox" data-k="m1"><div>Explicar FXML y <code>app.css</code>: <code>fx:id</code>, <code>onAction</code>, <code>styleClass</code> y Scene Builder<span class="vinculo">Apoyo: guía §11</span></div></li>
+            <li><input type="checkbox" data-k="m2"><div>Explicar <code>MainController</code> y el sidebar con <code>nav-button-activo</code><span class="vinculo">Apoyo: guía flujo C</span></div></li>
+            <li><input type="checkbox" data-k="m3"><div>CRUD Pagos: controller → service → repository; periodo al día 1, montos y métodos<span class="vinculo">Apoyo: guía flujo G</span></div></li>
+            <li><input type="checkbox" data-k="m4"><div>Explicar <code>NotaVenta</code>, <code>NotaVentaDialog</code>, <code>ImpresoraWindows</code> y <code>ImpresoraSerial</code><span class="vinculo">Apoyo: guía flujo H</span></div></li>
+            <li><input type="checkbox" data-k="m5"><div>Explicar <code>jpackage</code>, el ZIP portable y los iconos<span class="vinculo">Apoyo: guía §13 y flujo K</span></div></li>
+            <li><input type="checkbox" data-k="m6"><div>Mostrar el <code>.exe</code> funcionando y la nota impresa de 58 mm</div></li>
+          </ul>
+          <div class="nota"><strong>Demo:</strong> registrar un pago, imprimir/compartir la nota y mostrar el ejecutable.</div>
+          <div class="progreso"><i></i></div><div class="ptexto">Progreso: <span>0</span>/6</div>
+        </div>
+      </div>
+
+      <details><summary>Orden de la exposición (12 minutos)</summary>
+        <ol>
+          <li><strong>0:00 – 2:00 · Jhoel:</strong> problema, capas, <code>AppContext</code> y pilares OOP.</li>
+          <li><strong>2:00 – 4:30 · Jhoel:</strong> login + CRUD Departamentos e Inquilinos.</li>
+          <li><strong>4:30 – 7:30 · Diego:</strong> base, Supabase y CRUD Contratos con solapamiento y finalización.</li>
+          <li><strong>7:30 – 10:30 · Jimmi:</strong> FXML/CSS, CRUD Pagos, nota de venta y <code>.exe</code>.</li>
+          <li><strong>10:30 – 12:00 · Todos:</strong> cierre y preguntas de la sección 15.</li>
+        </ol>
+      </details>
+      <div class="nota"><strong>🎬 Videos de apoyo (más en la sección 24.5):</strong>
+        <a href="https://www.youtube.com/results?search_query=javafx+fxml+tutorial+espa%C3%B1ol+principiantes" target="_blank" rel="noopener">JavaFX/FXML</a> ·
+        <a href="https://www.youtube.com/results?search_query=javafx+css+tutorial+espa%C3%B1ol" target="_blank" rel="noopener">JavaFX CSS</a> ·
+        <a href="https://www.youtube.com/results?search_query=programacion+orientada+a+objetos+java+espa%C3%B1ol+principiantes" target="_blank" rel="noopener">POO Java</a> ·
+        <a href="https://www.youtube.com/results?search_query=java+jdbc+base+de+datos+tutorial+espa%C3%B1ol" target="_blank" rel="noopener">JDBC</a>
+      </div>
+      <div class="aviso verde">Con esta sección + los 24 apartados anteriores + los videos + los mapas con flechas, tienen todo lo necesario para estudiar y exponer el proyecto.</div>
+    </section>
+
+  </div>
+</div>
+
+<footer>SysAlquileres v2.0 · Guía de estudio completa · POO 2026 · UPeU Juliaca</footer>
+
+<script>
+(function(){
+  const input = document.getElementById('buscar');
+  const secciones = Array.from(document.querySelectorAll('section'));
+  const enlaces = Array.from(document.querySelectorAll('#toc a'));
+
+  input.addEventListener('input', function(){
+    const q = this.value.trim().toLowerCase();
+    let visibles = 0;
+    secciones.forEach(function(sec){
+      const texto = sec.textContent.toLowerCase();
+      const mostrar = q === '' || texto.indexOf(q) !== -1;
+      sec.classList.toggle('hidden', !mostrar);
+      if (mostrar) visibles++;
+
+      if (q !== '') {
+        sec.innerHTML = sec.innerHTML.replace(/<mark>/g,'').replace(/<\/mark>/g,'');
+        const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')','gi');
+        sec.innerHTML = sec.innerHTML.replace(re,'<mark>$1</mark>');
+      } else {
+        sec.innerHTML = sec.innerHTML.replace(/<mark>/g,'').replace(/<\/mark>/g,'');
+      }
+    });
+    enlaces.forEach(function(a){
+      const id = a.getAttribute('href').slice(1);
+      const sec = document.getElementById(id);
+      a.classList.toggle('hidden', sec && sec.classList.contains('hidden'));
+    });
+    input.title = visibles + ' secciones encontradas';
+  });
+})();
+
+function toggleApk(){
+  var bloques = document.querySelectorAll('.apk-apartado');
+  var mostrar = Array.from(bloques).some(function(b){return !b.classList.contains('visible');});
+  bloques.forEach(function(b){ b.classList.toggle('visible', mostrar); });
+  var boton = document.getElementById('btnApk');
+  if (boton) boton.textContent = mostrar ? '📱 Ocultar APK' : '📱 Mostrar APK (apartado)';
+}
+(function(){
+  function actualizar(grupo){
+    var cajas = Array.from(grupo.querySelectorAll('input[type=checkbox]'));
+    var marcadas = cajas.filter(function(c){return c.checked;}).length;
+    grupo.querySelector('.progreso i').style.width = (marcadas/cajas.length*100)+'%';
+    grupo.querySelector('.ptexto span').textContent = marcadas;
+  }
+  Array.from(document.querySelectorAll('.persona')).forEach(function(grupo){
+    Array.from(grupo.querySelectorAll('input[type=checkbox]')).forEach(function(caja){
+      if (localStorage.getItem('sysalq_'+caja.dataset.k) === '1') caja.checked = true;
+      caja.addEventListener('change', function(){
+        localStorage.setItem('sysalq_'+caja.dataset.k, caja.checked ? '1':'0');
+        actualizar(grupo);
+      });
+    });
+    actualizar(grupo);
+  });
+})();
+</script>
+</body>
+</html>

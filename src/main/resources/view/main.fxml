@@ -63,6 +63,22 @@
             </graphic>
         </Button>
 
+        <Button fx:id="btnConfiguracion" text="Config. impresión" onAction="#irConfiguracion"
+                styleClass="nav-button" maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#C7D2FE" scaleX="0.75" scaleY="0.75"
+                         content="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.03 7.03 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.78a.5.5 0 0 0 .12.64l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.43.34.68.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.25.42.5.42h3.84c.25 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.25.12.54.02.68-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnUsuarios" text="Accesos clientes" onAction="#irUsuarios"
+                styleClass="nav-button" maxWidth="Infinity" alignment="CENTER_LEFT">
+            <graphic>
+                <SVGPath fill="#C7D2FE" scaleX="0.75" scaleY="0.75"
+                         content="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 0 1 6 0v3H9zm3 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+            </graphic>
+        </Button>
+
         <Region VBox.vgrow="ALWAYS"/>
 
         <Label text="SESIÓN" styleClass="sidebar-seccion"/>

@@ -27,6 +27,8 @@ public class MainController {
     @FXML private Button btnInquilinos;
     @FXML private Button btnContratos;
     @FXML private Button btnPagos;
+    @FXML private Button btnConfiguracion;
+    @FXML private Button btnUsuarios;
 
     private static final String CLASE_ACTIVO = "nav-button-activo";
 
@@ -47,6 +49,10 @@ public class MainController {
                 "Controla la vigencia de los alquileres", btnContratos));
         vistas.put("pagos", new Vista("pagos.fxml", "Pagos y notas de venta",
                 "Registra pagos y emite la nota de venta en 58 mm", btnPagos));
+        vistas.put("configuracion", new Vista("configuracion-impresion.fxml", "Configuración de impresión",
+                "Papel, conexión y prueba de la impresora térmica", btnConfiguracion));
+        vistas.put("usuarios", new Vista("usuarios.fxml", "Accesos de clientes",
+                "Consulta y recupera la clave de acceso a la APK", btnUsuarios));
 
         mostrarUsuario();
         abrir("departamentos");
@@ -86,6 +92,16 @@ public class MainController {
     @FXML
     private void irPagos() {
         abrir("pagos");
+    }
+
+    @FXML
+    private void irConfiguracion() {
+        abrir("configuracion");
+    }
+
+    @FXML
+    private void irUsuarios() {
+        abrir("usuarios");
     }
 
     private void abrir(String clave) {

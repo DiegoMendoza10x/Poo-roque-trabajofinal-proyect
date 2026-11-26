@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SysAlquileres · Presentación interactiva</title>
+<style>
+  :root{
+    --azul:#2563EB; --azul-claro:#60A5FA; --azul-oscuro:#1E3A8A; --noche:#071024;
+    --texto:#0F172A; --suave:#64748B; --linea:#E2E8F0; --fondo:#F8FAFC;
+    --verde:#16A34A; --rojo:#DC2626; --ambar:#D97706;
+    --px:0px; --py:0px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--texto);
+    background:radial-gradient(circle at 12% 10%,#17306b 0,#0B1B3A 42%,var(--noche) 100%);
+    overflow:hidden;
+  }
+  #barra{position:fixed;top:0;left:0;height:5px;width:0;z-index:60;transition:width .35s cubic-bezier(.2,.8,.2,1);
+    background:linear-gradient(90deg,#22D3EE,#60A5FA,#2563EB)}
+  #contador{position:fixed;top:18px;right:26px;color:#DBEAFE;font-size:13px;letter-spacing:.1em;z-index:60;font-weight:700}
+  .deck{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:26px}
+  .slide{
+    display:none;position:relative;flex-direction:column;gap:14px;
+    width:min(1280px,95vw);aspect-ratio:16/9;background:#fff;border-radius:24px;
+    padding:clamp(20px,2.8vw,46px);box-shadow:0 36px 90px rgba(0,0,0,.5);overflow:hidden;
+  }
+  .slide.activa{display:flex;animation:entrar .5s cubic-bezier(.2,.8,.2,1) both}
+  @keyframes entrar{from{opacity:0;transform:translateY(26px) scale(.985)}to{opacity:1;transform:none}}
+  .slide::before{content:"";position:absolute;top:0;left:0;right:0;height:7px;
+    background:linear-gradient(90deg,#22D3EE,var(--azul),#A78BFA)}
+  .reveal{opacity:0;transform:translateY(16px)}
+  .slide.activa .reveal{animation:subir .55s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--d,0)*70ms)}
+  @keyframes subir{to{opacity:1;transform:none}}
+  h1{font-size:clamp(34px,5vw,68px);margin:0 0 10px;line-height:1.03;letter-spacing:-.03em}
+  h2{font-size:clamp(23px,3vw,42px);margin:0;line-height:1.1;letter-spacing:-.02em}
+  h3{font-size:clamp(14px,1.5vw,20px);margin:0 0 8px}
+  p{font-size:clamp(12px,1.3vw,18px);line-height:1.5;margin:6px 0}
+  .eyebrow{color:var(--azul);font-weight:800;letter-spacing:.18em;font-size:clamp(9px,1vw,13px);text-transform:uppercase}
+  .bajada{color:var(--suave);font-size:clamp(12px,1.35vw,19px);margin:0}
+  .contenido{flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+  .grid2{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(12px,2vw,30px);align-items:center;flex:1;min-height:0}
+  .grid2-igual{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,1.8vw,26px);flex:1;min-height:0}
+  .col{display:flex;flex-direction:column;gap:10px;min-height:0}
+  .card{background:var(--fondo);border:1px solid var(--linea);border-radius:16px;padding:clamp(11px,1.5vw,20px)}
+  .card.azul{background:linear-gradient(145deg,#EFF6FF,#DBEAFE);border-color:#BFDBFE}
+  .card.noche{background:linear-gradient(145deg,#0B1B3A,#152c5e);color:#fff;border-color:#273c75}
+  .card.noche h3{color:#BFDBFE}
+  ul.lista{margin:0;padding-left:19px}
+  ul.lista li{font-size:clamp(11px,1.2vw,16px);line-height:1.42;margin:6px 0}
+  ul.lista li::marker{color:var(--azul)}
+  .checks{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+  .checks li{position:relative;padding-left:24px;font-size:clamp(11px,1.2vw,16px);line-height:1.35}
+  .checks li::before{content:"✓";position:absolute;left:0;top:0;color:var(--verde);font-weight:900}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8;border-radius:999px;padding:6px 13px;font-size:clamp(10px,1vw,14px);font-weight:700}
+  .chip.verde{background:#DCFCE7;border-color:#BBF7D0;color:#15803D}
+  .chip.gris{background:#F1F5F9;border-color:#E2E8F0;color:#475569}
+  .screenshot{width:100%;max-height:100%;object-fit:contain;border:1px solid var(--linea);border-radius:14px;
+    box-shadow:0 12px 32px rgba(15,23,42,.14);background:#fff;cursor:zoom-in;transition:transform .25s,box-shadow .25s}
+  .screenshot:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 20px 45px rgba(37,99,235,.25)}
+  .pista{font-size:11px;color:var(--suave);text-align:center}
+  pre{background:var(--noche);color:#E2E8F0;border-radius:14px;padding:clamp(9px,1.2vw,16px);margin:0;overflow:auto;
+    font-family:Consolas,"Courier New",monospace;font-size:clamp(9px,1vw,13px);line-height:1.35;white-space:pre}
+  .nota-destacada{background:#FFF7ED;border-left:5px solid var(--ambar);border-radius:10px;padding:9px 13px;font-size:clamp(10px,1.1vw,15px);color:#7C2D12}
+  /* Portada */
+  .portada{color:#fff;justify-content:center;background:linear-gradient(120deg,rgba(7,16,36,.88),rgba(30,58,138,.78)),url('assets/portada.svg') center/cover no-repeat}
+  .portada::before{background:linear-gradient(90deg,#22D3EE,#60A5FA,#fff)}
+  .portada h1{font-size:clamp(48px,7.4vw,96px);color:#fff;text-shadow:0 12px 40px rgba(0,0,0,.45)}
+  .portada .bajada{color:#DBEAFE;font-size:clamp(15px,2vw,26px)}
+  .portada .chip{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+  .fondo-parallax{position:absolute;inset:-30px;background:url('assets/portada.svg') center/cover;
+    transform:translate(var(--px),var(--py)) scale(1.06);opacity:.45;z-index:-1;filter:saturate(1.2)}
+  .marca{position:absolute;right:38px;top:34px;width:clamp(70px,8vw,110px);height:clamp(70px,8vw,110px);
+    border-radius:24px;background:linear-gradient(145deg,#3B82F6,#1E3A8A);display:grid;place-items:center;
+    font-weight:900;font-size:clamp(26px,3vw,42px);box-shadow:0 18px 50px rgba(37,99,235,.55)}
+  .pie{position:absolute;bottom:20px;left:clamp(20px,2.8vw,46px);color:#94A3B8;font-size:11px}
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .stat{background:var(--fondo);border:1px solid var(--linea);border-radius:14px;padding:13px;text-align:center}
+  .stat b{display:block;font-size:clamp(24px,3vw,40px);color:var(--azul);line-height:1}
+  .stat span{font-size:clamp(9px,1vw,13px);color:var(--suave)}
+  .tabla{width:100%;border-collapse:collapse;font-size:clamp(10px,1.05vw,14px)}
+  .tabla th,.tabla td{border-bottom:1px solid var(--linea);padding:7px 9px;text-align:left}
+  .tabla th{color:var(--azul-oscuro);background:#EFF6FF}
+  /* Flujo */
+  .flujo{display:flex;flex-direction:column;gap:7px}
+  .paso{background:#fff;border:1px solid var(--linea);border-left:5px solid var(--azul);border-radius:12px;
+    padding:9px 13px;font-size:clamp(11px,1.15vw,15px)}
+  .paso strong{color:var(--azul-oscuro)}
+  .flecha{text-align:center;color:#93C5FD;font-size:18px;line-height:1}
+  .flujo-h{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .flujo-h .paso{flex:1;min-width:120px}
+  /* Capas interactivas */
+  .capas{display:flex;flex-direction:column;gap:7px}
+  .capa{border:1px solid var(--linea);background:#fff;border-radius:12px;padding:10px 13px;cursor:pointer;
+    font-size:clamp(11px,1.15vw,15px);transition:.2s;display:flex;justify-content:space-between;align-items:center}
+  .capa:hover{border-color:#93C5FD;transform:translateX(4px)}
+  .capa.activa{background:linear-gradient(90deg,#DBEAFE,#EFF6FF);border-color:var(--azul);font-weight:700}
+  .capa small{color:var(--suave);font-size:10px}
+  #detalleCapa{transition:.25s}
+  /* Ticket y simulador */
+  .ticket{background:#FFFDF6;border:1px dashed #CBD5E1;border-radius:14px;padding:12px;position:relative;overflow:hidden}
+  .ticket pre{background:transparent;color:#0F172A;padding:0;font-size:clamp(8px,.85vw,12px);min-height:0}
+  .ticket::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;
+    background:repeating-linear-gradient(90deg,transparent 0 6px,#E2E8F0 6px 7px)}
+  .sim-pre{background:#111827;color:#A7F3D0}
+  .barra-print{height:9px;background:#E2E8F0;border-radius:999px;overflow:hidden}
+  .barra-print i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--verde),#4ADE80);transition:width .16s}
+  .toggle{display:inline-flex;background:#E2E8F0;padding:4px;border-radius:999px;gap:3px}
+  .toggle button{border:0;background:transparent;border-radius:999px;padding:6px 13px;font-size:clamp(10px,1vw,14px);
+    font-weight:700;cursor:pointer;color:#475569;transition:.2s}
+  .toggle button.sel{background:#fff;color:var(--azul);box-shadow:0 2px 8px rgba(15,23,42,.12)}
+  .boton-demo{border:0;border-radius:10px;background:var(--azul);color:#fff;padding:9px 16px;font-weight:700;cursor:pointer;font-size:13px}
+  .boton-demo:hover{background:var(--azul-oscuro)}
+  .boton-demo:disabled{opacity:.55;cursor:wait}
+  .img-impresora{width:100%;max-height:210px;object-fit:contain;border-radius:14px}
+  .papel{height:0;background:#FFFDF6;border:1px solid #CBD5E1;margin:0 auto;width:62%;overflow:hidden;
+    font-family:Consolas,monospace;font-size:10px;text-align:center;color:#0F172A}
+  .papel.saliendo{animation:imprimir 1.6s ease-out}
+  @keyframes imprimir{0%{height:0}100%{height:105px}}
+  /* Quiz */
+  .quiz-opciones{display:grid;gap:9px}
+  .quiz-opciones button{text-align:left;border:1px solid var(--linea);background:#fff;border-radius:12px;
+    padding:11px 15px;font-size:clamp(11px,1.2vw,16px);cursor:pointer;transition:.2s}
+  .quiz-opciones button:hover{border-color:var(--azul);transform:translateX(4px)}
+  .quiz-opciones button.bien{background:#DCFCE7;border-color:var(--verde)}
+  .quiz-opciones button.mal{background:#FEE2E2;border-color:var(--rojo)}
+  #quizFeedback{min-height:34px;font-size:clamp(11px,1.15vw,15px)}
+  /* Controles y overlays */
+  .controles{position:fixed;bottom:18px;right:24px;display:flex;gap:8px;z-index:70}
+  .controles button{width:42px;height:42px;border-radius:50%;border:1px solid #334155;background:#0B1B3Add;color:#fff;
+    font-size:16px;cursor:pointer;display:grid;place-items:center;transition:.18s}
+  .controles button:hover{background:var(--azul);transform:translateY(-3px)}
+  #puntos{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:70}
+  #puntos button{width:8px;height:8px;border:0;border-radius:50%;background:#475569;cursor:pointer;padding:0;transition:.2s}
+  #puntos button.activo{width:24px;border-radius:99px;background:#60A5FA}
+  .overlay{position:fixed;inset:0;background:rgba(7,16,36,.82);backdrop-filter:blur(8px);z-index:80;display:none;
+    align-items:center;justify-content:center;padding:28px;color:#fff}
+  .overlay.activo{display:flex;animation:entrar .25s both}
+  #panorama .panel,#ayuda .panel{background:#0B1B3A;border:1px solid #334155;border-radius:20px;padding:24px;max-width:1100px;width:100%;max-height:88vh;overflow:auto}
+  .mini-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:16px}
+  .mini{background:#13275a;border:1px solid #2c447e;border-radius:12px;color:#E2E8F0;padding:10px;text-align:left;cursor:pointer;transition:.2s;height:120px;overflow:hidden}
+  .mini:hover{border-color:#60A5FA;transform:translateY(-4px)}
+  .mini .num{color:#60A5FA;font-weight:900;font-size:12px}
+  .mini span{display:block;font-size:12px;line-height:1.2}
+  .mini img{width:100%;height:58px;object-fit:cover;border-radius:6px;margin-top:6px}
+  .notas{display:none;position:fixed;bottom:72px;left:24px;max-width:430px;background:#0B1B3Af2;color:#fff;
+    border:1px solid #334155;border-radius:14px;padding:14px 18px;font-size:13px;line-height:1.45;z-index:65;
+    box-shadow:0 20px 50px rgba(0,0,0,.4)}
+  body.mostrar-notas .notas{display:block}
+  .notas b{color:#93C5FD}
+  #visor{background:rgba(7,16,36,.92);flex-direction:column;gap:12px}
+  #visor img{max-width:92vw;max-height:78vh;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  @media print{
+    @page{size:landscape;margin:10mm}
+    html,body{background:#fff;overflow:visible}
+    .deck{display:block;padding:0}
+    .slide{display:flex!important;width:100%;aspect-ratio:auto;min-height:175mm;border-radius:0;box-shadow:none;page-break-after:always;padding:12mm}
+    .slide .reveal{opacity:1!important;transform:none!important;animation:none!important}
+    .controles,#puntos,#contador,#barra,.notas,.overlay{display:none!important}
+  }
+  @media(max-width:760px){
+    .grid2,.grid2-igual{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}
+    .mini-grid{grid-template-columns:repeat(2,1fr)}.deck{padding:10px}
+  }
+</style>
+</head>
+<body>
+<div id="barra"></div>
+<div id="contador">1 / 23</div>
+
+<main class="deck" id="deck">
+
+<!-- 1 -->
+<section class="slide portada activa" data-title="Portada">
+  <div class="fondo-parallax"></div>
+  <div class="eyebrow reveal" style="--d:0">Proyecto final · POO 2026</div>
+  <h1 class="reveal" style="--d:1">SysAlquileres</h1>
+  <p class="bajada reveal" style="--d:2">Gestión integral de alquileres de departamentos<br>con nota de venta térmica</p>
+  <div class="chips reveal" style="--d:3">
+    <span class="chip">Java 21 + JavaFX 21</span><span class="chip">CRUD completo</span>
+    <span class="chip">PostgreSQL / Supabase</span><span class="chip">Impresora 58 / 80 mm</span>
+  </div>
+  <div class="marca">SA</div>
+  <div class="pie">UPeU Juliaca · 2026 · Usa ← → para navegar, N para notas</div>
+  <aside class="notas"><b>Guion:</b> “Buenos días. Presentamos SysAlquileres, un sistema de escritorio para administrar departamentos, inquilinos, contratos y pagos. Incluye reglas de negocio y una innovación: nota de venta impresa por cable o Bluetooth.”</aside>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-title="Problema y solución">
+  <div class="eyebrow reveal">01 · El problema</div>
+  <h2 class="reveal" style="--d:1">De cuadernos y Excel a un sistema confiable</h2>
+  <p class="bajada reveal" style="--d:2">El alquiler se manejaba con datos dispersos y sin validaciones.</p>
+  <div class="contenido grid2-igual">
+    <div class="card reveal" style="--d:3"><h3>😵 Sin sistema</h3><ul class="lista">
+      <li>Un departamento se podía alquilar dos veces.</li><li>Pagos sin contrato asociado.</li>
+      <li>Fechas de inicio y fin imposibles.</li><li>Inquilinos duplicados con el mismo DNI.</li>
+      <li>Ningún comprobante de lo cobrado.</li></ul></div>
+    <div class="card azul reveal" style="--d:4"><h3>✅ Con SysAlquileres</h3><ul class="checks">
+      <li>Datos centralizados en base de datos.</li><li>Reglas aplicadas antes de guardar.</li>
+      <li>Contratos vinculados a inquilino y depto.</li><li>Estados automáticos.</li>
+      <li>Nota de venta impresa al cobrar.</li></ul></div>
+  </div>
+  <aside class="notas"><b>Énfasis:</b> el valor no es solo digitalizar, sino evitar contradicciones. Mencionar el doble alquiler.</aside>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-title="Objetivos">
+  <div class="eyebrow reveal">02 · Objetivos</div>
+  <h2 class="reveal" style="--d:1">Qué nos propusimos construir</h2>
+  <div class="contenido" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+    <div class="card reveal" style="--d:2"><h3>1️⃣ CRUD completo</h3><p>Alta, lectura, edición y eliminación de los cuatro módulos con búsqueda y filtros.</p></div>
+    <div class="card reveal" style="--d:3"><h3>2️⃣ Reglas de negocio</h3><p>DNI único, fechas correctas y ningún contrato vigente solapado.</p></div>
+    <div class="card reveal" style="--d:4"><h3>3️⃣ Innovación</h3><p>Nota de venta en POS térmica de 58 y 80 mm por cable o Bluetooth.</p></div>
+    <div class="card reveal" style="--d:5"><h3>4️⃣ Persistencia flexible</h3><p>H2 local y PostgreSQL / Supabase en la nube con el mismo código.</p></div>
+  </div>
+  <aside class="notas"><b>Frase:</b> “Cumplimos el CRUD y agregamos un entregable innovador demostrable en vivo.”</aside>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-title="Tecnologías">
+  <div class="eyebrow reveal">03 · Stack</div>
+  <h2 class="reveal" style="--d:1">Tecnologías utilizadas</h2>
+  <div class="contenido">
+    <div class="chips reveal" style="--d:2">
+      <span class="chip">Java 21</span><span class="chip">JavaFX 21</span><span class="chip">FXML</span>
+      <span class="chip">CSS propio</span><span class="chip">Maven</span><span class="chip">H2</span>
+      <span class="chip">PostgreSQL</span><span class="chip">Supabase</span><span class="chip">HikariCP</span>
+      <span class="chip">Jakarta Validation</span><span class="chip">Lombok</span><span class="chip">Logback</span>
+      <span class="chip verde">javax.print</span><span class="chip verde">jSerialComm</span><span class="chip verde">ESC/POS</span>
+    </div>
+    <div class="card azul reveal" style="--d:3"><h3>Ejecución</h3><pre>mvn javafx:run
+mvn -B -DskipTests package</pre></div>
+  </div>
+  <aside class="notas"><b>Pregunta típica:</b> ¿por qué App no extiende Application? Para evitar “JavaFX runtime components are missing” desde el botón Run.</aside>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-title="Arquitectura interactiva">
+  <div class="eyebrow reveal">04 · Diseño</div>
+  <h2 class="reveal" style="--d:1">Arquitectura por capas <span style="font-size:.5em;color:var(--azul)">(haz clic en cada capa)</span></h2>
+  <div class="contenido grid2">
+    <div class="capas reveal" style="--d:2" id="capas">
+      <div class="capa activa" data-capa="vista"><span>🎨 Vista · FXML + CSS</span><small>clic</small></div>
+      <div class="capa" data-capa="controller"><span>🖱 Controller</span><small>clic</small></div>
+      <div class="capa" data-capa="service"><span>🧠 Service · reglas</span><small>clic</small></div>
+      <div class="capa" data-capa="repository"><span>🗄 Repository · JDBC</span><small>clic</small></div>
+      <div class="capa" data-capa="bd"><span>💾 Base de datos</span><small>clic</small></div>
+    </div>
+    <div class="card azul reveal" style="--d:3" id="detalleCapa"><h3 id="tituloCapa">Vista</h3><p id="textoCapa">Muestra controles y tablas. No contiene lógica ni SQL: solo estructura y estilo.</p></div>
+  </div>
+  <aside class="notas"><b>Argumento:</b> “Cambiar la base no cambia la interfaz; cambiar una regla no cambia los botones.”</aside>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-title="Flujo de una operación">
+  <div class="eyebrow reveal">05 · Flujo</div>
+  <h2 class="reveal" style="--d:1">Una operación, paso a paso</h2>
+  <p class="bajada reveal" style="--d:2">Ejemplo: registrar un pago.</p>
+  <div class="contenido">
+    <div class="flujo-h reveal" style="--d:3"><div class="paso"><strong>1</strong> Formulario</div><div class="flecha">→</div><div class="paso"><strong>2</strong> Controller lee</div><div class="flecha">→</div><div class="paso"><strong>3</strong> Service valida</div></div>
+    <div class="flujo-h reveal" style="--d:4"><div class="paso"><strong>4</strong> Repository SQL</div><div class="flecha">→</div><div class="paso"><strong>5</strong> Base guarda</div><div class="flecha">→</div><div class="paso"><strong>6</strong> Tabla actualiza</div></div>
+    <div class="nota-destacada reveal" style="--d:5">Si falla una regla, <b>BusinessException</b> muestra el error en rojo sin cerrar la pantalla.</div>
+    <pre class="reveal" style="--d:6">IPagoService.save(pago) → Validador.validar(pago) → PagoRepository.insert(...)
+// prepared statement con ? → evita inyección SQL</pre>
+  </div>
+  <aside class="notas"><b>Explicar:</b> el controller no tiene SQL y el repository no decide reglas.</aside>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-title="Login">
+  <div class="eyebrow reveal">06 · Módulos</div>
+  <h2 class="reveal" style="--d:1">Login con validación real</h2>
+  <div class="contenido grid2">
+    <img class="screenshot reveal" style="--d:2" src="screenshots/v2/login.png" alt="Pantalla de login de SysAlquileres">
+    <div class="col reveal" style="--d:3"><ul class="checks">
+      <li>Consulta real a la tabla <b>usuario</b>.</li><li>Solo acepta usuarios <b>Activo</b>.</li>
+      <li>Error sin cerrar la ventana.</li><li>Fondo degradado con tarjeta e icono.</li>
+      <li>Credenciales: <b>admin / admin123</b>.</li></ul>
+      <div class="card"><p><code>Sesion</code> guarda nombre y rol para la cabecera y el ticket.</p></div></div>
+  </div>
+  <p class="pista">Haz clic en la imagen para ampliarla</p>
+  <aside class="notas"><b>Frase:</b> “El login no es decorativo: si el usuario no existe o está inactivo, no entra.”</aside>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-title="Ventana principal">
+  <div class="eyebrow reveal">06 · Módulos</div>
+  <h2 class="reveal" style="--d:1">Navegación principal</h2>
+  <div class="contenido grid2">
+    <img class="screenshot reveal" style="--d:2" src="screenshots/v2/principal.png" alt="Ventana principal con barra lateral">
+    <div class="col reveal" style="--d:3"><ul class="checks">
+      <li>Barra lateral con cuatro módulos.</li><li>Cabecera con usuario, rol y avatar.</li>
+      <li>Cada módulo se carga una sola vez (caché).</li><li>Formulario a la izquierda, tabla a la derecha.</li>
+      <li>Cerrar sesión vuelve al login.</li></ul></div>
+  </div>
+  <p class="pista">Haz clic en la imagen para ampliarla</p>
+  <aside class="notas"><b>Mostrar:</b> cambiar de módulo y volver; el contenido se mantiene.</aside>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-title="Departamentos">
+  <div class="eyebrow reveal">06 · Módulos</div>
+  <h2 class="reveal" style="--d:1">Departamentos</h2>
+  <div class="contenido grid2">
+    <img class="screenshot reveal" style="--d:2" src="screenshots/v2/modulo-departamentos.png" alt="Módulo de departamentos">
+    <div class="col reveal" style="--d:3"><ul class="checks">
+      <li>Número único, piso, dirección y precio.</li><li>Búsqueda y filtro por estado.</li>
+      <li><b>Disponible</b> / <b>Ocupado</b> con chips de color.</li>
+      <li>Estado automático al crear o finalizar contrato.</li><li>No se elimina si tiene contratos.</li></ul></div>
+  </div>
+  <p class="pista">Haz clic en la imagen para ampliarla</p>
+  <aside class="notas"><b>Pregunta:</b> ¿quién cambia el estado? El service, no el usuario.</aside>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-title="Inquilinos">
+  <div class="eyebrow reveal">06 · Módulos</div>
+  <h2 class="reveal" style="--d:1">Inquilinos</h2>
+  <div class="contenido grid2">
+    <img class="screenshot reveal" style="--d:2" src="screenshots/v2/modulo-inquilinos.png" alt="Módulo de inquilinos">
+    <div class="col reveal" style="--d:3"><ul class="checks">
+      <li>DNI de 8 dígitos y <b>único</b>.</li><li>Personería Natural o Jurídica.</li>
+      <li>Jurídica: representante, RUC y dirección fiscal.</li>
+      <li>Búsqueda sin acentos: “jose” encuentra “José”.</li><li>Eliminación bloqueada con contratos.</li></ul></div>
+  </div>
+  <p class="pista">Haz clic en la imagen para ampliarla</p>
+  <aside class="notas"><b>Detalle:</b> <code>Formato.normalizar()</code> quita acentos y pasa a minúsculas.</aside>
+</section>
+
+<!-- 11 -->
+<section class="slide" data-title="Contratos">
+  <div class="eyebrow reveal">06 · Módulos</div>
+  <h2 class="reveal" style="--d:1">Contratos: el corazón de las reglas</h2>
+  <div class="contenido grid2">
+    <img class="screenshot reveal" style="--d:2" src="screenshots/v2/modulo-contratos.png" alt="Módulo de contratos">
+    <div class="col reveal" style="--d:3"><ul class="checks">
+      <li>Inquilino + depto + fechas + monto + personas.</li><li>Fin posterior al inicio.</li>
+      <li>Sin contratos vigentes solapados.</li><li>Finalizar libera el departamento.</li>
+      <li>No se editan ni eliminan finalizados o con pagos.</li></ul>
+      <div class="nota-destacada">Regla estrella: <code>findVigenteSuperpuesto(...)</code></div></div>
+  </div>
+  <p class="pista">Haz clic en la imagen para ampliarla</p>
+  <aside class="notas"><b>Mostrar:</b> contrato finalizado en gris y vigentes en azul.</aside>
+</section>
+
+<!-- 12 -->
+<section class="slide" data-title="Pagos">
+  <div class="eyebrow reveal">06 · Módulos</div>
+  <h2 class="reveal" style="--d:1">Pagos y nota de venta</h2>
+  <div class="contenido grid2">
+    <img class="screenshot reveal" style="--d:2" src="screenshots/v2/modulo-pagos.png" alt="Módulo de pagos con botón Nota de venta">
+    <div class="col reveal" style="--d:3"><ul class="checks">
+      <li>Todo pago pertenece a un contrato.</li><li>Periodo, monto, método, descuento e IGV.</li>
+      <li>Efectivo, Transferencia, Yape, Plin y Tarjeta.</li><li>Botón <b>Nota de venta</b> para reemitir.</li>
+      <li>Al guardar pregunta si desea imprimir.</li></ul>
+      <div class="card azul"><p><b>Total = monto − descuento + IGV</b> con <code>BigDecimal</code>.</p></div></div>
+  </div>
+  <p class="pista">Haz clic en la imagen para ampliarla</p>
+  <aside class="notas"><b>Demo:</b> seleccionar pago y abrir la nota de venta.</aside>
+</section>
+
+<!-- 13 -->
+<section class="slide" data-title="Base de datos">
+  <div class="eyebrow reveal">07 · Datos</div>
+  <h2 class="reveal" style="--d:1">Modelo de datos</h2>
+  <div class="contenido grid2">
+    <div class="card reveal" style="--d:2"><table class="tabla">
+      <tr><th>Tabla</th><th>Para qué sirve</th></tr><tr><td>usuario</td><td>Login y rol</td></tr>
+      <tr><td>tipo_personeria</td><td>Natural / Jurídica</td></tr><tr><td>departamento</td><td>Número, precio, estado</td></tr>
+      <tr><td>inquilino</td><td>DNI y datos</td></tr><tr><td>contrato</td><td>Fechas y monto</td></tr>
+      <tr><td>pago</td><td>Cobros y nota</td></tr><tr><td>finalizacion_contrato</td><td>Fecha y motivo</td></tr>
+    </table></div>
+    <div class="col reveal" style="--d:3"><div class="card azul"><h3>Relaciones</h3><pre>departamento 1 ── N contrato N ── 1 inquilino
+                       │
+                       1
+                       │
+                       N
+                     pago</pre></div>
+      <div class="chips"><span class="chip">H2</span><span class="chip">PostgreSQL</span><span class="chip">Supabase</span><span class="chip">HikariCP</span></div></div>
+  </div>
+  <aside class="notas"><b>Dato:</b> H2 en modo PostgreSQL para no instalar nada; Supabase usa variables de entorno, sin clave en el código.</aside>
+</section>
+
+<!-- 14 -->
+<section class="slide" data-title="Reglas de negocio">
+  <div class="eyebrow reveal">08 · Validaciones</div>
+  <h2 class="reveal" style="--d:1">Reglas de negocio</h2>
+  <div class="contenido" style="display:grid;grid-template-columns:repeat(3,1fr);gap:11px">
+    <div class="card reveal" style="--d:2"><h3>👤 Usuarios</h3><p>Solo activos; usuario único.</p></div>
+    <div class="card reveal" style="--d:3"><h3>🏢 Departamentos</h3><p>Número único; no borrar con contratos.</p></div>
+    <div class="card reveal" style="--d:4"><h3>🪪 Inquilinos</h3><p>DNI único de 8 dígitos; RUC válido.</p></div>
+    <div class="card reveal" style="--d:5"><h3>📄 Contratos</h3><p>Fechas válidas y sin solape vigente.</p></div>
+    <div class="card reveal" style="--d:6"><h3>🔄 Estados</h3><p>Ocupado al crear, libre al finalizar.</p></div>
+    <div class="card reveal" style="--d:7"><h3>💵 Pagos</h3><p>Monto &gt; 0; descuento e IGV ≥ 0.</p></div>
+  </div>
+  <aside class="notas"><b>Frase:</b> “Las reglas están en el service, no en los botones.”</aside>
+</section>
+
+<!-- 15 -->
+<section class="slide" data-title="Nota de venta">
+  <div class="eyebrow reveal">09 · Innovación</div>
+  <h2 class="reveal" style="--d:1">Nota de venta térmica 58 / 80 mm</h2>
+  <div class="contenido grid2">
+    <div class="ticket reveal" style="--d:2"><pre>      INMOBILIARIA J &amp; D &amp; J
+         RUC 00000000
+    Salida Arequipa KM 6
+      Tel. 900 876 123
+--------------------------------
+        NOTA DE VENTA
+          NV-000123
+--------------------------------
+Cliente: Pedro Flores
+DNI: 87654321   Depto.: 301
+Periodo: noviembre 2026
+Atendido: Administrador
+--------------------------------
+Alquiler             S/ 1,250.00
+Descuento              -S/ 50.00
+IGV                    S/ 100.00
+--------------------------------
+TOTAL                S/ 1,300.00
+--------------------------------
+Metodo: Efectivo
+   Gracias por su preferencia
+      Documento no fiscal
+--------------------------------</pre></div>
+    <div class="col reveal" style="--d:3">
+      <img class="img-impresora" src="assets/impresora-termica.svg" alt="Impresora térmica de 58 mm con Bluetooth">
+      <div class="card azul"><h3>Ancho de papel</h3><p>58 mm → <b>32 columnas</b> · 80 mm → <b>48 columnas</b></p></div>
+      <div class="nota-destacada">No reemplaza a la boleta/factura de SUNAT: es documento interno.</div>
+    </div>
+  </div>
+  <aside class="notas"><b>Cálculo:</b> 384/12 = 32 columnas; 576/12 = 48. <b>Pregunta:</b> ¿por qué BigDecimal? Porque el dinero no pierde centavos.</aside>
+</section>
+
+<!-- 16 -->
+<section class="slide" data-title="Simulador interactivo">
+  <div class="eyebrow reveal">10 · Simulador</div>
+  <h2 class="reveal" style="--d:1">Prueba la nota de venta aquí 👇</h2>
+  <div class="contenido grid2">
+    <div class="col reveal" style="--d:2">
+      <div class="card"><h3>1. Tamaño del papel</h3><div class="toggle" id="togglePapel"><button class="sel" data-mm="58">58 mm</button><button data-mm="80">80 mm</button></div></div>
+      <div class="card"><h3>2. Conexión</h3><div class="toggle" id="toggleConexion"><button class="sel" data-modo="usb">🔌 Cable / Windows</button><button data-modo="bt">📶 Bluetooth / COM</button></div></div>
+      <div class="card"><h3>3. Enviar a imprimir</h3>
+        <button class="boton-demo" id="btnDemo">Imprimir demo</button>
+        <div class="barra-print" style="margin-top:10px"><i id="barraDemo"></i></div>
+        <p id="estadoDemo" class="pista" style="text-align:left">Listo para imprimir.</p>
+        <div class="papel" id="papelDemo">~~~~~~~~~~~~~~~~~~~~<br>SYSALQUILERES<br>NV-000123<br>~~~~~~~~~~~~~~~~~~~~</div>
+      </div>
+      <pre id="comandosDemo" class="sim-pre">ESC @ → inicializar
+TEXTO  → ticket ASCII
+ESC d 4 → avanzar líneas</pre>
+    </div>
+    <div class="ticket reveal" style="--d:3"><pre id="ticketDemo"></pre></div>
+  </div>
+  <aside class="notas"><b>Demo favorita:</b> cambiar a 80 mm y ver cómo el ticket se ensancha; luego elegir Bluetooth y observar los comandos ESC/POS.</aside>
+</section>
+
+<!-- 17 -->
+<section class="slide" data-title="Cable y Bluetooth">
+  <div class="eyebrow reveal">11 · Conexiones</div>
+  <h2 class="reveal" style="--d:1">Dos formas de imprimir</h2>
+  <div class="contenido grid2-igual">
+    <div class="card azul reveal" style="--d:2"><h3>🔌 Cable / Windows</h3>
+      <pre>Java → driver Windows → USB → impresora</pre>
+      <ul class="lista"><li><code>PrintServiceLookup</code> lista impresoras.</li><li><code>PrinterJob</code> dibuja texto monoespaciado.</li><li>Papel de 58 u 80 mm.</li>
+      <li>También sirve si Bluetooth se instaló como impresora.</li></ul></div>
+    <div class="card noche reveal" style="--d:3"><h3>📶 Bluetooth / COM</h3>
+      <pre>Java → puerto COM → Bluetooth → impresora</pre>
+      <ul class="lista"><li>Al emparejar, Windows crea COM virtual (SPP).</li><li><code>jSerialComm</code> a 9600 baudios.</li><li>ESC/POS directo, sin driver.</li></ul>
+      <table class="tabla" style="color:#fff"><tr><th>Comando</th><th>Bytes</th></tr><tr><td>ESC @</td><td>1B 40</td></tr><tr><td>ESC d 4</td><td>1B 64 04</td></tr></table>
+    </div>
+  </div>
+  <aside class="notas"><b>Frase:</b> “Por cable usamos el driver; por Bluetooth, si solo hay COM, hablamos el idioma de la impresora.”</aside>
+</section>
+
+<!-- 18 -->
+<section class="slide" data-title="CRUD completado">
+  <div class="eyebrow reveal">12 · CRUD completado</div>
+  <h2 class="reveal" style="--d:1">Del pago al papel, sin salir del sistema</h2>
+  <div class="contenido">
+    <div class="flujo-h reveal" style="--d:2"><div class="paso"><strong>1</strong> Llenar pago</div><div class="flecha">→</div><div class="paso"><strong>2</strong> Guardar BD</div><div class="flecha">→</div><div class="paso"><strong>3</strong> ¿Imprimir?</div><div class="flecha">→</div><div class="paso"><strong>4</strong> Papel + conexión</div><div class="flecha">→</div><div class="paso"><strong>5</strong> Imprimir</div></div>
+    <div class="card azul reveal" style="--d:3"><h3>Detalle importante</h3><p>El pago se guarda <b>primero</b>, por eso la nota lleva el número real (<code>NV-000123</code>). Si dices “Ahora no”, el pago queda registrado igual.</p></div>
+    <pre class="reveal" style="--d:4">Dialogos.confirmarImpresion(...) → "Imprimir nota" / "Ahora no"
+NotaVentaDialog → cbxPapel (58/80) → rbWindows o rbSerial
+ImpresoraWindows.imprimir(...) | ImpresoraSerial.imprimir(...)</pre>
+  </div>
+  <aside class="notas"><b>Demo:</b> registrar pago nuevo, aceptar impresión, cambiar a 80 mm y mostrar el ticket.</aside>
+</section>
+
+<!-- 19 -->
+<section class="slide" data-title="Configuración y base activa">
+  <div class="eyebrow reveal">13 · Configuración</div>
+  <h2 class="reveal" style="--d:1">Panel de impresión y base activa</h2>
+  <div class="contenido grid2">
+    <img class="screenshot reveal" style="--d:2" src="screenshots/v2/configuracion-impresion.png" alt="Panel de configuración de impresión del sistema">
+    <div class="col reveal" style="--d:3">
+      <ul class="checks">
+        <li>Nuevo botón <b>Config. impresión</b> en la barra lateral.</li>
+        <li>Papel 58/80 mm, conexión, impresora, puerto COM y baudios.</li>
+        <li>Se guarda en <code>~/.SysAlquileres/impresion.properties</code>.</li>
+        <li>Botón <b>Imprimir prueba</b> para verificar la impresora.</li>
+        <li>La nota de venta abre con la configuración guardada.</li>
+      </ul>
+      <div class="card azul"><h3>Base de datos activa</h3><p><b>Supabase / PostgreSQL</b><br>Las variables <code>SUPABASE_DB_*</code> tienen prioridad sobre el H2 de <code>application.properties</code>.</p></div>
+      <div class="nota-destacada">Modelo Power Architect actualizado: 7 tablas, incluida <code>usuario</code>.</div>
+    </div>
+  </div>
+  <p class="pista">Haz clic en la imagen para ampliarla</p>
+  <aside class="notas"><b>Mensaje clave:</b> “Antes no había dónde configurar; ahora hay un panel propio, con guardado persistente y prueba. Y el sistema hoy está apuntando a Supabase, no a H2.”</aside>
+</section>
+
+<!-- 20 -->
+<section class="slide" data-title="Recuperación de clave">
+  <div class="eyebrow reveal">14 · Recuperación</div>
+  <h2 class="reveal" style="--d:1">Si el cliente olvida su clave 🔑</h2>
+  <div class="contenido grid2">
+    <div class="card reveal" style="--d:2">
+      <ul class="lista">
+        <li>El administrador abre <b>Accesos clientes</b> en la barra lateral.</li>
+        <li>Busca por DNI o nombre y selecciona al inquilino.</li>
+        <li>Marca <b>Mostrar claves</b> para ver la actual.</li>
+        <li>O pulsa <b>Generar clave</b> y luego <b>Guardar clave</b>.</li>
+        <li>Entrega la nueva clave al cliente para la APK.</li>
+        <li>El panel es un <b>CRUD</b>: también da de alta y elimina accesos.</li>
+      </ul>
+    </div>
+    <div class="col reveal" style="--d:3">
+      <div class="card azul"><h3>Lo importante</h3><p>La clave se ve y se modifica desde el <b>.exe</b>. No hace falta la <i>secret key</i> de Supabase: el escritorio edita la tabla <code>usuario</code> por JDBC.</p></div>
+      <div class="card"><h3>Regla automática</h3><p>Al <b>finalizar</b> un contrato la clave se desactiva; al <b>crear</b> uno nuevo se reactiva.</p></div>
+      <pre>usuario = DNI del inquilino
+clave   = 8 caracteres aleatorios
+rol     = CLIENTE</pre>
+    </div>
+  </div>
+  <aside class="notas"><b>Frase:</b> “Como la contraseña está en la tabla usuario y el escritorio se conecta por JDBC, podemos consultarla y renovarla sin ninguna llave secreta adicional. En producción se usaría un hash y restablecimiento por correo.”</aside>
+</section>
+
+<!-- 21 -->
+<section class="slide" data-title="Quiz">
+  <div class="eyebrow reveal">15 · ¿Entendiste?</div>
+  <h2 class="reveal" style="--d:1">Mini quiz rápido 🎯</h2>
+  <div class="contenido grid2">
+    <div class="card reveal" style="--d:2"><h3 id="quizPregunta"></h3><div class="quiz-opciones" id="quizOpciones"></div><div id="quizFeedback"></div></div>
+    <div class="card azul reveal" style="--d:3"><h3 id="quizTitulo">Pregunta 1 de 2</h3><p id="quizExplicacion">Haz clic en una respuesta para ver la explicación.</p><button class="boton-demo" id="quizSiguiente" style="display:none">Siguiente pregunta →</button></div>
+  </div>
+  <aside class="notas"><b>Dinámica:</b> preguntar al curso antes de hacer clic. Refuerza arquitectura y ancho de papel.</aside>
+</section>
+
+<!-- 20 -->
+<section class="slide" data-title="Resultados y demo">
+  <div class="eyebrow reveal">16 · Resultados</div>
+  <h2 class="reveal" style="--d:1">Lo que logramos</h2>
+  <div class="contenido">
+    <div class="stats reveal" style="--d:2">
+      <div class="stat"><b data-num="4">0</b><span>módulos CRUD</span></div>
+      <div class="stat"><b data-num="7">0</b><span>tablas en BD</span></div>
+      <div class="stat"><b data-num="2">0</b><span>anchos de papel</span></div>
+      <div class="stat"><b data-num="2">0</b><span>formas de conexión</span></div>
+    </div>
+    <div class="grid2-igual reveal" style="--d:3">
+      <div class="card"><h3>Aprendizajes</h3><ul class="lista"><li>Arquitectura por capas e IoC.</li><li>Validación con Jakarta.</li><li>ESC/POS y comunicación serial.</li><li>Persistencia local y en la nube.</li></ul></div>
+      <div class="card azul"><h3>Demo sugerida</h3><ul class="lista"><li>Login → módulos → chips de estado.</li><li>Contratos → regla de solapamiento.</li><li>Pago nuevo → nota → papel 80 mm.</li><li>Imprimir o copiar el ticket.</li></ul></div>
+    </div>
+  </div>
+  <aside class="notas"><b>Cierre técnico:</b> compila con Maven; tickets probados en 32 y 48 columnas.</aside>
+</section>
+
+<!-- 21 -->
+<section class="slide portada" data-title="Cierre">
+  <div class="fondo-parallax"></div>
+  <div class="eyebrow reveal">Gracias</div><h1 class="reveal" style="--d:1">¿Preguntas?</h1>
+  <p class="bajada reveal" style="--d:2">SysAlquileres · POO 2026 · UPeU Juliaca</p>
+  <div class="chips reveal" style="--d:3"><span class="chip">CRUD completo</span><span class="chip">Reglas de negocio</span><span class="chip">Nota 58 / 80 mm</span><span class="chip">Cable + Bluetooth</span></div>
+  <div class="pie">O: panorama · ?: atajos · N: notas · P: PDF</div>
+  <aside class="notas"><b>Despedida:</b> “El sistema no solo registra alquileres: evita errores y entrega un comprobante interno al cobrar. Gracias.”</aside>
+</section>
+
+</main>
+
+<div id="puntos"></div>
+<div class="controles">
+  <button id="ant" title="Anterior (←)">‹</button>
+  <button id="sig" title="Siguiente (→)">›</button>
+  <button id="pan" title="Panorama (O)">▦</button>
+  <button id="notes" title="Notas (N)">N</button>
+  <button id="full" title="Pantalla completa (F)">⛶</button>
+  <button id="print" title="PDF (P)">🖨</button>
+  <button id="help" title="Atajos (?)">?</button>
+</div>
+<div class="notas" id="notas"></div>
+
+<div class="overlay" id="panorama"><div class="panel"><h2 style="color:#fff">Panorama de la presentación</h2><p style="color:#93C5FD">Haz clic en una diapositiva para ir a ella</p><div class="mini-grid" id="miniGrid"></div></div></div>
+<div class="overlay" id="ayuda"><div class="panel"><h2 style="color:#fff">Atajos e interacción</h2>
+  <ul class="lista" style="color:#E2E8F0"><li>← → o Espacio: cambiar diapositiva</li><li>Inicio / Fin: primera / última</li><li>O: panorama con miniaturas</li><li>N: notas del exponente</li><li>F: pantalla completa</li><li>P: imprimir / guardar PDF</li><li>Clic en una captura: ampliarla</li><li>Arrastra el dedo en móvil para cambiar</li></ul></div></div>
+<div class="overlay" id="visor"><img id="visorImg" alt="Captura ampliada"><p id="visorCaption" style="color:#CBD5E1"></p></div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  let actual = 0;
+
+  function ir(i, guardarHash = true) {
+    actual = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('activa', k === actual));
+    document.getElementById('contador').textContent = (actual + 1) + ' / ' + slides.length;
+    document.getElementById('barra').style.width = ((actual + 1) / slides.length * 100) + '%';
+    document.getElementById('notas').innerHTML = slides[actual].querySelector('.notas')?.innerHTML || '';
+    document.querySelectorAll('#puntos button').forEach((p, k) => p.classList.toggle('activo', k === actual));
+    if (actual === 21) animarContadores();
+    if (guardarHash) location.hash = 's' + (actual + 1);
+  }
+
+  // Puntos de progreso
+  const puntos = document.getElementById('puntos');
+  slides.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.title = s.dataset.title;
+    b.onclick = () => ir(i);
+    puntos.appendChild(b);
+  });
+
+  // Panorama con miniaturas
+  const miniGrid = document.getElementById('miniGrid');
+  slides.forEach((s, i) => {
+    const img = s.querySelector('img.screenshot');
+    const b = document.createElement('button');
+    b.className = 'mini';
+    b.innerHTML = '<span class="num">' + String(i + 1).padStart(2, '0') + '</span><span>' + s.dataset.title + '</span>'
+      + (img ? '<img src="' + img.getAttribute('src') + '" alt="">' : '');
+    b.onclick = () => { ir(i); cerrarOverlays(); };
+    miniGrid.appendChild(b);
+  });
+
+  function cerrarOverlays() {
+    document.querySelectorAll('.overlay').forEach(o => o.classList.remove('activo'));
+  }
+
+  // Visor de imágenes
+  document.querySelectorAll('img.screenshot').forEach(img => {
+    img.style.cursor = 'zoom-in';
+    img.onclick = () => {
+      document.getElementById('visorImg').src = img.src;
+      document.getElementById('visorCaption').textContent = img.alt;
+      document.getElementById('visor').classList.add('activo');
+    };
+  });
+  document.getElementById('visor').onclick = cerrarOverlays;
+  document.getElementById('panorama').onclick = e => { if (e.target.id === 'panorama') cerrarOverlays(); };
+  document.getElementById('ayuda').onclick = e => { if (e.target.id === 'ayuda') cerrarOverlays(); };
+
+  // Controles
+  document.getElementById('ant').onclick = () => ir(actual - 1);
+  document.getElementById('sig').onclick = () => ir(actual + 1);
+  document.getElementById('pan').onclick = () => document.getElementById('panorama').classList.toggle('activo');
+  document.getElementById('notes').onclick = () => document.body.classList.toggle('mostrar-notas');
+  document.getElementById('help').onclick = () => document.getElementById('ayuda').classList.toggle('activo');
+  document.getElementById('print').onclick = () => window.print();
+  document.getElementById('full').onclick = () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+    else document.exitFullscreen?.();
+  };
+
+  window.addEventListener('keydown', e => {
+    if (['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); ir(actual + 1); }
+    else if (['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); ir(actual - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); ir(0); }
+    else if (e.key === 'End') { e.preventDefault(); ir(slides.length - 1); }
+    else if (e.key.toLowerCase() === 'n') document.body.classList.toggle('mostrar-notas');
+    else if (e.key.toLowerCase() === 'o') document.getElementById('panorama').classList.toggle('activo');
+    else if (e.key.toLowerCase() === 'p') window.print();
+    else if (e.key.toLowerCase() === 'f') document.getElementById('full').click();
+    else if (e.key === '?' || e.key === '/') document.getElementById('ayuda').classList.toggle('activo');
+    else if (e.key === 'Escape') cerrarOverlays();
+  });
+
+  window.addEventListener('hashchange', () => {
+    const m = location.hash.match(/^#s(\d+)$/);
+    if (m) ir(parseInt(m[1], 10) - 1, false);
+  });
+
+  let xInicio = 0;
+  window.addEventListener('touchstart', e => { xInicio = e.changedTouches[0].screenX; }, {passive:true});
+  window.addEventListener('touchend', e => {
+    const dif = e.changedTouches[0].screenX - xInicio;
+    if (Math.abs(dif) > 60) ir(actual + (dif < 0 ? 1 : -1));
+  }, {passive:true});
+
+  // Parallax suave en portada
+  document.addEventListener('mousemove', e => {
+    document.documentElement.style.setProperty('--px', ((e.clientX / innerWidth) - .5) * 16 + 'px');
+    document.documentElement.style.setProperty('--py', ((e.clientY / innerHeight) - .5) * 16 + 'px');
+  });
+
+  // Contadores animados
+  function animarContadores() {
+    document.querySelectorAll('.stat b[data-num]').forEach(el => {
+      if (el.dataset.hecho) return;
+      el.dataset.hecho = '1';
+      const meta = +el.dataset.num;
+      let n = 0;
+      const t = setInterval(() => { el.textContent = ++n; if (n >= meta) clearInterval(t); }, 90);
+    });
+  }
+
+  // Capas interactivas
+  const capas = {
+    vista: ['Vista · FXML + CSS', 'Muestra controles, tablas y colores. No contiene lógica ni SQL.'],
+    controller: ['Controller', 'Recibe clics, lee campos, llena tablas y llama al service.'],
+    service: ['Service · reglas de negocio', 'Valida DNI, fechas y solapamiento. Lanza BusinessException.'],
+    repository: ['Repository · JDBC', 'Traduce objetos a SQL con parámetros ? y reconstruye entidades.'],
+    bd: ['Base de datos', 'H2 local, PostgreSQL o Supabase. HikariCP administra las conexiones.']
+  };
+  document.querySelectorAll('#capas .capa').forEach(c => {
+    c.onclick = () => {
+      document.querySelectorAll('#capas .capa').forEach(x => x.classList.remove('activa'));
+      c.classList.add('activa');
+      const d = capas[c.dataset.capa];
+      document.getElementById('tituloCapa').textContent = d[0];
+      document.getElementById('textoCapa').textContent = d[1];
+    };
+  });
+
+  // Simulador de impresión
+  const pagoDemo = {
+    empresa: 'INMOBILIARIA J & D & J', ruc: 'RUC 00000000', dir: 'Salida Arequipa KM 6', tel: 'Tel. 900 876 123',
+    cliente: 'Pedro Flores', dni: '87654321', dpto: '301', contrato: '12', periodo: 'noviembre 2026',
+    atendido: 'Administrador', monto: 'S/ 1,250.00', desc: '-S/ 50.00', igv: 'S/ 100.00',
+    total: 'S/ 1,300.00', metodo: 'Efectivo', numero: 'NV-000123'
+  };
+  let papelMM = 58, modoConexion = 'usb';
+
+  function centro(texto, a) {
+    const libre = Math.max(0, a - texto.length);
+    const izq = Math.floor(libre / 2);
+    return ' '.repeat(izq) + texto.slice(0, a) + ' '.repeat(libre - izq);
+  }
+  function fila(izq, der, a) {
+    if (izq.length + der.length + 1 > a) izq = izq.slice(0, Math.max(0, a - der.length - 1));
+    return izq + ' '.repeat(Math.max(1, a - izq.length - der.length)) + der;
+  }
+  function ticketTexto(a) {
+    const sep = '-'.repeat(a);
+    return [
+      centro(pagoDemo.empresa, a), centro(pagoDemo.ruc, a), centro(pagoDemo.dir, a), centro(pagoDemo.tel, a), sep,
+      centro('NOTA DE VENTA', a), centro(pagoDemo.numero, a), sep,
+      'Cliente: ' + pagoDemo.cliente, 'DNI: ' + pagoDemo.dni + '  Depto.: ' + pagoDemo.dpto,
+      'Contrato: #' + pagoDemo.contrato, 'Periodo: ' + pagoDemo.periodo, 'Atendido: ' + pagoDemo.atendido, sep,
+      fila('Alquiler', pagoDemo.monto, a), fila('Descuento', pagoDemo.desc, a), fila('IGV', pagoDemo.igv, a), sep,
+      fila('TOTAL', pagoDemo.total, a), sep, 'Metodo: ' + pagoDemo.metodo,
+      centro('Gracias por su preferencia', a), centro('Documento no fiscal', a), sep
+    ].join('\n');
+  }
+  function actualizarTicket() {
+    const a = papelMM === 80 ? 48 : 32;
+    document.getElementById('ticketDemo').textContent = ticketTexto(a);
+    document.getElementById('comandosDemo').textContent = modoConexion === 'bt'
+      ? 'ESC @  (1B 40)   → inicializar\nTEXTO ASCII      → ticket de ' + a + ' columnas\nESC d 4 (1B 64 04) → avanzar líneas\nPuerto COM5 · 9600 baudios'
+      : 'PrinterJob → PageFormat ' + papelMM + ' mm\nFuente monoespaciada → ' + a + ' columnas\nDriver Windows → POS-' + papelMM + '-Series';
+  }
+  document.querySelectorAll('#togglePapel button').forEach(b => b.onclick = () => {
+    papelMM = +b.dataset.mm;
+    document.querySelectorAll('#togglePapel button').forEach(x => x.classList.toggle('sel', x === b));
+    actualizarTicket();
+  });
+  document.querySelectorAll('#toggleConexion button').forEach(b => b.onclick = () => {
+    modoConexion = b.dataset.modo;
+    document.querySelectorAll('#toggleConexion button').forEach(x => x.classList.toggle('sel', x === b));
+    actualizarTicket();
+  });
+  document.getElementById('btnDemo').onclick = function () {
+    const boton = this, barra = document.getElementById('barraDemo'), estado = document.getElementById('estadoDemo');
+    boton.disabled = true; barra.style.width = '0%'; estado.textContent = 'Enviando datos a la impresora...';
+    let p = 0;
+    const t = setInterval(() => {
+      p += 10; barra.style.width = p + '%';
+      if (p >= 100) {
+        clearInterval(t);
+        estado.textContent = (modoConexion === 'bt' ? 'ESC/POS enviado por COM5 a 9600 baudios' : 'Trabajo enviado a POS-' + papelMM + '-Series') + ' ✅';
+        const papel = document.getElementById('papelDemo');
+        papel.classList.remove('saliendo'); void papel.offsetWidth; papel.classList.add('saliendo');
+        boton.disabled = false;
+      }
+    }, 110);
+  };
+
+  // Quiz
+  const preguntas = [
+    { q: '¿Qué capa evita que un departamento tenga dos contratos vigentes solapados?',
+      o: ['El FXML', 'El Service', 'El TextArea'],
+      r: 1, e: 'Correcto: la regla está en ContratoServiceImp, usando findVigenteSuperpuesto(...).' },
+    { q: '¿Cuántas columnas imprime una impresora térmica de 80 mm?',
+      o: ['24 columnas', '32 columnas', '48 columnas'],
+      r: 2, e: 'Correcto: 576 puntos / 12 por carácter = 48 columnas. En 58 mm son 32.' }
+  ];
+  let qi = 0;
+  function renderQuiz() {
+    const p = preguntas[qi];
+    document.getElementById('quizPregunta').textContent = p.q;
+    document.getElementById('quizTitulo').textContent = 'Pregunta ' + (qi + 1) + ' de ' + preguntas.length;
+    document.getElementById('quizExplicacion').textContent = 'Haz clic en una respuesta para ver la explicación.';
+    document.getElementById('quizFeedback').textContent = '';
+    document.getElementById('quizSiguiente').style.display = 'none';
+    const cont = document.getElementById('quizOpciones');
+    cont.innerHTML = '';
+    p.o.forEach((op, i) => {
+      const b = document.createElement('button');
+      b.textContent = String.fromCharCode(65 + i) + ') ' + op;
+      b.onclick = () => {
+        cont.querySelectorAll('button').forEach(x => x.disabled = true);
+        b.classList.add(i === p.r ? 'bien' : 'mal');
+        document.getElementById('quizFeedback').textContent = i === p.r ? '✅ ' + p.e : '❌ No es. ' + p.e;
+        document.getElementById('quizExplicacion').textContent = p.e;
+        document.getElementById('quizSiguiente').style.display = 'inline-block';
+      };
+      cont.appendChild(b);
+    });
+  }
+  document.getElementById('quizSiguiente').onclick = () => { qi = (qi + 1) % preguntas.length; renderQuiz(); };
+
+  actualizarTicket();
+  renderQuiz();
+  const inicio = location.hash.match(/^#s(\d+)$/);
+  ir(inicio ? parseInt(inicio[1], 10) - 1 : 0, false);
+</script>
+</body>
+</html>

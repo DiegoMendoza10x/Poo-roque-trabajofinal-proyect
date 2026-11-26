@@ -1,66 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="pe.edu.upeu.alquileres.controller.LoginController"
-           styleClass="login-fondo" stylesheets="@../css/app.css" alignment="CENTER">
+<StackPane alignment="CENTER" styleClass="login-fondo" stylesheets="@../css/app.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pe.edu.upeu.alquileres.controller.LoginController">
 
-    <VBox styleClass="login-card" maxWidth="380.0" spacing="14.0" alignment="CENTER_LEFT">
+    <VBox alignment="CENTER_LEFT" maxWidth="380.0" spacing="14.0" styleClass="login-card">
         <padding>
-            <Insets top="34.0" right="34.0" bottom="30.0" left="34.0"/>
+            <Insets bottom="30.0" left="34.0" right="34.0" top="34.0" />
         </padding>
 
         <HBox alignment="CENTER_LEFT" spacing="14.0">
-            <ImageView fitWidth="48.0" fitHeight="48.0" preserveRatio="true" smooth="true">
+            <ImageView fitHeight="48.0" fitWidth="48.0" preserveRatio="true" smooth="true">
                 <image>
-                    <Image url="@../images/app-icon.png"/>
+                    <Image url="@../images/app-icon.png" />
                 </image>
             </ImageView>
             <VBox spacing="2.0">
-                <Label text="SysAlquileres" styleClass="login-titulo"/>
-                <Label text="Gestión de alquileres de departamentos" styleClass="login-subtitulo"/>
+                <Label styleClass="login-titulo" text="SysAlquileres" />
+                <Label styleClass="login-subtitulo" text="Gestión de alquileres de departamentos" />
             </VBox>
         </HBox>
 
         <Region styleClass="separador-suave">
             <VBox.margin>
-                <Insets top="4.0" bottom="4.0"/>
+                <Insets bottom="4.0" top="4.0" />
             </VBox.margin>
         </Region>
 
-        <Label text="USUARIO" styleClass="login-etiqueta"/>
-        <TextField fx:id="txtUsuario" promptText="Ingresa tu usuario" onAction="#onIngresar"
-                   maxWidth="Infinity"/>
+        <Label styleClass="login-etiqueta" text="USUARIO" />
+        <TextField fx:id="txtUsuario" maxWidth="Infinity" onAction="#onIngresar" promptText="Ingresa tu usuario" />
 
-        <Label text="CLAVE" styleClass="login-etiqueta"/>
-        <PasswordField fx:id="txtClave" promptText="Ingresa tu clave" onAction="#onIngresar"
-                       maxWidth="Infinity"/>
+        <Label styleClass="login-etiqueta" text="CLAVE" />
+        <PasswordField fx:id="txtClave" maxWidth="Infinity" onAction="#onIngresar" promptText="Ingresa tu clave" />
 
-        <Label fx:id="lblError" wrapText="true"/>
+        <Label fx:id="lblError" wrapText="true" />
 
-        <Button text="Ingresar al sistema" onAction="#onIngresar" defaultButton="true"
-                styleClass="boton-primario" maxWidth="Infinity"
-                HBox.hgrow="ALWAYS">
+        <Button defaultButton="true" maxWidth="Infinity" onAction="#onIngresar" styleClass="boton-primario" text="Ingresar al sistema" HBox.hgrow="ALWAYS">
             <VBox.margin>
-                <Insets top="6.0"/>
+                <Insets top="6.0" />
             </VBox.margin>
         </Button>
 
-        <Button text="Cerrar" onAction="#onSalir" styleClass="boton-secundario"
-                maxWidth="Infinity"/>
-
-        <Label text="Usuario de prueba: admin  ·  Clave: admin123" styleClass="login-pista"
-               maxWidth="Infinity" alignment="CENTER"/>
+        <Button maxWidth="Infinity" onAction="#onSalir" styleClass="boton-secundario" text="Cerrar" />
     </VBox>
 </StackPane>

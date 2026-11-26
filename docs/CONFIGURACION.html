@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configuración · SysAlquileres</title><link rel="stylesheet" href="assets/estilo-docs.css"></head>
+<body>
+<div class="barra"><div><strong>Configuración · SysAlquileres</strong><small>Impresora, base de datos y accesos</small></div>
+<div class="acciones"><button class="boton suave" onclick="document.getElementById('inicio').scrollIntoView()">↑ Inicio</button><button class="boton pdf" onclick="window.print()">⬇ Descargar en PDF</button></div></div>
+<header class="hero" id="inicio"><div class="hero-inner"><span class="etq">Paneles de apoyo</span><h1>Configuración del sistema</h1>
+<p>Dónde se configuran la impresora térmica, la base activa, el modelo Architect y los accesos de los clientes.</p></div></header>
+<div class="layout"><nav class="indice"><h3>Contenido</h3>
+<a href="#impresion">1. Panel de impresión</a><a href="#archivo">2. Archivo guardado</a><a href="#base">3. Base activa</a>
+<a href="#architect">4. Modelo Architect</a><a href="#clientes">5. Accesos clientes</a><a href="#prueba">6. Prueba rápida</a></nav>
+<main>
+<section id="impresion"><h2><span class="num">1</span> Panel de impresión</h2>
+<p class="intro">Barra lateral → <b>Config. impresión</b>.</p>
+<table><tr><th>Campo</th><th>Qué define</th></tr>
+<tr><td>Conexión</td><td>Cable / Windows o Bluetooth / puerto COM.</td></tr>
+<tr><td>Papel</td><td>58 mm (32 columnas) u 80 mm (48 columnas).</td></tr>
+<tr><td>Impresora</td><td>POS-58-Series, POS-80-Series, etc.</td></tr>
+<tr><td>Puerto / baudios</td><td>COM4, 9600 por defecto.</td></tr></table>
+<ul class="checks"><li><b>Guardar configuración</b>: persiste los valores.</li><li><b>Imprimir prueba</b>: ticket corto de verificación.</li><li><b>Actualizar listas</b>: vuelve a buscar impresoras y puertos.</li></ul>
+<div class="aviso verde"><strong>Integración</strong> La ventana de nota de venta abre con estos valores ya seleccionados.</div></section>
+<section id="archivo"><h2><span class="num">2</span> Archivo guardado</h2>
+<pre>%USERPROFILE%\.SysAlquileres\impresion.properties
+
+papel=58
+usar.windows=true
+impresora=POS-58-Series
+puerto.com=
+baudios=9600</pre>
+<p>Lo administra <code>config/ConfigImpresion.java</code> (Singleton). La ruta exacta se muestra en el panel.</p></section>
+<section id="base"><h2><span class="num">3</span> Base activa</h2>
+<div class="aviso verde"><strong>Este entorno</strong> Supabase / PostgreSQL, por las variables <code>SUPABASE_DB_*</code>.</div>
+<ol class="pasos"><li><code>application.properties</code> trae H2 por defecto.</li><li>Propiedades <code>-Ddb.url=...</code>.</li><li>Variables <code>DB_*</code>.</li><li><b>Variables <code>SUPABASE_DB_*</code></b> (prioridad máxima).</li></ol>
+<pre>SUPABASE_DB_URL=jdbc:postgresql://aws-0-us-east-1.pooler.supabase.com:5432/postgres
+SUPABASE_DDL_AUTO=false
+SUPABASE_SEED_DEMO=false</pre>
+<p>La URL se ajusta con <code>sslmode=require</code> y <code>prepareThreshold=0</code>. Para volver a H2: cerrar la app, quitar esas variables y ejecutar de nuevo.</p></section>
+<section id="architect"><h2><span class="num">4</span> Modelo Power Architect</h2>
+<ul class="lista">
+<li><code>database/modelo-power-architect.architect</code>: actualizado, 7 tablas.</li>
+<li><code>database/modelo-power-architect-original.architect</code>: original de REQUERIMIENTOS.</li>
+</ul>
+<table><tr><th>Cambio</th><th>Detalle</th></tr>
+<tr><td>Tabla usuario</td><td>Agregada para login, rol y estado.</td></tr>
+<tr><td>descuento / igv</td><td>Corregidos a <code>numeric(10,2)</code>.</td></tr>
+<tr><td>RUC</td><td>Ampliado a 11 caracteres.</td></tr>
+<tr><td>Índices</td><td>contrato y pago.</td></tr>
+</table></section>
+<section id="clientes"><h2><span class="num">5</span> Accesos clientes</h2>
+<p>Panel <b>Accesos clientes</b> en la barra lateral (CRUD completo):</p>
+<ul class="checks"><li><b>Nuevo cliente</b>: alta manual por DNI, nombre y clave.</li><li>Lista usuarios <code>CLIENTE</code> con DNI, nombre, rol, estado y clave.</li><li><b>Generar/Guardar clave</b>, <b>Eliminar</b> con confirmación, <b>Activar</b> y <b>Desactivar</b>.</li><li>No necesita la <i>secret key</i> de Supabase: edita <code>usuario</code> por JDBC.</li></ul>
+<div class="aviso verde"><strong>Automático</strong> Al finalizar un contrato la clave se desactiva; al crear uno nuevo se reactiva.</div>
+<div class="aviso ambar"><strong>Académico</strong> La clave se guarda en texto plano. En producción se usaría hash + restablecimiento por correo.</div></section>
+<section id="prueba"><h2><span class="num">6</span> Prueba rápida</h2>
+<ol class="pasos"><li>Entrar con <code>admin / admin123</code>.</li><li>Abrir Config. impresión y verificar motor y ruta del archivo.</li><li>Imprimir prueba en POS-58-Series.</li><li>Abrir Accesos clientes y ver un usuario.</li><li>Cambiar papel a 80 mm y abrir una nota de venta.</li></ol></section>
+</main></div>
+<footer>SysAlquileres · Configuración · POO 2026 · UPeU Juliaca</footer><script src="assets/docs.js"></script>
+</body></html>

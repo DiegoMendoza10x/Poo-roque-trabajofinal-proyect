@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SysAlquileres · Documentación visual</title>
+<link rel="stylesheet" href="assets/estilo-docs.css">
+<style>
+  .portal{max-width:1000px;margin:0 auto;padding:30px 20px 60px}
+  .portal h2{color:var(--azul-oscuro);margin:18px 0 6px}
+  .portal p.intro{color:var(--suave);margin:0 0 20px}
+  .tarjetas{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .tarjetas a{display:block;background:#fff;border:1px solid var(--borde);border-radius:14px;
+    padding:18px;color:var(--texto);text-decoration:none;box-shadow:0 8px 24px rgba(15,23,42,.05);transition:.2s}
+  .tarjetas a:hover{transform:translateY(-4px);border-color:var(--azul);box-shadow:0 16px 34px rgba(37,99,235,.18)}
+  .tarjetas .icono{font-size:26px;display:block;margin-bottom:8px}
+  .tarjetas b{display:block;color:var(--azul-oscuro);font-size:15px;margin-bottom:4px}
+  .tarjetas small{display:block;color:var(--suave);font-size:12px}
+</style>
+</head>
+<body>
+<div class="barra">
+  <div><strong>SysAlquileres · Documentación visual</strong><small>Todos los documentos en HTML</small></div>
+  <div class="acciones"><button class="boton suave" onclick="window.print()">🖨 Imprimir índice</button></div>
+</div>
+<header class="hero">
+  <div class="hero-inner">
+    <span class="etq">Documentación</span>
+    <h1>Todo el proyecto, en HTML</h1>
+    <p>Guías visuales con índice, diagramas, tablas y botón <b>Descargar en PDF</b>, listas para mostrar al docente.</p>
+    <div class="chips"><span class="chip">10 documentos</span><span class="chip">Diseño unificado</span><span class="chip">Sin internet</span></div>
+  </div>
+</header>
+<div class="portal">
+  <h2>Guías principales</h2>
+  <p class="intro">Por dónde empezar.</p>
+  <div class="tarjetas">
+    <a href="PRESENTACION.html"><span class="icono">🎬</span><b>Presentación interactiva</b><small>23 diapositivas con simulador, quiz, miniaturas y visor de imágenes.</small></a>
+    <a href="GUIA_EXPOSICION.html"><span class="icono">🎤</span><b>Guía de exposición</b><small>Arquitectura, reglas, guion de 12 minutos y preguntas probables.</small></a>
+    <a href="MANUAL_USUARIO.html"><span class="icono">📘</span><b>Manual de usuario</b><small>Uso paso a paso de todos los módulos, panels y APK.</small></a>
+  </div>
+
+  <h2>Arquitectura y datos</h2>
+  <p class="intro">Cómo está hecho y dónde están los datos.</p>
+  <div class="tarjetas">
+    <a href="CODIGO_FUENTE.html"><span class="icono">🧱</span><b>Código fuente</b><small>Estructura de carpetas, capas, clases clave y compilación.</small></a>
+    <a href="CONFIGURACION.html"><span class="icono">⚙️</span><b>Configuración</b><small>Panel de impresión, base activa, modelo Architect y accesos.</small></a>
+    <a href="SUPABASE.html"><span class="icono">☁️</span><b>Supabase</b><small>Variables de entorno, conexión JDBC, scripts y RLS.</small></a>
+    <a href="SUPABASE_EXPLICADO.html"><span class="icono">🔍</span><b>Supabase didáctico</b><small>Diagramas, recorrido animado del dato y guion para exponer la base.</small></a>
+  </div>
+
+  <h2>Entregables</h2>
+  <p class="intro">Impresión, empaquetamiento y móvil.</p>
+  <div class="tarjetas">
+    <a href="IMPRESION_58MM.html"><span class="icono">🖨️</span><b>Impresión 58/80 mm</b><small>Ticket, columnas, cable/Bluetooth, ESC/POS y solución de problemas.</small></a>
+    <a href="EMPAQUETAMIENTO.html"><span class="icono">📦</span><b>Empaquetamiento</b><small>Ejecutable .exe, ZIP portable y APK v1.1.</small></a>
+    <a href="APK_CLIENTES.html"><span class="icono">📱</span><b>APK de clientes</b><small>Roles ADMIN/CLIENTE, alta del usuario y recuperación de clave.</small></a>
+  </div>
+</div>
+<footer>SysAlquileres · Documentación visual · POO 2026 · UPeU Juliaca</footer>
+</body>
+</html>

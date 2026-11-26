@@ -191,16 +191,30 @@ public class PagoController {
                 .descuento(Formato.decimal(txtDescuento.getText()))
                 .igv(Formato.decimal(txtIgv.getText()))
                 .build();
+        boolean esNuevo = idEditando == null;
         try {
-            if (idEditando == null) {
-                service.save(pago);
+            Pago guardado;
+            if (esNuevo) {
+                guardado = service.save(pago);
                 mensaje("Pago registrado correctamente.", false);
             } else {
-                service.update(idEditando, pago);
+                guardado = service.update(idEditando, pago);
                 mensaje("Pago actualizado correctamente.", false);
             }
             cargar();
             limpiarFormulario();
+
+            // Al registrar un pago, se ofrece emitir la nota de venta de una vez.
+            if (esNuevo && guardado != null && guardado.getIdPago() != null) {
+                boolean imprimir = Dialogos.confirmarImpresion(
+                        "El pago #" + guardado.getIdPago() + " se registró correctamente.\n"
+                                + "Puedes enviar la nota a la impresora térmica por cable o Bluetooth.");
+                if (imprimir) {
+                    NotaVentaDialog.mostrar(
+                            tblPagos.getScene() == null ? null : tblPagos.getScene().getWindow(),
+                            guardado);
+                }
+            }
         } catch (BusinessException e) {
             mensaje(e.getMessage(), true);
         } catch (Exception e) {
