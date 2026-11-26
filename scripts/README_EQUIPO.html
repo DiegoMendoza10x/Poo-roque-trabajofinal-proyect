@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía para el equipo · SysAlquileres</title>
+<link rel="stylesheet" href="../docs/assets/estilo-docs.css">
+</head>
+<body>
+
+<div class="barra">
+  <div><strong>Guía para el equipo · SysAlquileres</strong><small>Cómo clonar y subir el proyecto a tu propio GitHub</small></div>
+  <div class="acciones">
+    <button class="boton suave" onclick="document.getElementById('inicio').scrollIntoView()">↑ Inicio</button>
+    <button class="boton pdf" onclick="window.print()">⬇ Descargar en PDF</button>
+  </div>
+</div>
+
+<header class="hero" id="inicio">
+  <div class="hero-inner">
+    <span class="etq">Trabajo en equipo</span>
+    <h1>Preparar tu copia del proyecto</h1>
+    <p>Esta guía explica, paso a paso, cómo usar <code>PREPARAR_EQUIPO.bat</code> para clonar el proyecto completo y subirlo a tu propio repositorio de GitHub sin repetir el trabajo.</p>
+    <div class="chips"><span class="chip">1 clon</span><span class="chip">1 push</span><span class="chip">Sin contraseñas en el .bat</span></div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="indice">
+    <h3>Contenido</h3>
+    <a href="#que-hace">1. Qué hace el script</a>
+    <a href="#antes">2. Antes de empezar</a>
+    <a href="#uso">3. Uso paso a paso</a>
+    <a href="#preguntas">4. Qué te pregunta</a>
+    <a href="#interno">5. Qué pasa internamente</a>
+    <a href="#entregables">6. Entregables incluidos</a>
+    <a href="#errores">7. Si el push falla</a>
+    <a href="#seguridad">8. Credenciales</a>
+    <a href="#verificar">9. Verificación final</a>
+    <a href="#faq">10. Preguntas</a>
+  </nav>
+
+  <main>
+  <section id="que-hace">
+    <h2><span class="num">1</span> Qué hace el script</h2>
+    <p class="intro">El archivo <code>scripts/PREPARAR_EQUIPO.bat</code> automatiza todo el proceso. No necesitas saber comandos de Git.</p>
+    <div class="diagrama">
+      <div class="cadena">
+        <div class="nodo"><span class="icono">📥</span><b>Clonar</b><small>descarga el proyecto</small></div><div class="flecha">→</div>
+        <div class="nodo"><span class="icono">🔀</span><b>Remotos</b><small>plantilla + origin</small></div><div class="flecha">→</div>
+        <div class="nodo"><span class="icono">✅</span><b>Verificar</b><small>entregables</small></div><div class="flecha">→</div>
+        <div class="nodo"><span class="icono">⬆️</span><b>Subir</b><small>git push</small></div>
+      </div>
+    </div>
+    <ul class="checks">
+      <li>Clona <code>https://github.com/Yorlxx/SysAlquileres.git</code> en la carpeta que indiques.</li>
+      <li>Renombra el remoto original a <code>plantilla</code> (para no perder el origen).</li>
+      <li>Agrega tu repositorio como <code>origin</code>.</li>
+      <li>Sube la rama <code>main</code> con todo el contenido.</li>
+      <li>Muestra un resumen con los entregables y el estado final.</li>
+    </ul>
+  </section>
+
+  <section id="antes">
+    <h2><span class="num">2</span> Antes de empezar</h2>
+    <ol class="pasos">
+      <li><b>Instalar Git</b> desde <code>https://git-scm.com/download/win</code>. El script lo verifica automáticamente.</li>
+      <li><b>Crear un repositorio vacío</b> en tu cuenta de GitHub. No inicialices con README ni .gitignore: déjalo completamente vacío.</li>
+      <li>Copiar el archivo <code>PREPARAR_EQUIPO.bat</code> a tu PC (puede estar en cualquier carpeta).</li>
+      <li>Si el repo plantilla es <b>privado</b>, pedir que te agreguen como colaborador en *Settings → Collaborators*.</li>
+      <li>Tener tu usuario de GitHub y una PAT (token de acceso personal) o la credencial ya guardada por Git.</li>
+    </ol>
+    <div class="aviso ambar"><strong>Repo vacío</strong> Si el repositorio destino ya tiene archivos, el push fallará. El script te ofrecerá opciones para resolverlo, pero lo más limpio es crear uno vacío.</div>
+  </section>
+
+  <section id="uso">
+    <h2><span class="num">3</span> Uso paso a paso</h2>
+    <ol class="pasos">
+      <li>Haz <b>doble clic</b> en <code>PREPARAR_EQUIPO.bat</code>. Se abrirá una ventana de comandos azul.</li>
+      <li>Escribe la <b>ruta destino</b>, por ejemplo <code>C:\Entrega\SysAlquileres</code>, y presiona Enter.</li>
+      <li>Pega la <b>URL de tu repositorio</b>: <code>https://github.com/TU_USUARIO/TU_REPO.git</code>.</li>
+      <li>Presiona Enter en las dos preguntas opcionales para usar los valores por defecto.</li>
+      <li>Si la carpeta ya existiera, responde <code>s</code> para eliminarla o <code>n</code> para elegir otra ruta.</li>
+      <li>Espera a que termine. Verás los pasos <code>[1/5]</code> hasta <code>[5/5]</code>.</li>
+      <li>Presiona una tecla cuando aparezca <i>Press any key to continue</i>.</li>
+    </ol>
+    <div class="aviso verde"><strong>Resultado</strong> Tu repo de GitHub contendrá exactamente la misma estructura que el proyecto entregado.</div>
+  </section>
+
+  <section id="preguntas">
+    <h2><span class="num">4</span> Qué te pregunta el script</h2>
+    <table>
+      <tr><th>Pregunta</th><th>Ejemplo</th><th>Obligatoria</th></tr>
+      <tr><td>Ruta destino</td><td><code>C:\Entrega\SysAlquileres</code></td><td>Sí</td></tr>
+      <tr><td>URL de tu repo</td><td><code>https://github.com/juan/SysAlquileres.git</code></td><td>Sí</td></tr>
+      <tr><td>URL del repo plantilla</td><td>Enter para usar la original</td><td>No</td></tr>
+      <tr><td>Rama destino</td><td>Enter para usar <code>main</code></td><td>No</td></tr>
+      <tr><td>¿Eliminar carpeta existente?</td><td><code>s</code> o <code>n</code></td><td>Solo si existe</td></tr>
+    </table>
+  </section>
+
+  <section id="interno">
+    <h2><span class="num">5</span> Qué pasa internamente</h2>
+    <pre>git clone https://github.com/Yorlxx/SysAlquileres.git "C:\Entrega\SysAlquileres"
+cd /d "C:\Entrega\SysAlquileres"
+
+git remote rename origin plantilla
+git remote add origin https://github.com/TU_USUARIO/TU_REPO.git
+
+git push -u origin main</pre>
+    <p>Después del push, tendrás dos remotos:</p>
+    <table>
+      <tr><th>Remoto</th><th>URL</th><th>Para qué sirve</th></tr>
+      <tr><td><code>plantilla</code></td><td>Repo original</td><td>Consultar actualizaciones futuras.</td></tr>
+      <tr><td><code>origin</code></td><td>Tu repo</td><td>Donde subes tu entrega.</td></tr>
+    </table>
+  </section>
+
+  <section id="entregables">
+    <h2><span class="num">6</span> Entregables incluidos</h2>
+    <p>El script verifica y muestra estos archivos al clonar:</p>
+    <table>
+      <tr><th>Entregable</th><th>Ubicación</th></tr>
+      <tr><td>Manual de usuario HTML</td><td><code>docs/MANUAL_USUARIO.html</code></td></tr>
+      <tr><td>Presentación interactiva</td><td><code>docs/PRESENTACION.html</code></td></tr>
+      <tr><td>Modelo Power Architect</td><td><code>modelo-power-architect/SysAlquileres-PowerArchitect.architect</code></td></tr>
+      <tr><td>APK v1.1</td><td><code>dist/SysAlquileres-Movil-v1.1.apk</code></td></tr>
+      <tr><td>Empaquetado Windows</td><td><code>dist/SysAlquileres-v2.0.0-portable.zip</code></td></tr>
+      <tr><td>README general</td><td><code>README.md</code></td></tr>
+    </table>
+  </section>
+
+  <section id="errores">
+    <h2><span class="num">7</span> Si el push falla</h2>
+    <p>Si tu repositorio no está vacío, el script muestra tres opciones:</p>
+    <table>
+      <tr><th>Opción</th><th>Qué hace</th><th>Cuándo usarla</th></tr>
+      <tr><td><code>s</code> — unir historias</td><td><code>git pull --allow-unrelated-histories</code> y vuelve a subir.</td><td>Cuando quieras conservar ambos contenidos.</td></tr>
+      <tr><td><code>f</code> — forzar</td><td><code>git push -f</code>.</td><td>Cuando sepas que puedes sobrescribir el repo.</td></tr>
+      <tr><td><code>c</code> — cancelar</td><td>Detiene el script.</td><td>Cuando prefieras revisar antes.</td></tr>
+    </table>
+    <div class="aviso rojo"><strong>Cuidado con forzar</strong> La opción <code>f</code> sobrescribe el historial remoto. Úsala solo en un repo propio que acabas de crear.</div>
+  </section>
+
+  <section id="seguridad">
+    <h2><span class="num">8</span> Credenciales y seguridad</h2>
+    <ul class="checks">
+      <li>El <code>.bat</code> <b>no contiene contraseñas ni tokens</b>.</li>
+      <li>Si GitHub solicita credenciales, usa tu usuario y una <b>PAT</b>, o la credencial guardada por Git Credential Manager.</li>
+      <li>No escribas tu contraseña dentro del script ni la compartas por chat.</li>
+      <li>Las credenciales reales de Supabase tampoco están en el repo: se configuran por variables de entorno.</li>
+    </ul>
+    <pre># Si GitHub pide login, puedes autenticarte con:
+gh auth login
+
+# O dejar que Git Credential Manager guarde la credencial
+git config --global credential.helper manager</pre>
+  </section>
+
+  <section id="verificar">
+    <h2><span class="num">9</span> Verificación final</h2>
+    <p>Al terminar, ejecuta dentro de la carpeta destino:</p>
+    <pre>git remote -v
+git status -sb
+git ls-files dist\*.apk</pre>
+    <p>Deberías ver:</p>
+    <ul class="checks">
+      <li><code>plantilla</code> apuntando al repo original.</li>
+      <li><code>origin</code> apuntando a tu repo.</li>
+      <li><code>## main...origin/main</code> sin mensaje de “ahead”.</li>
+      <li>La línea <code>dist/SysAlquileres-Movil-v1.1.apk</code>, confirmando que el APK está versionado.</li>
+    </ul>
+  </section>
+
+  <section id="faq">
+    <h2><span class="num">10</span> Preguntas frecuentes</h2>
+    <details><summary>¿Necesito instalar Java o Android Studio?</summary><p>No. Solo Git. El proyecto ya incluye el ZIP con JRE y el APK compilado.</p></details>
+    <details><summary>¿Puedo ejecutar el .bat desde otra carpeta?</summary><p>Sí. Solo necesitas indicar la ruta destino correcta.</p></details>
+    <details><summary>¿Qué pasa si cierro la ventana antes de que termine?</summary><p>Repite el proceso. Si la carpeta ya existe, responde <code>s</code> para recrearla.</p></details>
+    <details><summary>¿El APK está realmente en GitHub?</summary><p>Sí. Se agregó con <code>git add -f</code> y aparece en <code>dist/SysAlquileres-Movil-v1.1.apk</code>.</p></details>
+    <details><summary>¿Y si el repo plantilla se vuelve privado?</summary><p>Necesitas que te agreguen como colaborador en GitHub para poder clonarlo.</p></details>
+  </section>
+  </main>
+</div>
+<footer>SysAlquileres · Guía para el equipo · POO 2026 · UPeU Juliaca</footer>
+<script src="../docs/assets/docs.js"></script>
+</body>
+</html>
