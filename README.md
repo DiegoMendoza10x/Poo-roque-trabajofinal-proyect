@@ -209,7 +209,7 @@ Para reiniciar la base de datos: cierra la aplicación y elimina la carpeta `dat
 
 > **Base activa en este entorno:** hay variables `SUPABASE_DB_*` configuradas, por lo que el sistema está usando **Supabase / PostgreSQL** (pooler `aws-0-us-east-1.pooler.supabase.com`). `application.properties` sigue trayendo H2 como valor por defecto; las variables de entorno tienen prioridad. Para volver a H2 local, cierra la app y elimina/desactiva esas variables de entorno. La ruta del panel **Config. impresión** muestra el motor activo en tiempo real.
 
-> El modelo **Power Architect** actualizado está en `database/modelo-power-architect.architect` (7 tablas, incluida `usuario`). El original entregado en REQUERIMIENTOS se conserva como `database/modelo-power-architect-original.architect`.
+> El modelo **Power Architect** actualizado está en la carpeta **`modelo-power-architect/`**, archivo `SysAlquileres-PowerArchitect.architect` (7 tablas, incluida `usuario`). El original de REQUERIMIENTOS se conserva como `PowerArchitect-Original.architect`. Instrucciones en `modelo-power-architect/README.md`.
 
 > Si actualizas desde una versión anterior, elimina la carpeta `data/` una vez: las bases ya creadas no reciben automáticamente la tabla `usuario`.
 
@@ -302,6 +302,10 @@ SysAlquileres/
 │   ├── supabase_schema.sql                      # Script para Supabase
 │   ├── modelo-power-architect.architect         # Modelo actualizado (7 tablas)
 │   └── modelo-power-architect-original.architect # Modelo original de REQUERIMIENTOS
+├── modelo-power-architect/      # ENTREGABLE: modelo abierto en SQL Power Architect
+│   ├── SysAlquileres-PowerArchitect.architect   # actualizado (7 tablas)
+│   ├── PowerArchitect-Original.architect
+│   └── README.md                # cómo abrirlo y cambios
 ├── docs/
 │   ├── index.html                   # índice de documentación
 │   ├── MANUAL_USUARIO.html          # Manual con botón Descargar en PDF

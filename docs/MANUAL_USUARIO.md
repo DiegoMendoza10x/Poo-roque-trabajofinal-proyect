@@ -193,6 +193,16 @@ También puedes **Activar** o **Desactivar** el acceso, dar de alta con **Nuevo 
 
 **Automático:** al finalizar un contrato la clave se desactiva; al crear un contrato nuevo se reactiva.
 
+### 9.2 Funcionalidades según roles o perfiles
+
+| Perfil | Dónde | Puede ver | Puede hacer | No puede |
+|---|---|---|---|---|
+| **Administrador** | Escritorio `.exe` | Los 4 módulos y paneles de apoyo. | Alta, consulta, edición y baja; nota de venta; gestionar accesos. | — |
+| **Administrador** | APK v1.1 | Listados generales. | Consultar, ver detalle y compartir nota. | Crear, editar ni eliminar. |
+| **Cliente** | APK v1.1 | Solo su departamento, contrato, vencimiento e historial de pagos. | Actualizar sus datos y cerrar sesión. | Ver datos de otros ni modificar información. |
+
+El rol `ADMIN` existe por defecto (`admin / admin123`). El rol `CLIENTE` se crea al dar de alta un contrato: usuario = DNI y clave aleatoria entregada por el administrador.
+
 ---
 
 ## 10. Base de datos (información para el usuario)

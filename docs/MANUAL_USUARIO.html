@@ -192,8 +192,9 @@
     <a href="#errores">11. Solución de problemas</a>
     <a href="#faq">12. Preguntas frecuentes</a>
     <a href="#apk">13. APK de clientes</a>
-    <a href="#recuperacion">14. Recuperación de clave</a>
-    <a href="#anexos">15. Anexos</a>
+    <a href="#roles">14. Funcionalidades por rol</a>
+    <a href="#recuperacion">15. Recuperación de clave</a>
+    <a href="#anexos">16. Anexos</a>
     <div class="mini-badge">Para guardar este manual: pulsa <b>Descargar en PDF</b> y elige <b>Guardar como PDF</b>.</div>
   </nav>
 
@@ -541,9 +542,23 @@ mvn javafx:run</pre>
     <div class="aviso"><strong>Entregable</strong> <code>dist/SysAlquileres-Movil-v1.1.apk</code>. Guía completa en <code>docs/APK_CLIENTES.md</code>.</div>
   </section>
 
+  <!-- Roles -->
+  <section id="roles">
+    <h2><span class="num">14</span> Funcionalidades según roles o perfiles</h2>
+    <p class="intro">El sistema define tres formas de uso según el perfil y el dispositivo.</p>
+    <table>
+      <tr><th>Perfil</th><th>Dónde</th><th>Puede ver</th><th>Puede hacer</th><th>No puede</th></tr>
+      <tr><td><b>Administrador</b></td><td>Escritorio `.exe`</td><td>Los 4 módulos y los paneles de apoyo.</td><td>Alta, consulta, edición y baja; emitir nota de venta; gestionar accesos.</td><td>—</td></tr>
+      <tr><td><b>Administrador</b></td><td>APK v1.1</td><td>Listados generales de departamentos, inquilinos, contratos y pagos.</td><td>Consultar, ver detalle y compartir la nota de venta.</td><td>Crear, editar ni eliminar registros.</td></tr>
+      <tr><td><b>Cliente</b></td><td>APK v1.1</td><td>Solo su departamento, contrato, vencimiento e historial de pagos.</td><td>Actualizar sus datos y cerrar sesión.</td><td>Ver datos de otros inquilinos ni modificar información.</td></tr>
+    </table>
+    <div class="aviso verde"><strong>Cómo se obtiene el rol</strong> El usuario `admin` existe por defecto con rol `ADMIN`. El rol `CLIENTE` se crea automáticamente al dar de alta un contrato: usuario = DNI del inquilino y clave aleatoria que el administrador entrega.</div>
+    <div class="aviso ambar"><strong>Estados del acceso</strong> Un contrato finalizado desactiva la clave del cliente; un contrato nuevo la reactiva. El panel Accesos clientes también permite activarlo o desactivarlo manualmente.</div>
+  </section>
+
   <!-- Recuperación -->
   <section id="recuperacion">
-    <h2><span class="num">14</span> Recuperación de clave del cliente</h2>
+    <h2><span class="num">15</span> Recuperación de clave del cliente</h2>
     <p class="intro">Si el inquilino olvida su clave, el administrador la consulta o renueva desde el escritorio.</p>
     <ol class="pasos">
       <li>Abrir <b>Accesos clientes</b> en la barra lateral del `.exe`.</li>
@@ -558,7 +573,7 @@ mvn javafx:run</pre>
 
   <!-- Anexo -->
   <section id="anexos">
-    <h2><span class="num">15</span> Anexos y archivos útiles</h2>
+    <h2><span class="num">16</span> Anexos y archivos útiles</h2>
     <table>
       <tr><th>Archivo</th><th>Contenido</th></tr>
       <tr><td><code>README.md</code></td><td>Descripción general, ejecución y estructura.</td></tr>
